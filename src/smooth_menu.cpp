@@ -10,3 +10,28 @@
  */
 #include "smooth_menu.h"
 
+
+namespace SMOOTH_MENU {
+
+
+
+    uint16_t Menu::addItem(Item_t* item)
+    {
+
+    
+    }
+
+
+    uint16_t Menu::addItem(std::string tag, int x, int y, int width, int heigh, void* userData = nullptr)
+    {
+        Item_t* new_item = new Item_t;
+
+
+
+
+        return addItem(new_item);
+    }
+
+
+
+}
