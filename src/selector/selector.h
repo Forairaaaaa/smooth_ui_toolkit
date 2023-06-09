@@ -25,7 +25,7 @@ namespace SMOOTH_MENU {
 
         struct Config_t {
             LVGL::LV_ANIM_PATH_t animPath_x = LVGL::ease_out;
-            LVGL::LV_ANIM_PATH_t animPath_y = LVGL::ease_out;
+            LVGL::LV_ANIM_PATH_t animPath_y = LVGL::overshoot;
             LVGL::LV_ANIM_PATH_t animPath_width = LVGL::overshoot;
             LVGL::LV_ANIM_PATH_t animPath_heigh = LVGL::ease_out;
             int32_t animTime = 400;
