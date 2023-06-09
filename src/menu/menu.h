@@ -40,11 +40,19 @@ namespace SMOOTH_MENU {
     class Menu_t : protected Item_t {
         private:
             std::vector<Item_t*> _item_list;
-            MenuRenderCallback_t* _rander_callback;
+            MenuRenderCallback_t* _render_callback;
 
         public:
-            Menu_t() : _rander_callback(nullptr) {}
+            Menu_t() : _render_callback(nullptr) {}
             ~Menu_t() = default;
+
+
+            /**
+             * @brief Get the Item List
+             * 
+             * @return std::vector<Item_t*> 
+             */
+            inline std::vector<Item_t*> getItemList() { return _item_list; }
 
 
             /**
@@ -115,7 +123,7 @@ namespace SMOOTH_MENU {
              * 
              * @param callback 
              */
-            inline void setRenderCallback(MenuRenderCallback_t* callback) { _rander_callback = callback; }
+            inline void setRenderCallback(MenuRenderCallback_t* callback) { _render_callback = callback; }
 
 
             /**

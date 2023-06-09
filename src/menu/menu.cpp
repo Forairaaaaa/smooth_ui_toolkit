@@ -83,13 +83,13 @@ namespace SMOOTH_MENU {
 
     void Menu_t::renderMenu()
     {
-        if (_rander_callback == nullptr) {
+        if (_render_callback == nullptr) {
             return;
         }
 
         /* Iterate item list */
         for (int i = 0; i < _item_list.size(); i++) {
-            _rander_callback->renderMenu(_item_list[i]);
+            _render_callback->renderMenu(_item_list[i]);
         }
     }
 

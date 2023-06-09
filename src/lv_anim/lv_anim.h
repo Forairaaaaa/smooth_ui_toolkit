@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2023
  * 
  */
+#pragma once
 #include <stdint.h>
 
 
@@ -129,6 +130,17 @@ namespace LVGL {
             {
                 _anim_t.act_time = currentTime - _time_offset;
                 return _path_cb(&_anim_t);
+            }
+
+
+            inline bool isFinished(int32_t currentTime)
+            {
+                if ((currentTime - _time_offset) > _anim_t.time) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
             }
 
             

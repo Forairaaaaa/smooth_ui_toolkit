@@ -13,6 +13,7 @@ set(SMOOTH_MENU_INCS
     src/
     src/lv_anim/
     src/menu/
+    src/selector/
 )
 
 
