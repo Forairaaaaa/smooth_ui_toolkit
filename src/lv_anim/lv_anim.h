@@ -108,6 +108,7 @@ namespace LVGL {
                 }
             }
 
+
             inline void setAnim(LV_ANIM_PATH_t path, int32_t startValue, int32_t endValue, int32_t time)
             {
                 setPath(path);
@@ -116,10 +117,12 @@ namespace LVGL {
                 setTime(time);
             }
 
+
             inline void setValue(int32_t startValue, int32_t endValue, int32_t time)
             {
                 setAnim(_anim_path, startValue, endValue, time);
             }
+
 
             /* Reset anim time */
             inline void resetTime(int32_t currentTime) { _time_offset = currentTime; }

@@ -9,6 +9,8 @@
  * 
  */
 #pragma once
+#include "menu/menu.h"
+#include "selector/selector.h"
 
 
 namespace SMOOTH_MENU {

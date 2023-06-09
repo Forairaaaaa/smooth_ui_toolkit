@@ -21,15 +21,9 @@ namespace SMOOTH_MENU {
         }
 
         _current_menu = menu;
-
-        _shape.x = _current_menu->getItemList()[0]->x;
-        _shape.y = _current_menu->getItemList()[0]->y;
-        _shape.width = _current_menu->getItemList()[0]->width;
-        _shape.heigh = _current_menu->getItemList()[0]->heigh;
-
-        _current_item = 0;
-        _target_item = 0;
-        _target_changed = true;
+        _item_status.current = 0;
+        _item_status.target = 0;
+        _item_status.changed = true;
 
     }
 
@@ -40,56 +34,75 @@ namespace SMOOTH_MENU {
             targetItem = _current_menu->getItemNum() - 1;
         }
 
-        _target_item = targetItem;
-        _target_changed = true;
+        _item_status.target = targetItem;
+        _item_status.changed = true;
     }
 
 
     void Selector_t::goLast()
     {
-        if (_target_item == 0) {
+        if (_item_status.target == 0) {
             return;
         }
-        goToItem(_target_item - 1);
+        goToItem(_item_status.target - 1);
     }
 
 
     void Selector_t::goNext()
     {
-        goToItem(_target_item + 1);
+        goToItem(_item_status.target + 1);
     }
 
 
-    void Selector_t::update(uint32_t currentTime)
+    void Selector_t::update(uint32_t currentTime, bool render)
     {
         /* If target changed */
-        if (_target_changed) {
-            _target_changed = false;
+        if (_item_status.changed) {
+            _item_status.changed = false;
 
             /* Reset target */
-            _anim_x.setAnim(_cfg.animPath_x, _anim_x.getValue(currentTime), _current_menu->getItemList()[_target_item]->x, _cfg.animTime);
-            _anim_y.setAnim(_cfg.animPath_y, _anim_y.getValue(currentTime), _current_menu->getItemList()[_target_item]->y, _cfg.animTime);
-            _anim_width.setAnim(_cfg.animPath_width, _anim_width.getValue(currentTime), _current_menu->getItemList()[_target_item]->width, _cfg.animTime);
-            _anim_heigh.setAnim(_cfg.animPath_heigh, _anim_heigh.getValue(currentTime), _current_menu->getItemList()[_target_item]->heigh, _cfg.animTime);
+            _anim_cntr.x.setAnim(_cfg.animPath_x, _anim_cntr.x.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->x, _cfg.animTime_x);
+            _anim_cntr.y.setAnim(_cfg.animPath_y, _anim_cntr.y.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->y, _cfg.animTime_y);
+            _anim_cntr.width.setAnim(_cfg.animPath_width, _anim_cntr.width.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->width, _cfg.animTime_width);
+            _anim_cntr.heigh.setAnim(_cfg.animPath_heigh, _anim_cntr.heigh.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->heigh, _cfg.animTime_heigh);
             
             /* Reset anim time */
-            _anim_x.resetTime(currentTime);
-            _anim_y.resetTime(currentTime);
-            _anim_width.resetTime(currentTime);
-            _anim_heigh.resetTime(currentTime);
+            _anim_cntr.x.resetTime(currentTime);
+            _anim_cntr.y.resetTime(currentTime);
+            _anim_cntr.width.resetTime(currentTime);
+            _anim_cntr.heigh.resetTime(currentTime);
 
+            
         }
 
+        /* Update current time */
+        _anim_cntr.currentTime = currentTime;
 
+        /* Render menu and selector */
+        if (render) {
+            renderSelector();
+        }
+    }
+
+
+    void Selector_t::renderSelector(bool renderMenu)
+    {
         /* Render selector */
         if (_render_callback != nullptr) {
-            _render_callback->renderSelector(_anim_x.getValue(currentTime), _anim_y.getValue(currentTime), _anim_width.getValue(currentTime), _anim_heigh.getValue(currentTime));
+            _render_callback->renderSelector(
+                _anim_cntr.x.getValue(_anim_cntr.currentTime),
+                _anim_cntr.y.getValue(_anim_cntr.currentTime),
+                _anim_cntr.width.getValue(_anim_cntr.currentTime),
+                _anim_cntr.heigh.getValue(_anim_cntr.currentTime)
+            );
         }
 
         /* Render menu */
-        _current_menu->renderMenu();
-
+        if (renderMenu) {
+            _current_menu->renderMenu();
+        }
     }
+
 
 }
 

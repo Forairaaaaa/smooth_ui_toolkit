@@ -23,20 +23,35 @@ namespace SMOOTH_MENU {
 
     namespace SELECTOR {
 
+
         struct Config_t {
             LVGL::LV_ANIM_PATH_t animPath_x = LVGL::ease_out;
-            LVGL::LV_ANIM_PATH_t animPath_y = LVGL::overshoot;
+            LVGL::LV_ANIM_PATH_t animPath_y = LVGL::ease_out;
             LVGL::LV_ANIM_PATH_t animPath_width = LVGL::overshoot;
             LVGL::LV_ANIM_PATH_t animPath_heigh = LVGL::ease_out;
-            int32_t animTime = 400;
+
+            int32_t animTime_x = 100;
+            int32_t animTime_y = 100;
+            int32_t animTime_width = 400;
+            int32_t animTime_heigh = 100;
         };
 
-        struct Shape_t {
-            int x = 0;
-            int y = 0;
-            int width = 0;
-            int heigh = 0;
+
+        struct AnimContainer_t {
+            LVGL::Anim_Path x;
+            LVGL::Anim_Path y;
+            LVGL::Anim_Path width;
+            LVGL::Anim_Path heigh;
+            uint32_t currentTime = 0;
         };
+
+
+        struct ItemStatus_t {
+            unsigned int current = 0;
+            unsigned int target = 0;
+            bool changed = false;
+        };
+
 
     };
 
@@ -44,42 +59,38 @@ namespace SMOOTH_MENU {
     class Selector_t {
         private:
             SELECTOR::Config_t _cfg;
-            SELECTOR::Shape_t _shape;
+            SELECTOR::AnimContainer_t _anim_cntr;
+            SELECTOR::ItemStatus_t _item_status;
 
             Menu_t* _current_menu;
-
-            unsigned int _current_item;
-            unsigned int _target_item;
-            bool _target_changed;
-
-            LVGL::Anim_Path _anim_x;
-            LVGL::Anim_Path _anim_y;
-            LVGL::Anim_Path _anim_width;
-            LVGL::Anim_Path _anim_heigh;
-
             SelectorRenderCallback_t* _render_callback;
-
 
 
         public:
             Selector_t()
             {
                 _current_menu = nullptr;
-                _current_item = 0;
-                _target_item = 0;
-                _target_changed = false;
                 _render_callback = nullptr;
 
-                _anim_x.setAnim(LVGL::overshoot, 0, 0, 0);
-                _anim_y.setAnim(LVGL::ease_out, 0, 0, 0);
-                _anim_width.setAnim(LVGL::overshoot, 0, 0, 0);
-                _anim_heigh.setAnim(LVGL::ease_out, 0, 0, 0);
+                /* Set to default */
+                {
+                    SELECTOR::Config_t default_config;
+                    SELECTOR::AnimContainer_t default_anim_cntr;
+                    SELECTOR::ItemStatus_t default_item_status;
+                    _cfg = default_config;
+                    _anim_cntr = default_anim_cntr;
+                    _item_status = default_item_status;
+                }
             }
             ~Selector_t() = default;
 
 
-            inline unsigned int getCurrentItem() { return _current_item; }
-            inline unsigned int getTargetItem() { return _target_item; }
+            inline void config(SELECTOR::Config_t cfg) { _cfg = cfg; }
+            inline SELECTOR::Config_t config(void) { return _cfg; }
+
+
+            inline unsigned int getCurrentItem() { return _item_status.current; }
+            inline unsigned int getTargetItem() { return _item_status.target; }
 
 
             /**
@@ -112,8 +123,6 @@ namespace SMOOTH_MENU {
             void goNext();
 
 
-
-
             /**
              * @brief Set the Render Callback function, for your graphics lib
              * 
@@ -122,10 +131,21 @@ namespace SMOOTH_MENU {
             inline void setRenderCallback(SelectorRenderCallback_t* callback) { _render_callback = callback; }
 
 
-            void update(uint32_t currentTime);
+            /**
+             * @brief Uptate anim value 
+             * 
+             * @param currentTime 
+             * @param render 
+             */
+            void update(uint32_t currentTime, bool render = true);
 
 
-
+            /**
+             * @brief Render selector at once 
+             * 
+             * @param renderMenu 
+             */
+            void renderSelector(bool renderMenu = true);
 
 
 
