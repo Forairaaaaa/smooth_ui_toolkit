@@ -14,6 +14,23 @@
 namespace SMOOTH_MENU {
 
 
+    Selector_t::Selector_t()
+    {
+        _current_menu = nullptr;
+        _render_callback = nullptr;
+
+        /* Set to default */
+        {
+            SELECTOR::Config_t default_config;
+            SELECTOR::AnimContainer_t default_anim_cntr;
+            SELECTOR::ItemStatus_t default_item_status;
+            _cfg = default_config;
+            _anim_cntr = default_anim_cntr;
+            _item_status = default_item_status;
+        }
+    }
+
+
     void Selector_t::setMenu(Menu_t* menu)
     {
         if (menu->getItemNum() == 0) {
@@ -101,6 +118,25 @@ namespace SMOOTH_MENU {
         if (renderMenu) {
             _current_menu->renderMenu();
         }
+    }
+
+
+    bool Selector_t::isAnimFinished()
+    {
+        if (!_anim_cntr.x.isFinished(_anim_cntr.currentTime)) {
+            return false;
+        }
+        if (!_anim_cntr.y.isFinished(_anim_cntr.currentTime)) {
+            return false;
+        }
+        if (!_anim_cntr.width.isFinished(_anim_cntr.currentTime)) {
+            return false;
+        }
+        if (!_anim_cntr.heigh.isFinished(_anim_cntr.currentTime)) {
+            return false;
+        }
+        _item_status.current = _item_status.target;
+        return true;
     }
 
 

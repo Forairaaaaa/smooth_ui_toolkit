@@ -30,10 +30,10 @@ namespace SMOOTH_MENU {
             LVGL::LV_ANIM_PATH_t animPath_width = LVGL::overshoot;
             LVGL::LV_ANIM_PATH_t animPath_heigh = LVGL::ease_out;
 
-            int32_t animTime_x = 100;
-            int32_t animTime_y = 100;
+            int32_t animTime_x = 200;
+            int32_t animTime_y = 200;
             int32_t animTime_width = 400;
-            int32_t animTime_heigh = 100;
+            int32_t animTime_heigh = 200;
         };
 
 
@@ -67,21 +67,7 @@ namespace SMOOTH_MENU {
 
 
         public:
-            Selector_t()
-            {
-                _current_menu = nullptr;
-                _render_callback = nullptr;
-
-                /* Set to default */
-                {
-                    SELECTOR::Config_t default_config;
-                    SELECTOR::AnimContainer_t default_anim_cntr;
-                    SELECTOR::ItemStatus_t default_item_status;
-                    _cfg = default_config;
-                    _anim_cntr = default_anim_cntr;
-                    _item_status = default_item_status;
-                }
-            }
+            Selector_t();
             ~Selector_t() = default;
 
 
@@ -147,6 +133,14 @@ namespace SMOOTH_MENU {
              */
             void renderSelector(bool renderMenu = true);
 
+
+            /**
+             * @brief Check if anim is finished
+             * 
+             * @return true 
+             * @return false 
+             */
+            bool isAnimFinished();
 
 
     };
