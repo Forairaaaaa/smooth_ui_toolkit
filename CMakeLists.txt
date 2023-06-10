@@ -11,10 +11,11 @@ file(GLOB_RECURSE SMOOTH_MENU_SRCS
 )
 set(SMOOTH_MENU_INCS
     src/
-    src/lv_anim/
-    src/menu/
-    src/selector/
-    src/camera/
+    # src/lv_anim/
+    # src/menu/
+    # src/selector/
+    # src/camera/
+    # src/simple_menu/
 )
 
 

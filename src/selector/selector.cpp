@@ -135,6 +135,17 @@ namespace SMOOTH_MENU {
     }
 
 
+    const RenderAttribute_t& Selector_t::getRenderAttribute()
+    {
+        _render_attribute_buffer.x = _anim_cntr.x.getValue(_anim_cntr.currentTime);
+        _render_attribute_buffer.y = _anim_cntr.y.getValue(_anim_cntr.currentTime);
+        _render_attribute_buffer.width = _anim_cntr.width.getValue(_anim_cntr.currentTime);
+        _render_attribute_buffer.height = _anim_cntr.height.getValue(_anim_cntr.currentTime);
+
+        return _render_attribute_buffer;
+    }
+
+
 }
 
 

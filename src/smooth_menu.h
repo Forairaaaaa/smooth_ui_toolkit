@@ -12,6 +12,7 @@
 #include "menu/menu.h"
 #include "selector/selector.h"
 #include "camera/camera.h"
+#include "simple_menu/simple_menu.h"
 
 
 namespace SMOOTH_MENU {

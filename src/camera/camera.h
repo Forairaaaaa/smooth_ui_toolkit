@@ -16,12 +16,6 @@
 namespace SMOOTH_MENU {
 
 
-    namespace CAMERA {
-
-
-    };
-
-
     class Camrea_t : public Selector_t {
         private:
             int _width;
@@ -54,7 +48,14 @@ namespace SMOOTH_MENU {
              * @param renderMenu 
              */
             void render(bool renderMenu = true);
-         
+
+
+            /**
+             * @brief Get render attribute for rendering
+             * 
+             * @return const RenderAttribute_t& 
+             */
+            const RenderAttribute_t& getRenderAttribute();
 
     };
 

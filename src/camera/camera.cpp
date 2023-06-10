@@ -99,6 +99,15 @@ namespace SMOOTH_MENU {
     }
 
 
+    const RenderAttribute_t& Camrea_t::getRenderAttribute()
+    {
+        _render_attribute_buffer.x = _anim_cntr.x.getValue(_anim_cntr.currentTime);
+        _render_attribute_buffer.y = _anim_cntr.y.getValue(_anim_cntr.currentTime);
+        _render_attribute_buffer.width = _width;
+        _render_attribute_buffer.height = _height;
+
+        return _render_attribute_buffer;
+    }
 
 
 }

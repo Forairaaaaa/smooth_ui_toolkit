@@ -54,7 +54,7 @@ namespace SMOOTH_MENU {
              * 
              * @return std::vector<Item_t*> 
              */
-            inline std::vector<Item_t*> getItemList() { return _item_list; }
+            inline const std::vector<Item_t*>& getItemList() { return _item_list; }
 
 
             /**

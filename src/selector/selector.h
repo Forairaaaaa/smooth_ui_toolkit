@@ -16,6 +16,14 @@
 namespace SMOOTH_MENU {
 
 
+    struct RenderAttribute_t {
+        int x;
+        int y;
+        int width;
+        int height;
+    };
+
+
     struct SelectorRenderCallback_t {
         virtual void renderCallback(int x, int y, int width, int height) { }
     };
@@ -64,6 +72,7 @@ namespace SMOOTH_MENU {
 
             Menu_t* _current_menu;
             SelectorRenderCallback_t* _render_callback;
+            RenderAttribute_t _render_attribute_buffer;
 
 
         public:
@@ -79,6 +88,7 @@ namespace SMOOTH_MENU {
             inline unsigned int getTargetItem() { return _item_status.target; }
             inline bool isTargetChanged() { return _item_status.changed; }
             inline Menu_t* getMenu() { return _current_menu; }
+            inline SELECTOR::AnimContainer_t* getAnimCntr() { return &_anim_cntr; }
 
 
             /**
@@ -143,6 +153,15 @@ namespace SMOOTH_MENU {
              * @return false 
              */
             bool isAnimFinished();
+
+
+            /**
+             * @brief Get render attribute for rendering
+             * 
+             * @return const RenderAttribute_t& 
+             */
+            const RenderAttribute_t& getRenderAttribute();
+
 
 
     };
