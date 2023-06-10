@@ -26,14 +26,14 @@ namespace SMOOTH_MENU {
         int x = 0;
         int y = 0;
         int width = 0;
-        int heigh = 0;
+        int height = 0;
 
         int id = 0;
     };
 
 
     struct MenuRenderCallback_t {
-        virtual void renderMenu(const Item_t* item) { }
+        virtual void renderCallback(const Item_t* item) { }
     };
 
 
@@ -64,11 +64,11 @@ namespace SMOOTH_MENU {
              * @param x 
              * @param y 
              * @param width 
-             * @param heigh 
+             * @param height 
              * @param userData 
              * @return int 
              */
-            int addItem(std::string tag, int x, int y, int width, int heigh, void* userData = nullptr);
+            int addItem(std::string tag, int x, int y, int width, int height, void* userData = nullptr);
 
 
             /**
@@ -85,11 +85,11 @@ namespace SMOOTH_MENU {
              * 
              * @param tag 
              * @param width 
-             * @param heigh 
+             * @param height 
              * @param userData 
              * @return int 
              */
-            int addItemVertically(std::string tag, int width, int heigh, int x = 0, void* userData = nullptr);
+            int addItemVertically(std::string tag, int width, int height, int x = 0, void* userData = nullptr);
 
 
             /**
@@ -98,11 +98,11 @@ namespace SMOOTH_MENU {
              * @param tag 
              * @param y 
              * @param width 
-             * @param heigh 
+             * @param height 
              * @param userData 
              * @return ine 
              */
-            int addItemHorizontally(std::string tag, int width, int heigh, int y = 0, void* userData = nullptr);
+            int addItemHorizontally(std::string tag, int width, int height, int y = 0, void* userData = nullptr);
 
 
             /**
@@ -132,7 +132,7 @@ namespace SMOOTH_MENU {
              * @brief Render menu at once
              * 
              */
-            void renderMenu();
+            void render();
 
 
     };

@@ -14,6 +14,7 @@ set(SMOOTH_MENU_INCS
     src/lv_anim/
     src/menu/
     src/selector/
+    src/camera/
 )
 
 

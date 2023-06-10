@@ -33,15 +33,10 @@ namespace SMOOTH_MENU {
 
     void Selector_t::setMenu(Menu_t* menu)
     {
-        if (menu->getItemNum() == 0) {
-            return;
-        }
-
         _current_menu = menu;
         _item_status.current = 0;
         _item_status.target = 0;
         _item_status.changed = true;
-
     }
 
 
@@ -71,23 +66,23 @@ namespace SMOOTH_MENU {
     }
 
 
-    void Selector_t::update(uint32_t currentTime, bool render)
+    void Selector_t::update(uint32_t currentTime, bool renderAtOnce)
     {
         /* If target changed */
         if (_item_status.changed) {
             _item_status.changed = false;
 
-            /* Reset target */
+            /* Reset anim to target */
             _anim_cntr.x.setAnim(_cfg.animPath_x, _anim_cntr.x.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->x, _cfg.animTime_x);
             _anim_cntr.y.setAnim(_cfg.animPath_y, _anim_cntr.y.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->y, _cfg.animTime_y);
             _anim_cntr.width.setAnim(_cfg.animPath_width, _anim_cntr.width.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->width, _cfg.animTime_width);
-            _anim_cntr.heigh.setAnim(_cfg.animPath_heigh, _anim_cntr.heigh.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->heigh, _cfg.animTime_heigh);
+            _anim_cntr.height.setAnim(_cfg.animPath_height, _anim_cntr.height.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->height, _cfg.animTime_height);
             
             /* Reset anim time */
             _anim_cntr.x.resetTime(currentTime);
             _anim_cntr.y.resetTime(currentTime);
             _anim_cntr.width.resetTime(currentTime);
-            _anim_cntr.heigh.resetTime(currentTime);
+            _anim_cntr.height.resetTime(currentTime);
 
             
         }
@@ -96,27 +91,27 @@ namespace SMOOTH_MENU {
         _anim_cntr.currentTime = currentTime;
 
         /* Render menu and selector */
-        if (render) {
-            renderSelector();
+        if (renderAtOnce) {
+            render();
         }
     }
 
 
-    void Selector_t::renderSelector(bool renderMenu)
+    void Selector_t::render(bool renderMenu)
     {
         /* Render selector */
         if (_render_callback != nullptr) {
-            _render_callback->renderSelector(
+            _render_callback->renderCallback(
                 _anim_cntr.x.getValue(_anim_cntr.currentTime),
                 _anim_cntr.y.getValue(_anim_cntr.currentTime),
                 _anim_cntr.width.getValue(_anim_cntr.currentTime),
-                _anim_cntr.heigh.getValue(_anim_cntr.currentTime)
+                _anim_cntr.height.getValue(_anim_cntr.currentTime)
             );
         }
 
         /* Render menu */
         if (renderMenu) {
-            _current_menu->renderMenu();
+            _current_menu->render();
         }
     }
 
@@ -132,7 +127,7 @@ namespace SMOOTH_MENU {
         if (!_anim_cntr.width.isFinished(_anim_cntr.currentTime)) {
             return false;
         }
-        if (!_anim_cntr.heigh.isFinished(_anim_cntr.currentTime)) {
+        if (!_anim_cntr.height.isFinished(_anim_cntr.currentTime)) {
             return false;
         }
         _item_status.current = _item_status.target;

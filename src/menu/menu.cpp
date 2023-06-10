@@ -21,7 +21,7 @@ namespace SMOOTH_MENU {
         x = menuX;
         y = menuY;
         width = menuWidth;
-        heigh = menuHeigh;
+        height = menuHeigh;
         id = menuID;
     }
 
@@ -43,7 +43,7 @@ namespace SMOOTH_MENU {
     }
 
 
-    int Menu_t::addItem(std::string tag, int x, int y, int width, int heigh, void* userData)
+    int Menu_t::addItem(std::string tag, int x, int y, int width, int height, void* userData)
     {
         Item_t* new_item = new Item_t;
 
@@ -51,28 +51,28 @@ namespace SMOOTH_MENU {
         new_item->x = x;
         new_item->y = y;
         new_item->width = width;
-        new_item->heigh = heigh;
+        new_item->height = height;
         new_item->userData = userData;
         
         return addItem(new_item);
     }
 
 
-    int Menu_t::addItemVertically(std::string tag, int width, int heigh, int x, void* userData)
+    int Menu_t::addItemVertically(std::string tag, int width, int height, int x, void* userData)
     {
         int y;
         if (_item_list.size() == 0) {
             y = 0;
         }
         else {
-            y = _item_list[_item_list.size() - 1]->y + _item_list[_item_list.size() - 1]->heigh;
+            y = _item_list[_item_list.size() - 1]->y + _item_list[_item_list.size() - 1]->height;
         }
 
-        return addItem(tag, x, y, width, heigh, userData);
+        return addItem(tag, x, y, width, height, userData);
     }
 
 
-    int Menu_t::addItemHorizontally(std::string tag, int width, int heigh, int y, void* userData)
+    int Menu_t::addItemHorizontally(std::string tag, int width, int height, int y, void* userData)
     {
         int x;
         if (_item_list.size() == 0) {
@@ -82,7 +82,7 @@ namespace SMOOTH_MENU {
             x = _item_list[_item_list.size() - 1]->x + _item_list[_item_list.size() - 1]->width;
         }
 
-        return addItem(tag, x, y, width, heigh, userData);
+        return addItem(tag, x, y, width, height, userData);
     }
 
 
@@ -93,7 +93,7 @@ namespace SMOOTH_MENU {
     }
 
 
-    void Menu_t::renderMenu()
+    void Menu_t::render()
     {
         if (_render_callback == nullptr) {
             return;
@@ -101,7 +101,7 @@ namespace SMOOTH_MENU {
 
         /* Iterate item list */
         for (int i = 0; i < _item_list.size(); i++) {
-            _render_callback->renderMenu(_item_list[i]);
+            _render_callback->renderCallback(_item_list[i]);
         }
     }
 

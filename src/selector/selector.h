@@ -17,7 +17,7 @@ namespace SMOOTH_MENU {
 
 
     struct SelectorRenderCallback_t {
-        virtual void renderSelector(int x, int y, int width, int heigh) { }
+        virtual void renderCallback(int x, int y, int width, int height) { }
     };
 
 
@@ -28,12 +28,12 @@ namespace SMOOTH_MENU {
             LVGL::LV_ANIM_PATH_t animPath_x = LVGL::ease_out;
             LVGL::LV_ANIM_PATH_t animPath_y = LVGL::ease_out;
             LVGL::LV_ANIM_PATH_t animPath_width = LVGL::overshoot;
-            LVGL::LV_ANIM_PATH_t animPath_heigh = LVGL::ease_out;
+            LVGL::LV_ANIM_PATH_t animPath_height = LVGL::ease_out;
 
-            int32_t animTime_x = 200;
-            int32_t animTime_y = 200;
+            int32_t animTime_x = 100;
+            int32_t animTime_y = 100;
             int32_t animTime_width = 400;
-            int32_t animTime_heigh = 200;
+            int32_t animTime_height = 100;
         };
 
 
@@ -41,7 +41,7 @@ namespace SMOOTH_MENU {
             LVGL::Anim_Path x;
             LVGL::Anim_Path y;
             LVGL::Anim_Path width;
-            LVGL::Anim_Path heigh;
+            LVGL::Anim_Path height;
             uint32_t currentTime = 0;
         };
 
@@ -57,7 +57,7 @@ namespace SMOOTH_MENU {
 
 
     class Selector_t {
-        private:
+        protected:
             SELECTOR::Config_t _cfg;
             SELECTOR::AnimContainer_t _anim_cntr;
             SELECTOR::ItemStatus_t _item_status;
@@ -77,6 +77,8 @@ namespace SMOOTH_MENU {
 
             inline unsigned int getCurrentItem() { return _item_status.current; }
             inline unsigned int getTargetItem() { return _item_status.target; }
+            inline bool isTargetChanged() { return _item_status.changed; }
+            inline Menu_t* getMenu() { return _current_menu; }
 
 
             /**
@@ -123,7 +125,7 @@ namespace SMOOTH_MENU {
              * @param currentTime 
              * @param render 
              */
-            void update(uint32_t currentTime, bool render = true);
+            void update(uint32_t currentTime, bool renderAtOnce = true);
 
 
             /**
@@ -131,7 +133,7 @@ namespace SMOOTH_MENU {
              * 
              * @param renderMenu 
              */
-            void renderSelector(bool renderMenu = true);
+            void render(bool renderMenu = true);
 
 
             /**

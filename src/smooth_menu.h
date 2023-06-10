@@ -11,6 +11,7 @@
 #pragma once
 #include "menu/menu.h"
 #include "selector/selector.h"
+#include "camera/camera.h"
 
 
 namespace SMOOTH_MENU {
