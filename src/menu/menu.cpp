@@ -14,6 +14,18 @@
 namespace SMOOTH_MENU {
 
 
+    void Menu_t::setValue(std::string MenuTag, int menuX, int menuY, int menuWidth, int menuHeigh, int menuID, void* menuUserData)
+    {
+        tag = MenuTag;
+        userData = menuUserData;
+        x = menuX;
+        y = menuY;
+        width = menuWidth;
+        heigh = menuHeigh;
+        id = menuID;
+    }
+
+
     int Menu_t::addItem(Item_t* item)
     {
         /* If null pointer */

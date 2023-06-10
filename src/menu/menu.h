@@ -43,8 +43,10 @@ namespace SMOOTH_MENU {
             MenuRenderCallback_t* _render_callback;
 
         public:
-            Menu_t() : _render_callback(nullptr) {}
+            Menu_t() : _render_callback(nullptr) { }
             ~Menu_t() = default;
+
+            void setValue(std::string MenuTag, int menuX, int menuY, int menuWidth, int menuHeigh, int menuID = 0, void* menuUserData = nullptr);
 
 
             /**
