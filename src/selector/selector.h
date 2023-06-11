@@ -21,6 +21,8 @@ namespace SMOOTH_MENU {
         int y;
         int width;
         int height;
+
+        int targetItem;
     };
 
 
@@ -76,6 +78,8 @@ namespace SMOOTH_MENU {
             SelectorRenderCallback_t* _render_callback;
             RenderAttribute_t _render_attribute_buffer;
 
+            void _reset_anim_time();
+
 
         public:
             Selector_t();
@@ -128,14 +132,14 @@ namespace SMOOTH_MENU {
              * @brief Press
              * 
              */
-            void press();
+            void pressed();
 
 
             /**
              * @brief Release
              * 
              */
-            void release();
+            void released();
 
 
             /**

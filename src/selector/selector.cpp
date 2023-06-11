@@ -14,6 +14,16 @@
 namespace SMOOTH_MENU {
 
 
+    void Selector_t::_reset_anim_time()
+    {
+        /* Reset anim time */
+        _anim_cntr.x.resetTime(_anim_cntr.currentTime);
+        _anim_cntr.y.resetTime(_anim_cntr.currentTime);
+        _anim_cntr.width.resetTime(_anim_cntr.currentTime);
+        _anim_cntr.height.resetTime(_anim_cntr.currentTime);
+    }
+
+
     Selector_t::Selector_t()
     {
         _current_menu = nullptr;
@@ -81,15 +91,25 @@ namespace SMOOTH_MENU {
     }
 
 
-    void Selector_t::press()
+    void Selector_t::pressed()
     {
-
+        /* Squeeze selector  */
+        _anim_cntr.width.setAnim(_cfg.animPath_width, _anim_cntr.width.getValue(_anim_cntr.currentTime), _current_menu->getItemList()[_item_status.target]->width / 4 * 5, _cfg.animTime_width);
+        _anim_cntr.height.setAnim(_cfg.animPath_height, _anim_cntr.height.getValue(_anim_cntr.currentTime), _current_menu->getItemList()[_item_status.target]->height / 4 * 3, _cfg.animTime_height);
+        
+        _anim_cntr.width.resetTime(_anim_cntr.currentTime);
+        _anim_cntr.height.resetTime(_anim_cntr.currentTime);
     }
 
 
-    void Selector_t::release()
+    void Selector_t::released()
     {
-
+        /* Reset anim to target */
+        _anim_cntr.width.setAnim(_cfg.animPath_width, _anim_cntr.width.getValue(_anim_cntr.currentTime), _current_menu->getItemList()[_item_status.target]->width, _cfg.animTime_width);
+        _anim_cntr.height.setAnim(_cfg.animPath_height, _anim_cntr.height.getValue(_anim_cntr.currentTime), _current_menu->getItemList()[_item_status.target]->height, _cfg.animTime_height);
+        
+        _anim_cntr.width.resetTime(_anim_cntr.currentTime);
+        _anim_cntr.height.resetTime(_anim_cntr.currentTime);
     }
 
 
@@ -105,11 +125,7 @@ namespace SMOOTH_MENU {
             _anim_cntr.width.setAnim(_cfg.animPath_width, _anim_cntr.width.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->width, _cfg.animTime_width);
             _anim_cntr.height.setAnim(_cfg.animPath_height, _anim_cntr.height.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->height, _cfg.animTime_height);
             
-            /* Reset anim time */
-            _anim_cntr.x.resetTime(currentTime);
-            _anim_cntr.y.resetTime(currentTime);
-            _anim_cntr.width.resetTime(currentTime);
-            _anim_cntr.height.resetTime(currentTime);
+            _reset_anim_time();
 
         }
 
@@ -167,6 +183,8 @@ namespace SMOOTH_MENU {
         _render_attribute_buffer.y = _anim_cntr.y.getValue(_anim_cntr.currentTime);
         _render_attribute_buffer.width = _anim_cntr.width.getValue(_anim_cntr.currentTime);
         _render_attribute_buffer.height = _anim_cntr.height.getValue(_anim_cntr.currentTime);
+
+        _render_attribute_buffer.targetItem = _item_status.target;
 
         return _render_attribute_buffer;
     }

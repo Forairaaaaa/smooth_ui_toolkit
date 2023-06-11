@@ -107,6 +107,7 @@ namespace LVGL {
                         break;
                 }
             }
+            inline lv_anim_t* getAnimValue() { return &_anim_t; }
 
 
             inline void setAnim(LV_ANIM_PATH_t path, int32_t startValue, int32_t endValue, int32_t time)
