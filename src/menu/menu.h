@@ -12,23 +12,36 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "../lv_anim/lv_anim.h"
 
 
 namespace SMOOTH_MENU {
 
 
     struct Item_t {
-        /* Data */
-        std::string tag;
-        void* userData = nullptr;
-        
-        /* Postion */
-        int x = 0;
-        int y = 0;
-        int width = 0;
-        int height = 0;
+        public:
+            /* Attributes */
+            std::string tag;
+            void* userData = nullptr;
+            int id = 0;
+            
+            int x = 0;
+            int y = 0;
+            int width = 0;
+            int height = 0;
 
-        int id = 0;
+
+        /* For menu used */
+        public:
+            inline bool isMenu() { return _is_menu; }
+            virtual void open() { }
+            virtual void close() { }
+            int x_target = 0;
+            int y_target = 0;
+        protected:
+            bool _is_menu = false;
+            bool _is_opened = false;
+            
     };
 
 
@@ -37,16 +50,42 @@ namespace SMOOTH_MENU {
     };
 
 
-    class Menu_t : protected Item_t {
+    namespace MENU {
+
+        struct Config_t {
+            LVGL::LV_ANIM_PATH_t animPath_open = LVGL::ease_out;
+            int32_t animTime_open = 300;
+        };
+
+        struct AnimContainer_t {
+            LVGL::Anim_Path open;
+            uint32_t currentTime = 0;
+            bool isFinished = false;
+        };
+
+    }
+
+
+    class Menu_t : public Item_t {
         private:
             std::vector<Item_t*> _item_list;
             MenuRenderCallback_t* _render_callback;
 
+            MENU::Config_t _cfg;
+            MENU::AnimContainer_t _anim_cntr;
+
+
         public:
-            Menu_t() : _render_callback(nullptr) { }
+            Menu_t();
             ~Menu_t() = default;
 
-            void setValue(std::string MenuTag, int menuX, int menuY, int menuWidth, int menuHeigh, int menuID = 0, void* menuUserData = nullptr);
+
+            inline void config(MENU::Config_t cfg) { _cfg = cfg; }
+            inline MENU::Config_t config(void) { return _cfg; }
+
+
+            inline void setTag(std::string tag) { this->tag = tag; }
+            inline void setPostion(int x, int y) { this->x = x; this->y = y; }
 
 
             /**
@@ -133,6 +172,22 @@ namespace SMOOTH_MENU {
              * 
              */
             void render();
+
+
+            /**
+             * @brief Update menu anim
+             * 
+             * @param currentTime 
+             */
+            void update(uint32_t currentTime);
+
+
+
+            void open();
+
+
+            void close();
+
 
 
     };

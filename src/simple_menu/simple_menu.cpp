@@ -53,8 +53,10 @@ namespace SMOOTH_MENU {
 
     void Simple_Menu::update(uint32_t currentTime, bool renderAtOnce)
     {
+        _menu->update(currentTime);
         _selector->update(currentTime, false);
         _camera->update(currentTime, false);
+
 
         /* Render simple menu */
         if (renderAtOnce) {
