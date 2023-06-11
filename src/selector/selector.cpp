@@ -40,12 +40,30 @@ namespace SMOOTH_MENU {
     }
 
 
-    void Selector_t::goToItem(unsigned int targetItem)
+    void Selector_t::goToItem(int targetItem)
     {
-        if (targetItem > (_current_menu->getItemNum() - 1)) {
-            targetItem = _current_menu->getItemNum() - 1;
-        }
+        /* If hit top */
+        if (targetItem < 0) {
 
+            if (_cfg.menuLoopMode) {
+                targetItem = _current_menu->getItemNum() - 1;
+            }
+            else {
+                targetItem = 0;
+            }
+        }
+        
+        /* If hit bottom */
+        else if (targetItem > (_current_menu->getItemNum() - 1)) {
+            
+            if (_cfg.menuLoopMode) {
+                targetItem = 0;
+            }
+            else {
+                targetItem = _current_menu->getItemNum() - 1;
+            }
+        }
+        
         _item_status.target = targetItem;
         _item_status.changed = true;
     }
@@ -53,9 +71,6 @@ namespace SMOOTH_MENU {
 
     void Selector_t::goLast()
     {
-        if (_item_status.target == 0) {
-            return;
-        }
         goToItem(_item_status.target - 1);
     }
 
@@ -63,6 +78,18 @@ namespace SMOOTH_MENU {
     void Selector_t::goNext()
     {
         goToItem(_item_status.target + 1);
+    }
+
+
+    void Selector_t::press()
+    {
+
+    }
+
+
+    void Selector_t::release()
+    {
+
     }
 
 
@@ -84,7 +111,6 @@ namespace SMOOTH_MENU {
             _anim_cntr.width.resetTime(currentTime);
             _anim_cntr.height.resetTime(currentTime);
 
-            
         }
 
         /* Update current time */

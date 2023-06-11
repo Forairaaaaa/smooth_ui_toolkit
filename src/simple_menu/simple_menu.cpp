@@ -14,6 +14,13 @@
 namespace SMOOTH_MENU {
 
 
+    void Simple_Menu::setMenuLoopMode(bool loopMode)
+    {
+        _selector->setMenuLoopMode(loopMode);
+        _camera->setMenuLoopMode(loopMode);
+    }
+
+
     void Simple_Menu::init(Menu_t* menu, Selector_t* selector, Camrea_t* camera)
     {
         /* Init menu */

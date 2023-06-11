@@ -48,6 +48,14 @@ namespace SMOOTH_MENU {
 
 
             /**
+             * @brief Set menu go back when hit limit
+             * 
+             * @param loopMode 
+             */
+            void setMenuLoopMode(bool loopMode);
+
+
+            /**
              * @brief Init menu
              * 
              * @param cameraWidth 

@@ -42,6 +42,8 @@ namespace SMOOTH_MENU {
             int32_t animTime_y = 100;
             int32_t animTime_width = 400;
             int32_t animTime_height = 100;
+
+            bool menuLoopMode = true;
         };
 
 
@@ -55,8 +57,8 @@ namespace SMOOTH_MENU {
 
 
         struct ItemStatus_t {
-            unsigned int current = 0;
-            unsigned int target = 0;
+            int current = 0;
+            int target = 0;
             bool changed = false;
         };
 
@@ -89,6 +91,7 @@ namespace SMOOTH_MENU {
             inline bool isTargetChanged() { return _item_status.changed; }
             inline Menu_t* getMenu() { return _current_menu; }
             inline SELECTOR::AnimContainer_t* getAnimCntr() { return &_anim_cntr; }
+            inline void setMenuLoopMode(bool loopMode) { _cfg.menuLoopMode = loopMode; }
 
 
             /**
@@ -104,7 +107,7 @@ namespace SMOOTH_MENU {
              * 
              * @param targetItem 
              */
-            void goToItem(unsigned int targetItem);
+            void goToItem(int targetItem);
 
 
             /**
@@ -119,6 +122,20 @@ namespace SMOOTH_MENU {
              * 
              */
             void goNext();
+
+
+            /**
+             * @brief Press
+             * 
+             */
+            void press();
+
+
+            /**
+             * @brief Release
+             * 
+             */
+            void release();
 
 
             /**
