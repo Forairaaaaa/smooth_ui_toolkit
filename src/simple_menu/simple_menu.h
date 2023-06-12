@@ -30,6 +30,7 @@ namespace SMOOTH_MENU {
             Selector_t* _selector;
             Camrea_t* _camera;
             SimpleMenuCallback_t* _render_callback;
+            bool _first_open;
 
             
         public:
@@ -37,7 +38,8 @@ namespace SMOOTH_MENU {
                 _menu(nullptr),
                 _selector(nullptr),
                 _camera(nullptr),
-                _render_callback(nullptr)
+                _render_callback(nullptr),
+                _first_open(true)
                 { }
             ~Simple_Menu() = default;
 

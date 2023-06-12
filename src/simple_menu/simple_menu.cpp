@@ -53,6 +53,13 @@ namespace SMOOTH_MENU {
 
     void Simple_Menu::update(uint32_t currentTime, bool renderAtOnce)
     {
+        /* Move the selector to the first item */
+        if (_first_open) {
+            _first_open = false;
+            _selector->goToItem(0);
+            _selector->update(0);
+        }
+
         _menu->update(currentTime);
         _selector->update(currentTime, false);
         _camera->update(currentTime, false);
