@@ -53,6 +53,11 @@ namespace SMOOTH_MENU {
 
     void Simple_Menu::update(uint32_t currentTime, bool renderAtOnce)
     {
+        /* Return if empty menu */
+        if (!_menu->getItemNum()) {
+            return;
+        }
+        
         /* Move the selector to the first item */
         if (_first_open) {
             _first_open = false;
