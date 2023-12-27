@@ -1,3 +1,3 @@
-# smooth_menu
+# smooth_ui_toolkit
 
-模拟器：https://github.com/Forairaaaaa/smooth_menu_lgfx_test
+模拟器：https://github.com/Forairaaaaa/smooth_ui_toolkit_simu
