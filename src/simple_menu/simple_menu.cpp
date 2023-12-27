@@ -1,28 +1,27 @@
 /**
  * @file simple_menu.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-10
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include "simple_menu.h"
 
-
-namespace SMOOTH_MENU 
+namespace SMOOTH_MENU
 {
     Simple_Menu::Simple_Menu(int cameraWidth, int cameraHeight)
     {
-        // Create menu 
+        // Create menu
         _menu = new Menu_t;
 
-        // Create selector 
+        // Create selector
         _selector = new Selector_t;
         _selector->setMenu(_menu);
 
-        // Create camera 
+        // Create camera
         _camera = new Camrea_t;
         _camera->setMenu(_menu);
         _camera->setSize(cameraWidth, cameraHeight);
@@ -32,7 +31,6 @@ namespace SMOOTH_MENU
         _first_item = 0;
     }
 
-
     Simple_Menu::~Simple_Menu()
     {
         delete _menu;
@@ -40,13 +38,11 @@ namespace SMOOTH_MENU
         delete _camera;
     }
 
-
     void Simple_Menu::setMenuLoopMode(bool loopMode)
     {
         _selector->setMenuLoopMode(loopMode);
         _camera->setMenuLoopMode(loopMode);
     }
-
 
     void Simple_Menu::update(uint32_t currentTime, bool renderAtOnce)
     {
@@ -55,7 +51,7 @@ namespace SMOOTH_MENU
             return;
 
         /* Move the selector to the first item */
-        if (_first_open) 
+        if (_first_open)
         {
             _first_open = false;
 
@@ -71,12 +67,10 @@ namespace SMOOTH_MENU
         _selector->update(currentTime, false);
         _camera->update(currentTime, false);
 
-
-        // If render at once 
+        // If render at once
         if (renderAtOnce)
             render();
     }
-
 
     void Simple_Menu::render()
     {
@@ -86,17 +80,14 @@ namespace SMOOTH_MENU
         _render_callback->renderCallback(
             _menu->getItemList(),
             _selector->getRenderAttribute(),
-            _camera->getRenderAttribute()
-        );
+            _camera->getRenderAttribute());
     }
-
 
     void Simple_Menu::goLast()
     {
         _selector->goLast();
         _camera->goLast();
     }
-
 
     void Simple_Menu::goNext()
     {
