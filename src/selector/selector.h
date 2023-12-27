@@ -12,7 +12,7 @@
 #include "../lv_anim/lv_anim.h"
 #include "../menu/menu.h"
 
-namespace SMOOTH_MENU
+namespace SMOOTH_UI_TK
 {
     struct RenderAttribute_t
     {

@@ -12,7 +12,7 @@
 #include "../lv_anim/lv_anim.h"
 #include "../selector/selector.h"
 
-namespace SMOOTH_MENU
+namespace SMOOTH_UI_TK
 {
     class Camrea_t : public Selector_t
     {

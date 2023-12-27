@@ -14,7 +14,7 @@
 #include <string>
 #include "../lv_anim/lv_anim.h"
 
-namespace SMOOTH_MENU
+namespace SMOOTH_UI_TK
 {
     struct Item_t
     {

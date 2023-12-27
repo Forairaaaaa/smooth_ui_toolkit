@@ -11,7 +11,7 @@
 #pragma once
 #include "../camera/camera.h"
 
-namespace SMOOTH_MENU
+namespace SMOOTH_UI_TK
 {
     class SimpleMenuCallback_t
     {

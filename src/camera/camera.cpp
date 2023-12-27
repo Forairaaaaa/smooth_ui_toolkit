@@ -10,7 +10,7 @@
  */
 #include "camera.h"
 
-using namespace SMOOTH_MENU;
+using namespace SMOOTH_UI_TK;
 
 void Camrea_t::update(uint32_t currentTime, bool renderAtOnce)
 {
