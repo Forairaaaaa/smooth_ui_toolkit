@@ -4,30 +4,18 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_C_STANDARD 11)#C11
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
-# SMOOTH_MENU
-file(GLOB_RECURSE SMOOTH_MENU_SRCS
+# Files
+file(GLOB_RECURSE SMOOTH_UI_TOOLKIT_SRCS
     src/*.cpp
 )
-set(SMOOTH_MENU_INCS
+set(SMOOTH_UI_TOOLKIT_INCS
     src/
-    # src/lv_anim/
-    # src/menu/
-    # src/selector/
-    # src/camera/
-    # src/simple_menu/
 )
-
 
 
 #  Build library
-add_library(smooth_menu
-    ${SMOOTH_MENU_SRCS}
-)
+add_library(smooth_ui_toolkit ${SMOOTH_UI_TOOLKIT_SRCS})
 
 
 # Include
-target_include_directories(smooth_menu PUBLIC
-    ${SMOOTH_MENU_INCS}
-)
-
+target_include_directories(smooth_ui_toolkit PUBLIC ${SMOOTH_UI_TOOLKIT_INCS})

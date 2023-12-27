@@ -71,7 +71,6 @@ namespace LVGL {
                 _anim_t.time = 0;
                 _anim_t.act_time = 0;
             }
-            ~Anim_Path() = default;
 
 
             /* Set value */
