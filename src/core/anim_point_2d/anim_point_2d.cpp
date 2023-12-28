@@ -14,10 +14,10 @@
 using namespace SMOOTH_UI_TK;
 
 
-AnimPoint2D::AnimPoint2D(int xStart, int yStart)
+AnimPoint2D::AnimPoint2D(int startX, int startY)
 {
     // Start point 
-    _move_to_no_anim(xStart, yStart);
+    _move_to_no_anim(startX, startY);
 }
 
 

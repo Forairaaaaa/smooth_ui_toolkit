@@ -10,6 +10,8 @@
  */
 #pragma once
 #include "core/types/types.h"
+#include "core/cubic_bezier/cubic_bezier.h"
+#include "core/easing_path/easing_path.h"
 #include "core/anim_point_2d/anim_point_2d.h"
 #include "camera/camera.h"
 #include "lv_anim/lv_anim.h"

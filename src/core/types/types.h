@@ -13,12 +13,12 @@
 
 namespace SMOOTH_UI_TK
 {
-    struct Point2D_Int_t
+    struct Vector2D_t
     {
         int x;
         int y;
 
-        Point2D_Int_t(int x = 0, int y = 0)
+        Vector2D_t(int x = 0, int y = 0)
         {
             reset(x, y);
         }
@@ -27,6 +27,27 @@ namespace SMOOTH_UI_TK
         {
             this->x = x;
             this->y = y;
+        }
+    };
+
+    struct Vector4D_t
+    {
+        int x;
+        int y;
+        int z;
+        int w;
+
+        Vector4D_t(int x = 0, int y = 0, int z = 0, int w = 0)
+        {
+            reset(x, y, z, w);
+        }
+
+        void reset(int x = 0, int y = 0, int z = 0, int w = 0)
+        {
+            this->x = x;
+            this->y = y;
+            this->z = z;
+            this->w = w;
         }
     };
 }

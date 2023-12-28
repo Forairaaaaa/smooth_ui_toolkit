@@ -33,8 +33,8 @@ namespace SMOOTH_UI_TK
             // to remove multiple target buffer, and better path config 
             LVGL::Anim_Path anim_x;
             LVGL::Anim_Path anim_y;
-            Point2D_Int_t current_point;
-            Point2D_Int_t target_point;
+            Vector2D_t current_point;
+            Vector2D_t target_point;
             bool is_target_changed = false;
         };
         Data_t _data;
@@ -43,8 +43,8 @@ namespace SMOOTH_UI_TK
         void _move_to_no_anim(int x, int y);
 
     public:
-        AnimPoint2D(int xStart = 0, int yStart = 0);
-        inline AnimPoint2D(Point2D_Int_t point2d) { AnimPoint2D(point2d.x, point2d.y); }
+        AnimPoint2D(int startX = 0, int startY = 0);
+        inline AnimPoint2D(Vector2D_t startPoint) { AnimPoint2D(startPoint.x, startPoint.y); }
 
         inline Config_t getConfig() { return _config; }
         inline void setConfig(Config_t cfg) { _config = cfg; }
@@ -56,7 +56,7 @@ namespace SMOOTH_UI_TK
          * @param y 
          */
         void moveTo(int x, int y);
-        inline void moveTo(Point2D_Int_t point2d) { moveTo(point2d.x, point2d.y); }
+        inline void moveTo(Vector2D_t point2d) { moveTo(point2d.x, point2d.y); }
 
         /**
          * @brief Move to the target point without anim 
@@ -73,7 +73,7 @@ namespace SMOOTH_UI_TK
          */
         void update(uint32_t currentTime);
 
-        inline const Point2D_Int_t& getCurentPoint() { return _data.current_point; }
+        inline const Vector2D_t& getCurentPoint() { return _data.current_point; }
         inline int x() { return _data.current_point.x; }
         inline int y() { return _data.current_point.y; }
     };
