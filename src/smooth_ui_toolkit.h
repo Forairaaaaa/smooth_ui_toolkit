@@ -9,6 +9,8 @@
  * 
  */
 #pragma once
+#include "basic_types/basic_types.h"
+#include "anim_point_2d/anim_point_2d.h"
 #include "camera/camera.h"
 #include "lv_anim/lv_anim.h"
 #include "menu/menu.h"
