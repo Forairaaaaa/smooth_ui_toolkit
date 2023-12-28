@@ -9,7 +9,7 @@
  * 
  */
 #pragma once
-#include "basic_types/basic_types.h"
+#include "../types/types.h"
 #include "lv_anim/lv_anim.h"
 
 

@@ -1,5 +1,5 @@
 /**
- * @file basic_types.h
+ * @file types.h
  * @author Forairaaaaa
  * @brief 
  * @version 0.1
