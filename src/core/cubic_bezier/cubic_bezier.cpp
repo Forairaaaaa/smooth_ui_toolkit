@@ -13,6 +13,12 @@
 
 namespace SMOOTH_UI_TK
 {
+    float CubicBezier(float t, float p0, float p1, float p2, float p3)
+    {
+        
+    }
+
+
     int CubicBezierInt(int t, int p0, int p1, int p2, int p3)
     {
         int t_rem = 1024 - t;

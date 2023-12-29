@@ -19,6 +19,8 @@
 
 namespace SMOOTH_UI_TK
 {
+    float CubicBezier(float t, float p0, float p1, float p2, float p3);
+
     /**
      * @brief Cubic bezier in integer, t: 0~1024
      * 
