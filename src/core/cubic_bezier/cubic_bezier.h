@@ -10,6 +10,7 @@
  */
 #pragma once
 #include "../types/types.h"
+#include <stdint.h>
 // Refs: 
 // https://en.wikipedia.org/wiki/B%C3%A9zier_curve
 // https://cubic-bezier.com

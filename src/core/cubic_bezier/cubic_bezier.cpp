@@ -15,7 +15,18 @@ namespace SMOOTH_UI_TK
 {
     float CubicBezier(float t, float p0, float p1, float p2, float p3)
     {
-        
+        float t_rem = 1 - t;
+        float t_rem2 = t_rem * t_rem;
+        float t_rem3 = t_rem2 * t_rem;
+        float t2 = t * t;
+        float t3 = t2 * t;
+
+        int v1 = t_rem3 * p0;
+        int v2 = 3 * t_rem2 * t * p1;
+        int v3 = 3 * t_rem * t2 * p2;
+        int v4 = t3 * p3;
+
+        return v1 + v2 + v3 + v4;
     }
 
 
