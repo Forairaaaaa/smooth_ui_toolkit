@@ -40,5 +40,14 @@ namespace SMOOTH_UI_TK
         int easeInSine(const int& t);
         int easeOutSine(const int& t);
         int easeInOutSine(const int& t);
+        int easeInExpo(const int& t);
+        int easeOutExpo(const int& t);
+        int easeInOutExpo(const int& t);
+        int easeInCirc(const int& t);
+        int easeOutCirc(const int& t);
+        int easeInOutCirc(const int& t);
+        int easeInBack(const int& t);
+        int easeOutBack(const int& t);
+        int easeInOutBack(const int& t);
     }
 }
