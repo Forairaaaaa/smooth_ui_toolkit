@@ -10,7 +10,7 @@
  */
 #pragma once
 #include "../types/types.h"
-#include "lv_anim/lv_anim.h"
+#include "../../old/lv_anim/lv_anim.h"
 
 
 namespace SMOOTH_UI_TK

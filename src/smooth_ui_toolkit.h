@@ -10,12 +10,11 @@
  */
 #pragma once
 #include "core/types/types.h"
-#include "core/cubic_bezier/cubic_bezier.h"
 #include "core/easing_path/easing_path.h"
 #include "core/anim_point_2d/anim_point_2d.h"
-#include "camera/camera.h"
-#include "lv_anim/lv_anim.h"
-#include "menu/menu.h"
-#include "selector/selector.h"
-#include "simple_menu/simple_menu.h"
+#include "old/camera/camera.h"
+#include "old/lv_anim/lv_anim.h"
+#include "old/menu/menu.h"
+#include "old/selector/selector.h"
+#include "old/simple_menu/simple_menu.h"
 
