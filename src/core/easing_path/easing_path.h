@@ -49,5 +49,11 @@ namespace SMOOTH_UI_TK
         int easeInBack(const int& t);
         int easeOutBack(const int& t);
         int easeInOutBack(const int& t);
+        int easeInElastic(const int& t);
+        int easeOutElastic(const int& t);
+        int easeInOutElastic(const int& t);
+        int easeInBounce(const int& t);
+        int easeOutBounce(const int& t);
+        int easeInOutBounce(const int& t);
     }
 }

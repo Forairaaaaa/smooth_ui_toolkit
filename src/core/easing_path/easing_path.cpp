@@ -18,6 +18,8 @@ constexpr fpm::fixed_16_16 _c2 {1.70158 * 1.525};
 constexpr fpm::fixed_16_16 _c3 {1.70158 + 1};
 constexpr fpm::fixed_16_16 _c4 {6.2831853 / 3};
 constexpr fpm::fixed_16_16 _c5 {6.2831853 / 4.5};
+constexpr fpm::fixed_16_16 _n1 {7.5625};
+constexpr fpm::fixed_16_16 _d1 {2.75};
 
 
 namespace SMOOTH_UI_TK { namespace EasingPath
@@ -246,6 +248,81 @@ namespace SMOOTH_UI_TK { namespace EasingPath
         else
             ft = (fpm::pow(2 * ft - 2, 2) * ((_c2 + 1) * (ft * 2 - 2) + _c2) + 2) / 2;
         return static_cast<int>(ft * maxT);
+    }
+
+    int easeInElastic(const int& t)
+    {
+        fpm::fixed_16_16 ft {t};
+        ft = ft / maxT;
+        if (t == 0)
+            return 0;
+        if (t == maxT)
+            return maxT;
+        ft = -(fpm::pow(fpm::fixed_16_16 {2}, 10 * ft - 10)) * fpm::sin((ft * 10 - fpm::fixed_16_16 {10.75}) * _c4);
+        return static_cast<int>(ft * maxT);
+    }
+
+    int easeOutElastic(const int& t)
+    {
+        fpm::fixed_16_16 ft {t};
+        ft = ft / maxT;
+        if (t == 0)
+            return 0;
+        if (t == maxT)
+            return maxT;
+        ft = fpm::pow(fpm::fixed_16_16 {2}, -10 * ft) * fpm::sin((ft * 10 - fpm::fixed_16_16 {0.75}) * _c4) + 1;
+        return static_cast<int>(ft * maxT);
+    }
+
+    int easeInOutElastic(const int& t)
+    {
+        fpm::fixed_16_16 ft {t};
+        ft = ft / maxT;
+        if (t == 0)
+            return 0;
+        if (t == maxT)
+            return maxT;
+        if (t < maxT / 2)
+            ft = -(fpm::pow(fpm::fixed_16_16 {2}, 20 * ft - 10) * fpm::sin((20 * ft - fpm::fixed_16_16 {11.125}) * _c5)) / 2;
+        else
+            ft = (fpm::pow(fpm::fixed_16_16 {2}, -20 * ft + 10) * fpm::sin((20 * ft - fpm::fixed_16_16 {11.125}) * _c5)) / 2 + 1;
+        return static_cast<int>(ft * maxT);
+    }
+
+    int easeInBounce(const int& t)
+    {
+        return maxT - easeOutBounce(maxT - t);
+    }
+
+    int easeOutBounce(const int& t)
+    {
+        fpm::fixed_16_16 ft {t};
+        ft = ft / maxT;
+        if (ft < 1 / _d1)
+            ft = _n1 * ft * ft;
+        else if (ft < 2 / _d1)
+        {
+            ft = ft - fpm::fixed_16_16 {1.5} / _d1;
+            ft = _n1 * ft * ft + fpm::fixed_16_16 {0.75};
+        }
+        else if (ft < fpm::fixed_16_16 {2.5} / _d1)
+        {
+            ft = ft - fpm::fixed_16_16 {2.25} / _d1;
+            ft = _n1 * ft * ft + fpm::fixed_16_16 {0.9375};
+        }
+        else
+        {
+            ft = ft - fpm::fixed_16_16 {2.625} / _d1;
+            ft = _n1 * ft * ft + fpm::fixed_16_16 {0.984375};
+        }
+        return static_cast<int>(ft * maxT);
+    }
+
+    int easeInOutBounce(const int& t)
+    {
+        if (t < maxT / 2)
+            return (maxT - easeOutBounce(maxT - 2 * t)) / 2;
+        return (maxT + easeOutBounce(2 * t - maxT)) / 2;
     }
 
 } }
