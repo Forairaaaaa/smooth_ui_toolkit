@@ -30,7 +30,7 @@ namespace SMOOTH_UI_TK
     }
 
 
-    int CubicBezierInt(int t, const Vector4D_t& vector_4d)
+    int CubicBezierInt(int t, Vector4D_t vector_4d)
     {
         int t_rem = 1024 - t;
         int t_rem2 = (t_rem * t_rem) >> 10;
@@ -44,5 +44,16 @@ namespace SMOOTH_UI_TK
         int v4 = (t3 * vector_4d.w) >> 10;
 
         return v1 + v2 + v3 + v4;
+    }
+
+
+    Vector4D_t cubicBezierCast2Int(float p0, float p1, float p2, float p3)
+    {
+        return Vector4D_t(
+            static_cast<int>(p0 * 1024),
+            static_cast<int>(p1 * 1024),
+            static_cast<int>(p2 * 1024),
+            static_cast<int>(p3 * 1024)
+        );
     }
 }

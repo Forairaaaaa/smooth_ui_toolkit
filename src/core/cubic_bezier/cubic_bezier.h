@@ -38,5 +38,16 @@ namespace SMOOTH_UI_TK
      * @param vector_4d 
      * @return int 
      */
-    int CubicBezierInt(int t, const Vector4D_t& vector_4d);
+    int CubicBezierInt(int t, Vector4D_t vector_4d);
+    
+    /**
+     * @brief Cast normal cubic bezier to integer 
+     * 
+     * @param p0 
+     * @param p1 
+     * @param p2 
+     * @param p3 
+     * @return Vector4D_t 
+     */
+    Vector4D_t cubicBezierCast2Int(float p0, float p1, float p2, float p3);
 }
