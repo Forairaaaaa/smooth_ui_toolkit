@@ -19,12 +19,26 @@
 
 namespace SMOOTH_UI_TK
 {
-    // Paths, t: 0~100
     namespace EasingPath
     {
+        // t: 0~maxT
         constexpr int maxT = 1000;
+        
         int linear(const int& t);
         int easeInQuad(const int& t);
         int easeOutQuad(const int& t);
+        int easeInOutQuad(const int& t);
+        int easeInCubic(const int& t);
+        int easeOutCubic(const int& t);
+        int easeInOutCubic(const int& t);
+        int easeInQuart(const int& t);
+        int easeOutQuart(const int& t);
+        int easeInOutQuart(const int& t);
+        int easeInQuint(const int& t);
+        int easeOutQuint(const int& t);
+        int easeInOutQuint(const int& t);
+        int easeInSine(const int& t);
+        int easeOutSine(const int& t);
+        int easeInOutSine(const int& t);
     }
 }
