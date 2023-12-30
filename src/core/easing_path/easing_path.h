@@ -15,13 +15,14 @@
 // https://github.com/ai/easings.net/blob/master/src/easings/easingsFunctions.ts
 // https://easings.net
 // https://mikelankamp.github.io/fpm/
+// https://www.desmos.com/calculator?lang=zh-CN
 
 
-namespace SMOOTH_UI_TK
+namespace SmoothUIToolKit
 {
     namespace EasingPath
     {
-        // t: 0~maxT
+        // t: 0 ~ maxT
         constexpr int maxT = 1000;
         
         int linear(const int& t);

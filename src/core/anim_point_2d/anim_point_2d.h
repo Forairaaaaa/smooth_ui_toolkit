@@ -13,7 +13,7 @@
 #include "../../old/lv_anim/lv_anim.h"
 
 
-namespace SMOOTH_UI_TK
+namespace SmoothUIToolKit
 {
     class AnimPoint2D
     {

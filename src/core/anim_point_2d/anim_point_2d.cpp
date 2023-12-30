@@ -11,7 +11,7 @@
 #include "anim_point_2d.h"
 
 
-using namespace SMOOTH_UI_TK;
+using namespace SmoothUIToolKit;
 
 
 AnimPoint2D::AnimPoint2D(int startX, int startY)

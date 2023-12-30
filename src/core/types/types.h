@@ -11,7 +11,7 @@
 #pragma once
 
 
-namespace SMOOTH_UI_TK
+namespace SmoothUIToolKit
 {
     struct Vector2D_t
     {

@@ -10,7 +10,7 @@
  */
 #include "menu.h"
 
-using namespace SMOOTH_UI_TK;
+using namespace SmoothUIToolKit;
 
 Menu_t::Menu_t()
 {

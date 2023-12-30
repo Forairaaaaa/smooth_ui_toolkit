@@ -22,7 +22,7 @@ constexpr fpm::fixed_16_16 _n1 {7.5625};
 constexpr fpm::fixed_16_16 _d1 {2.75};
 
 
-namespace SMOOTH_UI_TK { namespace EasingPath
+namespace SmoothUIToolKit { namespace EasingPath
 {
     int linear(const int& t)
     {

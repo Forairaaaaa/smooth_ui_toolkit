@@ -10,7 +10,7 @@
  */
 #include "simple_menu.h"
 
-using namespace SMOOTH_UI_TK;
+using namespace SmoothUIToolKit;
 
 Simple_Menu::Simple_Menu(int cameraWidth, int cameraHeight)
 {

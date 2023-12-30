@@ -10,7 +10,7 @@
  */
 #include "selector.h"
 
-using namespace SMOOTH_UI_TK;
+using namespace SmoothUIToolKit;
 
 void Selector_t::_reset_anim_time()
 {
