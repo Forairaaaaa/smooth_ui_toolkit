@@ -43,7 +43,7 @@ namespace SmoothUIToolKit
             int (*transitionPath)(const int&) = EasingPath::easeOutQuad;
 
             // Transition update callback 
-            void (*updateCallback)(Transition* object) = nullptr;
+            void (*updateCallback)(Transition*) = nullptr;
         };
 
     private:
@@ -65,10 +65,14 @@ namespace SmoothUIToolKit
         // Transition configs 
         inline Config_t getConfig() { return _config; }
         inline void setConfig(Config_t cfg) { _config = cfg; }
-        inline void setConfig(int start, int end, std::uint32_t duration, int (*easingPath)(const int&))
+        inline void setConfig(int start, int end)
         {
             _config.startValue = start;
             _config.endValue = end;
+        }
+        inline void setConfig(int start, int end, std::uint32_t duration, int (*easingPath)(const int&))
+        {
+            setConfig(start, end);
             _config.duration = duration;
             _config.transitionPath = easingPath;
         }
@@ -113,16 +117,6 @@ namespace SmoothUIToolKit
          * 
          */
         void reset();
-
-        /**
-         * @brief Reset tansition to the start with new config 
-         * 
-         */
-        inline void reset(int start, int end, std::uint32_t duration = 1000, int (*easingPath)(const int&) = EasingPath::easeOutQuad)
-        {
-            setConfig(start, end, duration, easingPath);
-            reset();
-        }
         
         /**
          * @brief Update transition 
