@@ -59,6 +59,9 @@ namespace SmoothUIToolKit
         void _update_value(const std::uint32_t& currentTime);
 
     public:
+        Transition() = default;
+        Transition(Config_t cfg) { _config = cfg; }
+
         // Transition configs 
         inline Config_t getConfig() { return _config; }
         inline void setConfig(Config_t cfg) { _config = cfg; }
@@ -115,7 +118,7 @@ namespace SmoothUIToolKit
          * @brief Reset tansition to the start with new config 
          * 
          */
-        inline void reset(int start, int end, std::uint32_t duration, int (*easingPath)(const int&))
+        inline void reset(int start, int end, std::uint32_t duration = 1000, int (*easingPath)(const int&) = EasingPath::easeOutQuad)
         {
             setConfig(start, end, duration, easingPath);
             reset();

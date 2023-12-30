@@ -16,8 +16,8 @@ using namespace SmoothUIToolKit;
 
 void Transition::start(std::uint32_t currentTime)
 {
-    _data.time_offset = currentTime;
     _data.is_paused = false;
+    _data.time_offset = currentTime;
 }
 
 
@@ -60,18 +60,21 @@ void Transition::update(std::uint32_t currentTime)
             _data.current_value = _config.endValue;
             _data.is_finish = true;
         }
-        
-        _update_value(currentTime);
+        else
+        {
+            _update_value(currentTime);
+        }
     }
 
     // Invoke update callback
-    _config.updateCallback(this);
+    if (_config.updateCallback != nullptr)
+        _config.updateCallback(this);
 }
 
 
 void Transition::_update_value(const std::uint32_t& currentTime)
 {
     std::uint32_t t_current = EasingPath::maxT / _config.duration * (currentTime - _config.delay);
-    _data.current_value = (_config.endValue - _config.startValue) / EasingPath::maxT * _config.transitionPath(t_current);
+    _data.current_value = (_config.endValue - _config.startValue) * _config.transitionPath(t_current) / EasingPath::maxT + _config.startValue;
 }
 
