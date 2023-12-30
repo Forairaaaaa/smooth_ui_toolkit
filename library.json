@@ -1,5 +1,5 @@
 {
-    "name": "Smooth UI tookit",
+    "name": "SmoothUIToolKit",
     "version": "1.0.0",
     "description": "带动画曲线插值的 UI 抽象工具集",
     "keywords": "ui, smooth, easing path",

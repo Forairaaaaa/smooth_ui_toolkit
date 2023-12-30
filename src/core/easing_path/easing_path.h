@@ -58,4 +58,6 @@ namespace SmoothUIToolKit
         int easeOutBounce(const int& t);
         int easeInOutBounce(const int& t);
     }
+
+    typedef int (*EasingPathPtr)(const int&);
 }

@@ -18,6 +18,9 @@
 
 namespace SmoothUIToolKit
 {
+    class Transition;
+    typedef void (*TransitionUpdateCallbackPtr)(Transition*);
+
     /**
      * @brief Transition in esing path 
      * 
@@ -90,13 +93,13 @@ namespace SmoothUIToolKit
         inline void setUserData(void* userData) { _config.userData = userData; }
 
         // Basic getter 
-        inline auto getStartValue() { return _config.startValue; }
-        inline auto getEndValue() { return _config.endValue; }
-        inline auto getDuration() { return _config.duration; }
-        inline auto getDelay() { return _config.delay; }
-        inline auto getTransitionPath() { return _config.transitionPath; }
-        inline auto getUpdateCallback() { return _config.updateCallback; }
-        inline auto getUserData() { return _config.userData; }
+        inline int getStartValue() { return _config.startValue; }
+        inline int getEndValue() { return _config.endValue; }
+        inline std::uint32_t getDuration() { return _config.duration; }
+        inline std::uint32_t getDelay() { return _config.delay; }
+        inline EasingPathPtr getTransitionPath() { return _config.transitionPath; }
+        inline TransitionUpdateCallbackPtr getUpdateCallback() { return _config.updateCallback; }
+        inline void* getUserData() { return _config.userData; }
 
         /**
          * @brief Start transition 
