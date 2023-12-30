@@ -43,10 +43,10 @@ namespace SmoothUIToolKit
             std::uint32_t delay = 0;
 
             // Transition path (easing path)
-            int (*transitionPath)(const int&) = EasingPath::easeOutQuad;
+            EasingPathPtr transitionPath = EasingPath::easeOutQuad;
 
             // Transition update callback 
-            void (*updateCallback)(Transition*) = nullptr;
+            TransitionUpdateCallbackPtr updateCallback= nullptr;
 
             void* userData = nullptr;
         };
@@ -66,7 +66,7 @@ namespace SmoothUIToolKit
     public:
         Transition() = default;
         Transition(Config_t cfg) { _config = cfg; }
-        Transition(int start, int end, std::uint32_t duration, int (*easingPath)(const int&)) { setConfig(start, end, duration, easingPath); }
+        Transition(int start, int end, std::uint32_t duration, EasingPathPtr transitionPath) { setConfig(start, end, duration, transitionPath); }
 
         // Transition configs 
         inline Config_t getConfig() { return _config; }
@@ -76,11 +76,11 @@ namespace SmoothUIToolKit
             _config.startValue = start;
             _config.endValue = end;
         }
-        inline void setConfig(int start, int end, std::uint32_t duration, int (*easingPath)(const int&))
+        inline void setConfig(int start, int end, std::uint32_t duration, EasingPathPtr transitionPath)
         {
             setConfig(start, end);
             _config.duration = duration;
-            _config.transitionPath = easingPath;
+            _config.transitionPath = transitionPath;
         }
         
         // Basic setter 
@@ -88,8 +88,8 @@ namespace SmoothUIToolKit
         inline void setEndValue(int endValue) { _config.endValue = endValue; }
         inline void setDuration(std::uint32_t duration) { _config.duration = duration; }
         inline void setDelay(std::uint32_t delay) { _config.delay = delay; }
-        inline void setTransitionPath(int (*transitionPath)(const int&)) { _config.transitionPath = transitionPath; }
-        inline void setUpdateCallback(void (*updateCallback)(Transition* object)) { _config.updateCallback = updateCallback; }
+        inline void setTransitionPath(EasingPathPtr transitionPath) { _config.transitionPath = transitionPath; }
+        inline void setUpdateCallback(TransitionUpdateCallbackPtr updateCallback) { _config.updateCallback = updateCallback; }
         inline void setUserData(void* userData) { _config.userData = userData; }
 
         // Basic getter 
@@ -106,7 +106,7 @@ namespace SmoothUIToolKit
          * 
          * @param currentTime 
          */
-        void start(std::uint32_t currentTime);
+        void start(const std::uint32_t& currentTime);
 
         /**
          * @brief Pause transition, call start() to continue 
@@ -131,7 +131,7 @@ namespace SmoothUIToolKit
          * 
          * @param currentTime 
          */
-        void update(std::uint32_t currentTime);
+        void update(const std::uint32_t& currentTime);
 
         /**
          * @brief Get transtion's current value 

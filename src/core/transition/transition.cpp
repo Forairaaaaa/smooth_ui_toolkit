@@ -14,7 +14,7 @@
 using namespace SmoothUIToolKit;
 
 
-void Transition::start(std::uint32_t currentTime)
+void Transition::start(const std::uint32_t& currentTime)
 {
     _data.is_paused = false;
     _data.time_offset = currentTime;
@@ -43,7 +43,7 @@ void Transition::reset()
 }
 
 
-void Transition::update(std::uint32_t currentTime)
+void Transition::update(const std::uint32_t& currentTime)
 {
     if (!_data.is_paused && !_data.is_finish)
     {
