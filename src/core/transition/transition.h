@@ -109,7 +109,7 @@ namespace SmoothUIToolKit
         void start(std::uint32_t currentTime);
 
         /**
-         * @brief Pasue transition, call start() to continue 
+         * @brief Pause transition, call start() to continue 
          * 
          */
         void pause();
@@ -138,7 +138,7 @@ namespace SmoothUIToolKit
          * 
          * @return int 
          */
-        inline int getValue() { return _data.current_value; }
+        inline const int& getValue() { return _data.current_value; }
 
         /**
          * @brief Is transition finish 
