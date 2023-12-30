@@ -74,7 +74,7 @@ void Transition::update(std::uint32_t currentTime)
 
 void Transition::_update_value(const std::uint32_t& currentTime)
 {
-    std::uint32_t t_current = EasingPath::maxT / _config.duration * (currentTime - _config.delay);
+    std::uint32_t t_current = EasingPath::maxT / _config.duration * (currentTime - _config.delay - _data.time_offset);
     _data.current_value = (_config.endValue - _config.startValue) * _config.transitionPath(t_current) / EasingPath::maxT + _config.startValue;
 }
 
