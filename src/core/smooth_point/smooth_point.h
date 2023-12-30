@@ -80,8 +80,9 @@ namespace SmoothUIToolKit
         /**
          * @brief Pause moving, call start() to continue 
          * 
+         * @param currentTime 
          */
-        void pause();
+        void pause(const std::uint32_t& currentTime);
 
         /**
          * @brief End moving to the target point  

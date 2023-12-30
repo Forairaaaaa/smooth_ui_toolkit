@@ -21,10 +21,10 @@ void SmoothPoint::start(const std::uint32_t& currentTime)
 }
 
 
-void SmoothPoint::pause()
+void SmoothPoint::pause(const std::uint32_t& currentTime)
 {
-    _data.x_transition.pause();
-    _data.y_transition.pause();
+    _data.x_transition.pause(currentTime);
+    _data.y_transition.pause(currentTime);
 }
 
 

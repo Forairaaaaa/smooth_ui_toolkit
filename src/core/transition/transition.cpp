@@ -16,14 +16,21 @@ using namespace SmoothUIToolKit;
 
 void Transition::start(const std::uint32_t& currentTime)
 {
+    // New time offset 
+    _data.time_offset = _data.time_offset + (currentTime - _data.pause_time) + _data.pause_offset;
+
+    // Reset pause buffer
     _data.is_paused = false;
-    _data.time_offset = currentTime;
+    _data.pause_offset = 0;
+    _data.pause_time = 0;
 }
 
 
-void Transition::pause()
+void Transition::pause(const std::uint32_t& currentTime)
 {
     _data.is_paused = true;
+    _data.pause_offset = currentTime - _data.time_offset;
+    _data.pause_time = currentTime;
 }
 
 
@@ -40,6 +47,7 @@ void Transition::reset()
     _data.is_paused = true;
     _data.is_finish = false;
     _data.current_value = _config.startValue;
+    _data.time_offset = 0;
 }
 
 

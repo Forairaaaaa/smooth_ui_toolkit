@@ -55,6 +55,8 @@ namespace SmoothUIToolKit
         struct Data_t
         {
             std::uint32_t time_offset = 0;
+            std::uint32_t pause_time = 0;
+            std::uint32_t pause_offset = 0;
             int current_value = 0;
             bool is_paused = true;
             bool is_finish = false;
@@ -111,8 +113,9 @@ namespace SmoothUIToolKit
         /**
          * @brief Pause transition, call start() to continue 
          * 
+         * @param currentTime 
          */
-        void pause();
+        void pause(const std::uint32_t& currentTime);
 
         /**
          * @brief End transition to the end 
