@@ -44,6 +44,8 @@ namespace SmoothUIToolKit
 
             // Transition update callback 
             void (*updateCallback)(Transition*) = nullptr;
+
+            void* userData = nullptr;
         };
 
     private:
@@ -61,6 +63,7 @@ namespace SmoothUIToolKit
     public:
         Transition() = default;
         Transition(Config_t cfg) { _config = cfg; }
+        Transition(int start, int end, std::uint32_t duration, int (*easingPath)(const int&)) { setConfig(start, end, duration, easingPath); }
 
         // Transition configs 
         inline Config_t getConfig() { return _config; }
@@ -84,14 +87,16 @@ namespace SmoothUIToolKit
         inline void setDelay(std::uint32_t delay) { _config.delay = delay; }
         inline void setTransitionPath(int (*transitionPath)(const int&)) { _config.transitionPath = transitionPath; }
         inline void setUpdateCallback(void (*updateCallback)(Transition* object)) { _config.updateCallback = updateCallback; }
+        inline void setUserData(void* userData) { _config.userData = userData; }
 
         // Basic getter 
-        inline int getStartValue() { return _config.startValue; }
-        inline int getEndValue() { return _config.endValue; }
-        inline std::uint32_t getDuration() { return _config.duration; }
-        inline std::uint32_t getDelay() { return _config.delay; }
+        inline auto getStartValue() { return _config.startValue; }
+        inline auto getEndValue() { return _config.endValue; }
+        inline auto getDuration() { return _config.duration; }
+        inline auto getDelay() { return _config.delay; }
         inline auto getTransitionPath() { return _config.transitionPath; }
         inline auto getUpdateCallback() { return _config.updateCallback; }
+        inline auto getUserData() { return _config.userData; }
 
         /**
          * @brief Start transition 
