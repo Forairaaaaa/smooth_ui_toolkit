@@ -1,5 +1,5 @@
 /**
- * @file anim1d.h
+ * @file smooth1d.cpp
  * @author Forairaaaaa
  * @brief 
  * @version 0.1
@@ -8,5 +8,8 @@
  * @copyright Copyright (c) 2023
  * 
  */
-#pragma once
+#include "smooth1d.h"
+
+
+
 

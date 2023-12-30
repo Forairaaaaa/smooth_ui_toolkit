@@ -11,6 +11,7 @@
 #pragma once
 #include "../types/types.h"
 // Refs: 
+// https://cubic-bezier.com/#.17,.67,.83,.67
 // https://en.wikipedia.org/wiki/B%C3%A9zier_curve
 // https://github.com/ai/easings.net/blob/master/src/easings/easingsFunctions.ts
 // https://easings.net
