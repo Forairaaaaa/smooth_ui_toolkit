@@ -32,6 +32,7 @@ namespace SmoothUIToolKit
         {
             Transition x_transition;
             Transition y_transition;
+            bool is_changed = true;
         };
         Data_t _data;
         Config_t _config;
@@ -117,8 +118,8 @@ namespace SmoothUIToolKit
          * @param y 
          * @param currentTime 
          */
-        void moveTo(const int& x, const int& y, const std::uint32_t& currentTime);
-        inline void moveTo(const Vector2D_t& p, const std::uint32_t& currentTime) { moveTo(p.x, p.y, currentTime); }
+        void moveTo(const int& x, const int& y);
+        inline void moveTo(const Vector2D_t& p) { moveTo(p.x, p.y); }
 
         /**
          * @brief Get current point  

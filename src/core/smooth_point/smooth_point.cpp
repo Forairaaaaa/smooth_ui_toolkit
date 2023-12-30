@@ -44,6 +44,12 @@ void SmoothPoint::reset()
 
 void SmoothPoint::update(const std::uint32_t& currentTime)
 {
+    if (_data.is_changed)
+    {
+        _data.is_changed = false;
+        start(currentTime);
+    }
+
     _data.x_transition.update(currentTime);
     _data.y_transition.update(currentTime);
 
@@ -61,11 +67,17 @@ void SmoothPoint::jumpTo(const int& x, const int& y)
 }
 
 
-void SmoothPoint::moveTo(const int& x, const int& y, const std::uint32_t& currentTime)
+void SmoothPoint::moveTo(const int& x, const int& y)
 {
+    // If target not changed 
+    if (x == _data.x_transition.getEndValue() && y == _data.y_transition.getEndValue())
+        return;
+
     // Reset to new target 
     _data.x_transition.setConfig(_data.x_transition.getValue(), x);
     _data.y_transition.setConfig(_data.y_transition.getValue(), y);
     reset();
-    start(currentTime);
+
+    // Tell update to start moving 
+    _data.is_changed = true;
 }
