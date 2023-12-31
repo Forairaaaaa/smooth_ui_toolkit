@@ -40,7 +40,7 @@ namespace SmoothUIToolKit
     public:
         SmoothPoint() = default;
         SmoothPoint(const int& xStart, const int& yStart) { jumpTo(xStart, yStart); }
-        SmoothPoint(const Vector2D_t& pSatrt) { jumpTo(pSatrt); }
+        SmoothPoint(const Point_t& pSatrt) { jumpTo(pSatrt); }
 
         // Basic setter 
         inline void setDuration(std::uint32_t duration)
@@ -66,8 +66,8 @@ namespace SmoothUIToolKit
         // Basic getter 
         inline Transition& getXTransition() { return _data.x_transition; }
         inline Transition& getYTransition() { return _data.y_transition; }
-        inline Vector2D_t getStartPoint() { return Vector2D_t(_data.x_transition.getStartValue(), _data.y_transition.getStartValue()); }
-        inline Vector2D_t getTargetPoint() { return Vector2D_t(_data.x_transition.getEndValue(), _data.y_transition.getEndValue()); }
+        inline Point_t getStartPoint() { return Point_t(_data.x_transition.getStartValue(), _data.y_transition.getStartValue()); }
+        inline Point_t getTargetPoint() { return Point_t(_data.x_transition.getEndValue(), _data.y_transition.getEndValue()); }
         inline SmoothPointUpdateCallbackPtr getUpdateCallback() { return _config.updateCallback; }
 
         /**
@@ -110,7 +110,7 @@ namespace SmoothUIToolKit
          * @param y 
          */
         void jumpTo(const int& x, const int& y);
-        inline void jumpTo(const Vector2D_t& p) { jumpTo(p.x, p.y); }
+        inline void jumpTo(const Point_t& p) { jumpTo(p.x, p.y); }
 
         /**
          * @brief Move to target point smoothly 
@@ -120,14 +120,14 @@ namespace SmoothUIToolKit
          * @param currentTime 
          */
         void moveTo(const int& x, const int& y);
-        inline void moveTo(const Vector2D_t& p) { moveTo(p.x, p.y); }
+        inline void moveTo(const Point_t& p) { moveTo(p.x, p.y); }
 
         /**
          * @brief Get current point  
          * 
          * @return int 
          */
-        inline Vector2D_t getValue() { return Vector2D_t(_data.x_transition.getValue(), _data.y_transition.getValue()); }
+        inline Point_t getValue() { return Point_t(_data.x_transition.getValue(), _data.y_transition.getValue()); }
 
         /**
          * @brief Is moving finish 

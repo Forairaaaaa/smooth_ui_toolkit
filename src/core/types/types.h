@@ -31,6 +31,8 @@ namespace SmoothUIToolKit
         }
     };
 
+    typedef Vector2D_t Point_t;
+
     struct Vector4D_t
     {
         int x;
@@ -51,4 +53,6 @@ namespace SmoothUIToolKit
             this->h = h;
         }
     };
+
+    typedef Vector4D_t Shape_t;
 }
