@@ -35,6 +35,15 @@ namespace SmoothUIToolKit
 
             // Auto reset offset when droped 
             bool autoReset = false;
+
+            // Limit offset 
+            bool offsetLimit = false;
+
+            // X offset limit 
+            Vector2D_t xOffsetLimit;
+
+            // Y offset limit 
+            Vector2D_t yOffsetLimit;
         };
 
     private:

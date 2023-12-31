@@ -51,6 +51,14 @@ void SmoothDrag::drop()
     if (_config.autoReset)
     {
         moveTo(0, 0);
+        return;
+    }
+
+    if (_config.offsetLimit)
+    {
+        int new_x = Clamp(getTargetPoint().x, _config.xOffsetLimit);
+        int new_y = Clamp(getTargetPoint().y, _config.yOffsetLimit);
+        moveTo(new_x, new_y);
     }
 }
 

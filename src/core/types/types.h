@@ -53,4 +53,29 @@ namespace SmoothUIToolKit
             this->h = h;
         }
     };
+
+    inline bool IsInRange(Vector2D_t range, int x)
+    {
+        if (x < range.x)
+            return false;
+        if (x > range.y)
+            return false;
+        return true;
+    }
+
+    inline int GetRange(Vector2D_t range)
+    {
+        if (range.x > range.y)
+            return range.x - range.y;
+        return range.y - range.x;
+    }
+
+    inline int Clamp(int value, Vector2D_t range)
+    {
+        if (value < range.x)
+            return range.x;
+        if (value > range.y)
+            return range.y;
+        return value;
+    }
 }
