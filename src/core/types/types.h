@@ -16,7 +16,6 @@ namespace SmoothUIToolKit
 {
     struct Vector2D_t
     {
-
         int x;
         int y;
 

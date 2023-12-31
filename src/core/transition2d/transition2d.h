@@ -16,7 +16,10 @@
 
 namespace SmoothUIToolKit
 {
-    // A helper class that contains 2 transitions 
+    /**
+     * @brief A container of 2 Transition, provides dynamic transition methods 
+     * 
+     */
     class Transition2D;
 
     // Use like 2d point p(x, y)
