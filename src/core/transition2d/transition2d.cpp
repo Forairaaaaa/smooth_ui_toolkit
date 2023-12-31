@@ -1,48 +1,48 @@
 /**
- * @file smooth_point.cpp
+ * @file transition2d.cpp
  * @author Forairaaaaa
  * @brief 
  * @version 0.1
- * @date 2023-12-30
+ * @date 2023-12-31
  * 
  * @copyright Copyright (c) 2023
  * 
  */
-#include "smooth_point.h"
+#include "transition2d.h"
 
 
 using namespace SmoothUIToolKit;
 
 
-void SmoothPoint::start(const std::uint32_t& currentTime)
+void Transition2D::start(const std::uint32_t& currentTime)
 {
     _data.x_transition.start(currentTime);
     _data.y_transition.start(currentTime);
 }
 
 
-void SmoothPoint::pause(const std::uint32_t& currentTime)
+void Transition2D::pause(const std::uint32_t& currentTime)
 {
     _data.x_transition.pause(currentTime);
     _data.y_transition.pause(currentTime);
 }
 
 
-void SmoothPoint::end()
+void Transition2D::end()
 {
     _data.x_transition.end();
     _data.y_transition.end();
 }
 
 
-void SmoothPoint::reset()
+void Transition2D::reset()
 {
     _data.x_transition.reset();
     _data.y_transition.reset();
 }
 
 
-void SmoothPoint::update(const std::uint32_t& currentTime)
+void Transition2D::update(const std::uint32_t& currentTime)
 {
     if (_data.is_changed)
     {
@@ -59,7 +59,7 @@ void SmoothPoint::update(const std::uint32_t& currentTime)
 }
 
 
-void SmoothPoint::jumpTo(const int& x, const int& y)
+void Transition2D::jumpTo(const int& x, const int& y)
 {
     _data.x_transition.setConfig(_data.x_transition.getValue(), x);
     _data.y_transition.setConfig(_data.y_transition.getValue(), y);
@@ -67,7 +67,7 @@ void SmoothPoint::jumpTo(const int& x, const int& y)
 }
 
 
-void SmoothPoint::moveTo(const int& x, const int& y)
+void Transition2D::moveTo(const int& x, const int& y)
 {
     // If target not changed 
     if (x == _data.x_transition.getEndValue() && y == _data.y_transition.getEndValue())

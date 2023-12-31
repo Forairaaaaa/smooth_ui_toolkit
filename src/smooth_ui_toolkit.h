@@ -12,7 +12,7 @@
 #include "core/types/types.h"
 #include "core/easing_path/easing_path.h"
 #include "core/transition/transition.h"
-#include "core/smooth_point/smooth_point.h"
+#include "core/transition2d/transition2d.h"
 #include "old/camera/camera.h"
 #include "old/lv_anim/lv_anim.h"
 #include "old/menu/menu.h"

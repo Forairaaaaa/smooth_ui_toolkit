@@ -1,9 +1,9 @@
 /**
- * @file smooth_point.h
+ * @file transition2d.h
  * @author Forairaaaaa
  * @brief 
  * @version 0.1
- * @date 2023-12-30
+ * @date 2023-12-31
  * 
  * @copyright Copyright (c) 2023
  * 
@@ -16,15 +16,23 @@
 
 namespace SmoothUIToolKit
 {
-    class SmoothPoint;
-    typedef void (*SmoothPointUpdateCallbackPtr)(SmoothPoint*);
+    // A helper class contains 2 transitions 
+    class Transition2D;
 
-    class SmoothPoint
+    // Use like 2d point p(x, y)
+    typedef Transition2D SmoothPoint;
+
+    // Use like 2d shape s(w, h)
+    typedef Transition2D SmoothShape;
+
+    typedef void (*Transition2DUpdateCallbackPtr)(Transition2D*);
+
+    class Transition2D
     {
     public:
         struct Config_t
         {
-            SmoothPointUpdateCallbackPtr updateCallback = nullptr;
+            Transition2DUpdateCallbackPtr updateCallback = nullptr;
         };
 
     private:
@@ -38,9 +46,9 @@ namespace SmoothUIToolKit
         Config_t _config;
 
     public:
-        SmoothPoint() = default;
-        SmoothPoint(const int& xStart, const int& yStart) { jumpTo(xStart, yStart); }
-        SmoothPoint(const Point_t& pSatrt) { jumpTo(pSatrt); }
+        Transition2D() = default;
+        Transition2D(const int& xStart, const int& yStart) { jumpTo(xStart, yStart); }
+        Transition2D(const Point_t& pSatrt) { jumpTo(pSatrt); }
 
         // Basic setter 
         inline void setDuration(std::uint32_t duration)
@@ -58,7 +66,7 @@ namespace SmoothUIToolKit
             _data.x_transition.setTransitionPath(transitionPath);
             _data.y_transition.setTransitionPath(transitionPath);
         }
-        inline void setUpdateCallback(SmoothPointUpdateCallbackPtr updateCallback)
+        inline void setUpdateCallback(Transition2DUpdateCallbackPtr updateCallback)
         {
             _config.updateCallback = updateCallback;
         }
@@ -68,7 +76,7 @@ namespace SmoothUIToolKit
         inline Transition& getYTransition() { return _data.y_transition; }
         inline Point_t getStartPoint() { return Point_t(_data.x_transition.getStartValue(), _data.y_transition.getStartValue()); }
         inline Point_t getTargetPoint() { return Point_t(_data.x_transition.getEndValue(), _data.y_transition.getEndValue()); }
-        inline SmoothPointUpdateCallbackPtr getUpdateCallback() { return _config.updateCallback; }
+        inline Transition2DUpdateCallbackPtr getUpdateCallback() { return _config.updateCallback; }
 
         /**
          * @brief Start moving  
