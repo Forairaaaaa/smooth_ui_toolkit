@@ -18,6 +18,10 @@ namespace SmoothUIToolKit
      * @brief A class to provide drag and drop offset with transition 
      * 
      */
+    class SmoothDrag;
+
+    typedef void (*SmoothDragUpdateCallbackPtr)(SmoothDrag*);
+
     class SmoothDrag : public Transition2D
     {
     private:
@@ -30,6 +34,12 @@ namespace SmoothUIToolKit
         Data_t _data;
 
     public:
+        // Basic setter 
+        inline void setUpdateCallback(SmoothDragUpdateCallbackPtr updateCallback)
+        {
+            Transition2D::setUpdateCallback(reinterpret_cast<Transition2DUpdateCallbackPtr>(updateCallback));
+        }
+
         /**
          * @brief Start dragging 
          * 
