@@ -24,29 +24,43 @@ namespace SmoothUIToolKit
 
     class SmoothDrag : public Transition2D
     {
+    public:
+        struct Config_t
+        {
+            // Lock x offset 
+            bool lockXOffset = false;
+
+            // Lock y offset 
+            bool lockYOffset = false;
+
+            // Auto reset offset when droped 
+            bool autoReset = false;
+        };
+
     private:
         struct Data_t
         {
             Point_t drag_start_point;
             Point_t drag_start_offset;
             bool is_dragging = false;
-
-            bool lock_x = false;
-            bool lock_y = false;
         };
         Data_t _data;
+        Config_t _config;
 
     public:
+        SmoothDrag() = default;
         SmoothDrag(const int& xStart, const int& yStart) : Transition2D(xStart, yStart) {}
         SmoothDrag(const Point_t& pSatrt) : Transition2D(pSatrt) {}
+
+        // Drag config
+        inline Config_t getDragConfig() { return _config; }
+        inline void setDragConfig(Config_t cfg) { _config = cfg; }
 
         // Basic setter 
         inline void setUpdateCallback(SmoothDragUpdateCallbackPtr updateCallback)
         {
             Transition2D::setUpdateCallback(reinterpret_cast<Transition2DUpdateCallbackPtr>(updateCallback));
         }
-        inline bool isXLocked() { return _data.lock_x; }
-        inline bool isYLocked() { return _data.lock_y; }
 
         /**
          * @brief Start dragging 
@@ -69,20 +83,6 @@ namespace SmoothUIToolKit
          * @return Point_t 
          */
         inline Point_t getOffset() { return getValue(); }
-
-        /**
-         * @brief Lock x offset 
-         * 
-         * @param isLock 
-         */
-        inline void lockX(bool isLock) { _data.lock_x = isLock; }
-
-        /**
-         * @brief Lock y offset 
-         * 
-         * @param isLock 
-         */
-        inline void lockY(bool isLock) { _data.lock_y = isLock; }
     };
 }
 

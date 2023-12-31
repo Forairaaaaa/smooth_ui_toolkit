@@ -19,10 +19,10 @@ void SmoothDrag::drag(const int& x, const int& y)
     if (_data.is_dragging)
     {
         // If locked some shit 
-        if (_data.lock_x || _data.lock_y)
+        if (_config.lockXOffset || _config.lockYOffset)
         {
-            int new_x = _data.lock_x ? _data.drag_start_offset.x : _data.drag_start_offset.x + x - _data.drag_start_point.x;
-            int new_y = _data.lock_y ? _data.drag_start_offset.y : _data.drag_start_offset.y + y - _data.drag_start_point.y;
+            int new_x = _config.lockXOffset ? _data.drag_start_offset.x : _data.drag_start_offset.x + x - _data.drag_start_point.x;
+            int new_y = _config.lockYOffset ? _data.drag_start_offset.y : _data.drag_start_offset.y + y - _data.drag_start_point.y;
             moveTo(new_x, new_y);
             return;
         }
@@ -46,6 +46,12 @@ void SmoothDrag::drag(const int& x, const int& y)
 void SmoothDrag::drop()
 {
     _data.is_dragging = false;
+
+    // Auto reset offset 
+    if (_config.autoReset)
+    {
+        moveTo(0, 0);
+    }
 }
 
 
