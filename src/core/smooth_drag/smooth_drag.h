@@ -30,15 +30,23 @@ namespace SmoothUIToolKit
             Point_t drag_start_point;
             Point_t drag_start_offset;
             bool is_dragging = false;
+
+            bool lock_x = false;
+            bool lock_y = false;
         };
         Data_t _data;
 
     public:
+        SmoothDrag(const int& xStart, const int& yStart) : Transition2D(xStart, yStart) {}
+        SmoothDrag(const Point_t& pSatrt) : Transition2D(pSatrt) {}
+
         // Basic setter 
         inline void setUpdateCallback(SmoothDragUpdateCallbackPtr updateCallback)
         {
             Transition2D::setUpdateCallback(reinterpret_cast<Transition2DUpdateCallbackPtr>(updateCallback));
         }
+        inline bool isXLocked() { return _data.lock_x; }
+        inline bool isYLocked() { return _data.lock_y; }
 
         /**
          * @brief Start dragging 
@@ -61,6 +69,20 @@ namespace SmoothUIToolKit
          * @return Point_t 
          */
         inline Point_t getOffset() { return getValue(); }
+
+        /**
+         * @brief Lock x offset 
+         * 
+         * @param isLock 
+         */
+        inline void lockX(bool isLock) { _data.lock_x = isLock; }
+
+        /**
+         * @brief Lock y offset 
+         * 
+         * @param isLock 
+         */
+        inline void lockY(bool isLock) { _data.lock_y = isLock; }
     };
 }
 
