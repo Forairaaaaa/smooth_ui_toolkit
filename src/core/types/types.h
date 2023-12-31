@@ -35,20 +35,20 @@ namespace SmoothUIToolKit
     {
         int x;
         int y;
-        int z;
         int w;
+        int h;
 
-        Vector4D_t(int x = 0, int y = 0, int z = 0, int w = 0)
+        Vector4D_t(int x = 0, int y = 0, int w = 0, int h = 0)
         {
-            reset(x, y, z, w);
+            reset(x, y, w, h);
         }
 
-        void reset(int x = 0, int y = 0, int z = 0, int w = 0)
+        void reset(int x = 0, int y = 0, int w = 0, int h = 0)
         {
             this->x = x;
             this->y = y;
-            this->z = z;
             this->w = w;
+            this->h = h;
         }
     };
 }
