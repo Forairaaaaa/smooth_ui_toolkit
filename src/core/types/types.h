@@ -16,6 +16,7 @@ namespace SmoothUIToolKit
 {
     struct Vector2D_t
     {
+
         int x;
         int y;
 
@@ -53,6 +54,4 @@ namespace SmoothUIToolKit
             this->h = h;
         }
     };
-
-    typedef Vector4D_t Shape_t;
 }

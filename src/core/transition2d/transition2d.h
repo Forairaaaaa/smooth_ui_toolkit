@@ -16,7 +16,7 @@
 
 namespace SmoothUIToolKit
 {
-    // A helper class contains 2 transitions 
+    // A helper class that contains 2 transitions 
     class Transition2D;
 
     // Use like 2d point p(x, y)
@@ -129,6 +129,24 @@ namespace SmoothUIToolKit
          */
         void moveTo(const int& x, const int& y);
         inline void moveTo(const Point_t& p) { moveTo(p.x, p.y); }
+        
+        /** Resize to target size with no transition 
+         * @brief 
+         * 
+         * @param w 
+         * @param h 
+         */
+        inline void resizeTo(const int& w, const int& h) { jumpTo(w, h); }
+        inline void resizeTo(const Point_t& p) { jumpTo(p); }
+
+        /** Reshape to target size smoothly 
+         * @brief 
+         * 
+         * @param w 
+         * @param h 
+         */
+        inline void reshapeTo(const int& w, const int& h) { moveTo(w, h); }
+        inline void reshapeTo(const Point_t& p) { moveTo(p); }
 
         /**
          * @brief Get current point  
