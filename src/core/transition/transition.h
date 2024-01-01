@@ -72,6 +72,7 @@ namespace SmoothUIToolKit
 
         // Transition configs 
         inline Config_t getConfig() { return _config; }
+        inline Config_t& setConfig(void) { return _config; }
         inline void setConfig(Config_t cfg) { _config = cfg; }
         inline void setConfig(int start, int end)
         {
