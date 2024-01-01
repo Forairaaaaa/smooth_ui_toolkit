@@ -78,4 +78,15 @@ namespace SmoothUIToolKit
             return range.y;
         return value;
     }
+
+    inline int Clamp(int value, Vector2D_t range, bool& isInRange)
+    {
+        isInRange = false;
+        if (value < range.x)
+            return range.x;
+        if (value > range.y)
+            return range.y;
+        isInRange = true;
+        return value;
+    }
 }

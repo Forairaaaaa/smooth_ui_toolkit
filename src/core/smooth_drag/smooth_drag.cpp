@@ -21,16 +21,26 @@ void SmoothDrag::drag(const int& x, const int& y)
         // If locked some shit 
         if (_config.lockXOffset || _config.lockYOffset)
         {
-            int new_x = _config.lockXOffset ? _data.drag_start_offset.x : _data.drag_start_offset.x + x - _data.drag_start_point.x;
-            int new_y = _config.lockYOffset ? _data.drag_start_offset.y : _data.drag_start_offset.y + y - _data.drag_start_point.y;
-            moveTo(new_x, new_y);
-            return;
+            _data.target_buffer.x = _config.lockXOffset ? _data.drag_start_offset.x : _data.drag_start_offset.x + x - _data.drag_start_point.x;
+            _data.target_buffer.y = _config.lockYOffset ? _data.drag_start_offset.y : _data.drag_start_offset.y + y - _data.drag_start_point.y;
+        }
+        else 
+        {
+            _data.target_buffer.x = _data.drag_start_offset.x + x - _data.drag_start_point.x;
+            _data.target_buffer.y = _data.drag_start_offset.y + y - _data.drag_start_point.y;
+        }
+
+        // If not allow to dragging out of limit 
+        if (!_config.allowDraggingOutOfLimit)
+        {
+            _data.target_buffer.x = Clamp(_data.target_buffer.x, _config.xOffsetLimit);
+            _data.target_buffer.y = Clamp(_data.target_buffer.y, _config.yOffsetLimit);
         }
 
         // Update dragging offset 
         moveTo(
-            _data.drag_start_offset.x + x - _data.drag_start_point.x,
-            _data.drag_start_offset.y + y - _data.drag_start_point.y
+            _data.target_buffer.x,
+            _data.target_buffer.y
         );
         return;
     }
@@ -40,6 +50,9 @@ void SmoothDrag::drag(const int& x, const int& y)
     _data.drag_start_point.x = x;
     _data.drag_start_point.y = y;
     _data.drag_start_offset = getValue();
+
+    // Update to drag transition path 
+    Transition2D::setTransitionPath(_config.dragTransitionPath);
 }
 
 
@@ -50,14 +63,20 @@ void SmoothDrag::drop()
     // Auto reset offset 
     if (_config.autoReset)
     {
+        // Update to drag transition path 
+        Transition2D::setTransitionPath(_config.resetTransitionPath);
         moveTo(0, 0);
         return;
     }
 
     if (_config.offsetLimit)
     {
-        int new_x = Clamp(getTargetPoint().x, _config.xOffsetLimit);
-        int new_y = Clamp(getTargetPoint().y, _config.yOffsetLimit);
+        int new_x = Clamp(getTargetPoint().x, _config.xOffsetLimit, _data.is_in_range);
+        if (!_data.is_in_range)
+            Transition2D::setTransitionPath(_config.resetTransitionPath);
+        int new_y = Clamp(getTargetPoint().y, _config.yOffsetLimit, _data.is_in_range);
+        if (!_data.is_in_range)
+            Transition2D::setTransitionPath(_config.resetTransitionPath);
         moveTo(new_x, new_y);
     }
 }

@@ -10,6 +10,7 @@
  */
 #pragma once
 #include "../transition2d/transition2d.h"
+#include "core/easing_path/easing_path.h"
 
 
 namespace SmoothUIToolKit
@@ -39,11 +40,20 @@ namespace SmoothUIToolKit
             // Limit offset 
             bool offsetLimit = false;
 
+            // bool sss = true;
+            bool allowDraggingOutOfLimit = true;
+
             // X offset limit 
             Vector2D_t xOffsetLimit;
 
             // Y offset limit 
             Vector2D_t yOffsetLimit;
+
+            // Drag transition path 
+            EasingPathPtr dragTransitionPath = EasingPath::easeOutQuad;
+
+            // Reset transition path when droped 
+            EasingPathPtr resetTransitionPath = EasingPath::easeOutQuad;
         };
 
     private:
@@ -51,7 +61,9 @@ namespace SmoothUIToolKit
         {
             Point_t drag_start_point;
             Point_t drag_start_offset;
+            Point_t target_buffer;
             bool is_dragging = false;
+            bool is_in_range = true;
         };
         Data_t _data;
         Config_t _config;
@@ -63,9 +75,12 @@ namespace SmoothUIToolKit
 
         // Drag config
         inline Config_t getDragConfig() { return _config; }
+        inline Config_t& setDragConfig(void) { return _config; }
         inline void setDragConfig(Config_t cfg) { _config = cfg; }
 
         // Basic setter 
+        inline void setTransitionPath(EasingPathPtr transitionPath) { _config.dragTransitionPath = transitionPath; }
+        inline void setResetTransitionPath(EasingPathPtr transitionPath) { _config.resetTransitionPath = transitionPath; }
         inline void setUpdateCallback(SmoothDragUpdateCallbackPtr updateCallback)
         {
             Transition2D::setUpdateCallback(reinterpret_cast<Transition2DUpdateCallbackPtr>(updateCallback));
