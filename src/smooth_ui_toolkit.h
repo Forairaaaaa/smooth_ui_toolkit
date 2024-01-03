@@ -15,6 +15,8 @@
 #include "core/transition2d/transition2d.h"
 #include "core/smooth_drag/smooth_drag.h"
 
+#include "smooth_widget/widget_base/widget_base.h"
+
 #include "old/camera/camera.h"
 #include "old/lv_anim/lv_anim.h"
 #include "old/menu/menu.h"
