@@ -1,5 +1,5 @@
 /**
- * @file widget_base.h
+ * @file base.h
  * @author Forairaaaaa
  * @brief 
  * @version 0.1
