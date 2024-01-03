@@ -37,6 +37,11 @@ namespace SmoothUIToolKit
                 _size = size;
             }
 
+            inline const Vector2D_t& getPostion() { return _position; }
+            inline const Vector2D_t& getSize() { return _size; }
+            inline Vector2D_t& setPostion() { return _position; }
+            inline Vector2D_t& setSize() { return _size; }
+
             /**
              * @brief Tell widget what time is it and update 
              * 
