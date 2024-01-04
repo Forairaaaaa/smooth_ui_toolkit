@@ -49,11 +49,13 @@ namespace SmoothUIToolKit
             inline const std::vector<WidgetBase*>& getChildren() { return _children; }
 
             // Basic setter 
+            inline void setPostion(int x, int y) { _position.x = x; _position.y = y; }
             inline Vector2D_t& setPostion() { return _position; }
+            inline void setSize(int x, int y) { _size.x = x; _size.y = y; }
             inline Vector2D_t& setSize() { return _size; }
-            inline void setParent(WidgetBase* parent) { _parent = parent; }
-
+            
             // Children
+            inline void setParent(WidgetBase* parent) { _parent = parent; }
             bool isChild(WidgetBase* child);
             void addChild(WidgetBase* child);
     
