@@ -27,7 +27,7 @@ namespace SmoothUIToolKit
         class Button :public WidgetBase
         {
         public:
-            struct Callbacks_t
+            struct Callback_t
             {
                 ButtonOnUpdateCallback onUpdate = nullptr;
                 ButtonOnhoverCallback onHover = nullptr;
@@ -36,17 +36,37 @@ namespace SmoothUIToolKit
                 ButtonOnPressEndCallback onPressEnd = nullptr;
             };
 
+            struct Config_t
+            {
+                Callback_t callback;
+            };
+
         private:
-            Callbacks_t _callbacks;
-            // TODO (helpers)
+            Config_t _config;
 
         public:
             Button() = default;
             Button(int x, int y, int width, int height) : WidgetBase(x, y, width, height) {}
             Button(Vector2D_t position, Vector2D_t size) : WidgetBase(position, size) {}
 
-            // TODO (overrides)
+            // Config 
+            inline const Config_t& getConfig() { return _config; }
+            inline Config_t& setConfig() { return _config; }
+            inline Callback_t& setCallback() { return _config.callback; }
 
+        protected:
+            // Core methods 
+            void update(std::uint32_t currentTime) override;
+            void hover(int x, int y) override;
+            void drag(int x, int y) override;
+            void drop() override;
+
+        protected:
+            // Internal core methods callback for derived button 
+            virtual void _onUpdate() {}
+            virtual void _onHover() {}
+            virtual void _onDrag() {}
+            virtual void _onDrop() {}
         };
     }
 }
