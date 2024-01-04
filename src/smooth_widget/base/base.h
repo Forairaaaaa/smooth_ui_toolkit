@@ -52,8 +52,11 @@ namespace SmoothUIToolKit
             inline Vector2D_t& setPostion() { return _position; }
             inline Vector2D_t& setSize() { return _size; }
             inline void setParent(WidgetBase* parent) { _parent = parent; }
-            inline std::vector<WidgetBase*>& setChildren() { return _children; }            
 
+            // Children
+            bool isChild(WidgetBase* child);
+            void addChild(WidgetBase* child);
+    
         // Core widget update methods 
         public:
             /**
@@ -88,28 +91,65 @@ namespace SmoothUIToolKit
         // Callback methods for derived widgets 
         public:
             /**
-             * @brief Callback when cursor is hovering on widget 
+             * @brief Callback when every update 
+             * 
+             * @param currentTime 
+             */
+            virtual void onUpdate(std::uint32_t currentTime) {}
+            
+            /**
+             * @brief Callback when cursor start hovering on widget 
              * 
              */
             virtual void onHover() {}
 
             /**
-             * @brief Callback when cursor is dragging on widget 
+             * @brief Callback when cursor hovering on widget 
+             * 
+             * @param x 
+             * @param y 
+             */
+            virtual void onHovering(int x, int y) {}
+
+            /**
+             * @brief Callback when cursor leave the widget 
+             * 
+             */
+            virtual void onHoverEnd() {}
+
+            /**
+             * @brief Callback when cursor start dragging on widget 
              * 
              */
             virtual void onDrag() {}
 
             /**
-             * @brief Callback when cursor is drop from wdiget 
+             * @brief Callback when cursor is dragging on widget 
+             * 
+             * @param x 
+             * @param y 
+             */
+            virtual void onDragging(int x, int y) {}
+
+            /**
+             * @brief Callback when cursor droped from widget 
              * 
              */
             virtual void onDrop() {}
-
-            /**
-             * @brief Callback when widget just clicked 
-             * 
-             */
-            virtual void onClick() {}
+        
+        private:
+            struct Data_t
+            {
+                bool is_hovering = false;
+                bool is_dragging = false;
+            };
+            Data_t _data;
+            
+            bool _is_on_widget(const int& x, const int& y);
+            void _invoke_children_update(const std::uint32_t& currentTime);
+            void _invoke_children_hover(const int& x, const int& y);
+            void _invoke_children_drag(const int& x, const int& y);
+            void _invoke_children_drop();
         };
     }
 }
