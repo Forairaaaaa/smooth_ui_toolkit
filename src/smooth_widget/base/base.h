@@ -10,6 +10,7 @@
  */
 #pragma once
 #include "../../core/types/types.h"
+#include <vector>
 
 
 namespace SmoothUIToolKit 
@@ -23,6 +24,10 @@ namespace SmoothUIToolKit
             Vector2D_t _position;
             // w, h
             Vector2D_t _size;
+            // Parent widget 
+            WidgetBase* _parent = nullptr;
+            // Child widgets 
+            std::vector<WidgetBase*> _children;
 
         public:
             WidgetBase() = default;
@@ -37,10 +42,17 @@ namespace SmoothUIToolKit
                 _size = size;
             }
 
+            // Basic getter 
             inline const Vector2D_t& getPostion() { return _position; }
             inline const Vector2D_t& getSize() { return _size; }
+            inline WidgetBase* getParent() { return _parent; }
+            inline const std::vector<WidgetBase*>& getChildren() { return _children; }
+
+            // Basic setter 
             inline Vector2D_t& setPostion() { return _position; }
             inline Vector2D_t& setSize() { return _size; }
+            inline void setParent(WidgetBase* parent) { _parent = parent; }
+            inline std::vector<WidgetBase*>& setChildren() { return _children; }            
 
             /**
              * @brief Tell widget what time is it and update 
