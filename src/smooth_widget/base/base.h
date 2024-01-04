@@ -54,7 +54,7 @@ namespace SmoothUIToolKit
             inline void setSize(int x, int y) { _size.x = x; _size.y = y; }
             inline Vector2D_t& setSize() { return _size; }
             
-            // Children
+            // Widget tree apis 
             inline void setParent(WidgetBase* parent) { _parent = parent; }
             bool isChild(WidgetBase* child);
             void addChild(WidgetBase* child);
