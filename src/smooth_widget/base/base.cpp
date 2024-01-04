@@ -12,7 +12,7 @@
 using namespace SmoothUIToolKit::SmoothWidget;
 
 
-void WidgetBase::update(std::uint32_t currentTime)
+void WidgetBase::update(const std::uint32_t& currentTime)
 {
     // Self update 
     onUpdate(currentTime);
@@ -21,7 +21,7 @@ void WidgetBase::update(std::uint32_t currentTime)
 }
 
 
-void WidgetBase::hover(int x, int y)
+void WidgetBase::hover(const int& x, const int& y)
 {
     if (_is_on_widget(x, y))
     {
@@ -50,7 +50,7 @@ void WidgetBase::hover(int x, int y)
 }
 
 
-void WidgetBase::drag(int x, int y)
+void WidgetBase::drag(const int& x, const int& y)
 {
     // If already dragging
     if (_data.is_dragging)

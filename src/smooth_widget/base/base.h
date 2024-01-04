@@ -45,8 +45,6 @@ namespace SmoothUIToolKit
             // Basic getter 
             inline const Vector2D_t& getPostion() { return _position; }
             inline const Vector2D_t& getSize() { return _size; }
-            inline WidgetBase* getParent() { return _parent; }
-            inline const std::vector<WidgetBase*>& getChildren() { return _children; }
 
             // Basic setter 
             inline void setPostion(int x, int y) { _position.x = x; _position.y = y; }
@@ -56,17 +54,17 @@ namespace SmoothUIToolKit
             
             // Widget tree apis 
             inline void setParent(WidgetBase* parent) { _parent = parent; }
+            inline WidgetBase* getParent() { return _parent; }
+            inline const std::vector<WidgetBase*>& getChildren() { return _children; }
             bool isChild(WidgetBase* child);
             void addChild(WidgetBase* child);
     
-        // Core widget update methods 
-        public:
             /**
              * @brief Tell widget what time is it and update 
              * 
              * @param currentTime 
              */
-            virtual void update(std::uint32_t currentTime);
+            virtual void update(const std::uint32_t& currentTime);
 
             /**
              * @brief Tell widget where the cursor is now 
@@ -74,7 +72,7 @@ namespace SmoothUIToolKit
              * @param x 
              * @param y 
              */
-            virtual void hover(int x, int y);
+            virtual void hover(const int& x, const int& y);
 
             /**
              * @brief Tell widget where the pressing cursor is now 
@@ -82,7 +80,7 @@ namespace SmoothUIToolKit
              * @param x 
              * @param y 
              */
-            virtual void drag(int x, int y);
+            virtual void drag(const int& x, const int& y);
 
             /**
              * @brief Tell widget cursor just released 
@@ -90,14 +88,12 @@ namespace SmoothUIToolKit
              */
             virtual void drop();
 
-        // Callback methods for derived widgets 
-        public:
             /**
              * @brief Callback when every update 
              * 
              * @param currentTime 
              */
-            virtual void onUpdate(std::uint32_t currentTime) {}
+            virtual void onUpdate(const std::uint32_t& currentTime) {}
             
             /**
              * @brief Callback when cursor start hovering on widget 
@@ -111,7 +107,7 @@ namespace SmoothUIToolKit
              * @param x 
              * @param y 
              */
-            virtual void onHovering(int x, int y) {}
+            virtual void onHovering(const int& x, const int& y) {}
 
             /**
              * @brief Callback when cursor leave the widget 
@@ -131,7 +127,7 @@ namespace SmoothUIToolKit
              * @param x 
              * @param y 
              */
-            virtual void onDragging(int x, int y) {}
+            virtual void onDragging(const int& x, const int& y) {}
 
             /**
              * @brief Callback when cursor droped from widget 
