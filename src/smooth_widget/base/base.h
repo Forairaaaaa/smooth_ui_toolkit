@@ -33,8 +33,8 @@ namespace SmoothUIToolKit
             WidgetBase() = default;
             WidgetBase(int x, int y, int width, int height)
             {
-                _position.reset(x, y);
-                _size.reset(width, height);
+                setPostion(x, y);
+                setSize(width, height);
             }
             WidgetBase(Vector2D_t position, Vector2D_t size)
             {
@@ -47,9 +47,9 @@ namespace SmoothUIToolKit
             inline const Vector2D_t& getSize() { return _size; }
 
             // Basic setter 
-            inline void setPostion(int x, int y) { _position.x = x; _position.y = y; }
+            inline void setPostion(int x, int y) { _position.reset(x, y); }
             inline Vector2D_t& setPostion() { return _position; }
-            inline void setSize(int x, int y) { _size.x = x; _size.y = y; }
+            inline void setSize(int width, int height) { _size.reset(width, height); }
             inline Vector2D_t& setSize() { return _size; }
             
             // Widget tree apis 
