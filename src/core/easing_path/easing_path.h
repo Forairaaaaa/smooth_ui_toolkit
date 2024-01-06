@@ -1,16 +1,16 @@
 /**
  * @file easing_path.h
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-12-29
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #pragma once
 #include "../types/types.h"
-// Refs: 
+// Refs:
 // https://cubic-bezier.com/#.17,.67,.83,.67
 // https://en.wikipedia.org/wiki/B%C3%A9zier_curve
 // https://github.com/ai/easings.net/blob/master/src/easings/easingsFunctions.ts
@@ -18,14 +18,13 @@
 // https://mikelankamp.github.io/fpm/
 // https://www.desmos.com/calculator?lang=zh-CN
 
-
 namespace SmoothUIToolKit
 {
     namespace EasingPath
     {
         // t: 0 ~ maxT
         constexpr int maxT = 1000;
-        
+
         int linear(const int& t);
         int easeInQuad(const int& t);
         int easeOutQuad(const int& t);
@@ -57,7 +56,7 @@ namespace SmoothUIToolKit
         int easeInBounce(const int& t);
         int easeOutBounce(const int& t);
         int easeInOutBounce(const int& t);
-    }
+    } // namespace EasingPath
 
     typedef int (*EasingPathPtr)(const int&);
-}
+} // namespace SmoothUIToolKit

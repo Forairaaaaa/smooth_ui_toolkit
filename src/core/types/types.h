@@ -1,36 +1,32 @@
 /**
  * @file types.h
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-12-28
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #pragma once
 #include <cstdint>
-
 
 namespace SmoothUIToolKit
 {
     struct Vector2D_t
     {
-        union 
+        union
         {
             int x;
             int width;
         };
-        union 
+        union
         {
             int y;
             int height;
         };
 
-        Vector2D_t(int x = 0, int y = 0)
-        {
-            reset(x, y);
-        }
+        Vector2D_t(int x = 0, int y = 0) { reset(x, y); }
 
         void reset(int x = 0, int y = 0)
         {
@@ -48,10 +44,7 @@ namespace SmoothUIToolKit
         int w;
         int h;
 
-        Vector4D_t(int x = 0, int y = 0, int w = 0, int h = 0)
-        {
-            reset(x, y, w, h);
-        }
+        Vector4D_t(int x = 0, int y = 0, int w = 0, int h = 0) { reset(x, y, w, h); }
 
         void reset(int x = 0, int y = 0, int w = 0, int h = 0)
         {
@@ -97,4 +90,4 @@ namespace SmoothUIToolKit
         isInRange = true;
         return value;
     }
-}
+} // namespace SmoothUIToolKit

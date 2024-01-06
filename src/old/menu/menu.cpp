@@ -103,10 +103,6 @@ void Menu_t::update(uint32_t currentTime)
     _anim_cntr.currentTime = currentTime;
 }
 
-void Menu_t::open()
-{
-}
+void Menu_t::open() {}
 
-void Menu_t::close()
-{
-}
+void Menu_t::close() {}

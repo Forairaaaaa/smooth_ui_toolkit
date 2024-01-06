@@ -60,7 +60,7 @@ namespace SmoothUIToolKit
             int target = 0;
             bool changed = false;
         };
-    };
+    }; // namespace SELECTOR
 
     class Selector_t
     {
@@ -93,7 +93,7 @@ namespace SmoothUIToolKit
          *
          * @param menu
          */
-        void setMenu(Menu_t *menu);
+        void setMenu(Menu_t* menu);
 
         /**
          * @brief Go to item, 0 ~ (getItemNum() - 1)
@@ -165,4 +165,4 @@ namespace SmoothUIToolKit
 
         void reset(uint32_t currentTime);
     };
-}
+} // namespace SmoothUIToolKit

@@ -1,20 +1,19 @@
 // /**
 //  * @file button.h
 //  * @author Forairaaaaa
-//  * @brief 
+//  * @brief
 //  * @version 0.1
 //  * @date 2024-01-03
-//  * 
+//  *
 //  * @copyright Copyright (c) 2024
-//  * 
+//  *
 //  */
 // #pragma once
 // #include "../base/base.h"
 
-
-// namespace SmoothUIToolKit 
-// { 
-//     namespace SmoothWidget 
+// namespace SmoothUIToolKit
+// {
+//     namespace SmoothWidget
 //     {
 //         class Button;
 
@@ -24,7 +23,7 @@
 //         typedef void (*ButtonOnPressStartCallback)(Button*);
 //         typedef void (*ButtonOnPressEndCallback)(Button*);
 
-//         class Button :public WidgetBase
+//         class Button : public WidgetBase
 //         {
 //         public:
 //             struct Callback_t
@@ -49,10 +48,10 @@
 //             Button(int x, int y, int width, int height) : WidgetBase(x, y, width, height) {}
 //             Button(Vector2D_t position, Vector2D_t size) : WidgetBase(position, size) {}
 
-//             // Config 
+//             // Config
 //             inline const Config_t& getConfig() { return _config; }
 //             inline Config_t& setConfig() { return _config; }
 //             inline Callback_t& setCallback() { return _config.callback; }
 //         };
-//     }
-// }
+//     } // namespace SmoothWidget
+// } // namespace SmoothUIToolKit

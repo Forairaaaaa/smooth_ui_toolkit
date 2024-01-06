@@ -16,10 +16,10 @@ namespace SmoothUIToolKit
     class SimpleMenuCallback_t
     {
     public:
-        virtual void renderCallback(
-            const std::vector<Item_t*>& menuItemList,
-            const RenderAttribute_t& selector,
-            const RenderAttribute_t& camera) {}
+        virtual void renderCallback(const std::vector<Item_t*>& menuItemList, const RenderAttribute_t& selector,
+                                    const RenderAttribute_t& camera)
+        {
+        }
     };
 
     class Simple_Menu
@@ -82,4 +82,4 @@ namespace SmoothUIToolKit
          */
         void render();
     };
-}
+} // namespace SmoothUIToolKit

@@ -139,4 +139,4 @@ namespace LVGL
             }
         }
     };
-}
+} // namespace LVGL

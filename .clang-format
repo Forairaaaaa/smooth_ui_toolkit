@@ -1,13 +1,19 @@
 ---
 # We'll use defaults from the LLVM style, but with 4 columns indentation.
 BasedOnStyle: LLVM
-IndentWidth: 4
+
 ---
 Language: Cpp
 # Force pointers to the type for C++.
+ColumnLimit: 128
+IndentWidth: 4
+NamespaceIndentation: All
+AccessModifierOffset: -4
 DerivePointerAlignment: false
 PointerAlignment: Left
-# BreakBeforeBraces: Allman
+BreakBeforeBraces: Allman
+# AllowShortBlocksOnASingleLine: Always
+# AllowShortCaseLabelsOnASingleLine: false
 
 ---
 Language: JavaScript

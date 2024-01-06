@@ -1,36 +1,34 @@
 /**
  * @file base.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-01-04
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 #include "base.h"
 using namespace SmoothUIToolKit::SmoothWidget;
 
-
 void WidgetBase::update(const std::uint32_t& currentTime)
 {
-    // Self update 
+    // Self update
     onUpdate(currentTime);
-    // Children update 
+    // Children update
     _invoke_children_update(currentTime);
 }
-
 
 void WidgetBase::hover(const int& x, const int& y)
 {
     if (_is_on_widget(x, y))
     {
-        // If already hovering 
+        // If already hovering
         if (_data.is_hovering)
             onHovering(x, y);
-        
-        // If on hover 
-        else 
+
+        // If on hover
+        else
         {
             _data.is_hovering = true;
             onHover();
@@ -38,17 +36,16 @@ void WidgetBase::hover(const int& x, const int& y)
 
         _invoke_children_hover(x, y);
     }
-    // If on hover leave 
+    // If on hover leave
     else if (_data.is_hovering)
     {
         _data.is_hovering = false;
         onHoverEnd();
 
-        // One last kick to tell children the hover is gone 
+        // One last kick to tell children the hover is gone
         _invoke_children_hover(x, y);
     }
 }
-
 
 void WidgetBase::drag(const int& x, const int& y)
 {
@@ -68,10 +65,9 @@ void WidgetBase::drag(const int& x, const int& y)
     }
 }
 
-
 void WidgetBase::drop()
 {
-    // On drop 
+    // On drop
     if (_data.is_dragging)
     {
         _data.is_dragging = false;
@@ -80,13 +76,11 @@ void WidgetBase::drop()
     }
 }
 
-
 void WidgetBase::addChild(WidgetBase* child)
 {
     if (child != nullptr && isChild(child))
         _children.push_back(child);
 }
-
 
 bool WidgetBase::isChild(WidgetBase* child)
 {
@@ -98,7 +92,6 @@ bool WidgetBase::isChild(WidgetBase* child)
     return false;
 }
 
-
 bool WidgetBase::_is_on_widget(const int& x, const int& y)
 {
     if (x < _position.x || x > _position.x + _size.width)
@@ -108,13 +101,11 @@ bool WidgetBase::_is_on_widget(const int& x, const int& y)
     return true;
 }
 
-
 void WidgetBase::_invoke_children_update(const std::uint32_t& currentTime)
 {
     for (const auto i : _children)
         i->update(currentTime);
 }
-
 
 void WidgetBase::_invoke_children_hover(const int& x, const int& y)
 {
@@ -122,17 +113,14 @@ void WidgetBase::_invoke_children_hover(const int& x, const int& y)
         i->hover(x, y);
 }
 
-
 void WidgetBase::_invoke_children_drag(const int& x, const int& y)
 {
     for (const auto i : _children)
         i->drag(x, y);
 }
 
-
 void WidgetBase::_invoke_children_drop()
 {
     for (const auto i : _children)
         i->drop();
 }
-

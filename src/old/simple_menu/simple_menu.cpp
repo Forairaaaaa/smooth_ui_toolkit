@@ -77,10 +77,7 @@ void Simple_Menu::render()
     if (_render_callback == nullptr)
         return;
 
-    _render_callback->renderCallback(
-        _menu->getItemList(),
-        _selector->getRenderAttribute(),
-        _camera->getRenderAttribute());
+    _render_callback->renderCallback(_menu->getItemList(), _selector->getRenderAttribute(), _camera->getRenderAttribute());
 }
 
 void Simple_Menu::goLast()

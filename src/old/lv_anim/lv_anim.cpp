@@ -77,7 +77,7 @@ namespace LVGL
         return v1 + v2 + v3 + v4;
     }
 
-    int32_t lv_anim_path_linear(const lv_anim_t *a)
+    int32_t lv_anim_path_linear(const lv_anim_t* a)
     {
         /*Calculate the current step*/
         int32_t step = lv_map(a->act_time, 0, a->time, 0, LV_ANIM_RESOLUTION);
@@ -92,7 +92,7 @@ namespace LVGL
         return new_value;
     }
 
-    int32_t lv_anim_path_ease_in(const lv_anim_t *a)
+    int32_t lv_anim_path_ease_in(const lv_anim_t* a)
     {
         /*Calculate the current step*/
         uint32_t t = lv_map(a->act_time, 0, a->time, 0, LV_BEZIER_VAL_MAX);
@@ -106,7 +106,7 @@ namespace LVGL
         return new_value;
     }
 
-    int32_t lv_anim_path_ease_out(const lv_anim_t *a)
+    int32_t lv_anim_path_ease_out(const lv_anim_t* a)
     {
         /*Calculate the current step*/
         uint32_t t = lv_map(a->act_time, 0, a->time, 0, LV_BEZIER_VAL_MAX);
@@ -120,7 +120,7 @@ namespace LVGL
         return new_value;
     }
 
-    int32_t lv_anim_path_ease_in_out(const lv_anim_t *a)
+    int32_t lv_anim_path_ease_in_out(const lv_anim_t* a)
     {
         /*Calculate the current step*/
         uint32_t t = lv_map(a->act_time, 0, a->time, 0, LV_BEZIER_VAL_MAX);
@@ -134,7 +134,7 @@ namespace LVGL
         return new_value;
     }
 
-    int32_t lv_anim_path_overshoot(const lv_anim_t *a)
+    int32_t lv_anim_path_overshoot(const lv_anim_t* a)
     {
         /*Calculate the current step*/
         uint32_t t = lv_map(a->act_time, 0, a->time, 0, LV_BEZIER_VAL_MAX);
@@ -148,7 +148,7 @@ namespace LVGL
         return new_value;
     }
 
-    int32_t lv_anim_path_bounce(const lv_anim_t *a)
+    int32_t lv_anim_path_bounce(const lv_anim_t* a)
     {
         /*Calculate the current step*/
         int32_t t = lv_map(a->act_time, 0, a->time, 0, LV_BEZIER_VAL_MAX);
@@ -206,11 +206,11 @@ namespace LVGL
         return new_value;
     }
 
-    int32_t lv_anim_path_step(const lv_anim_t *a)
+    int32_t lv_anim_path_step(const lv_anim_t* a)
     {
         if (a->act_time >= a->time)
             return a->end_value;
         else
             return a->start_value;
     }
-}
+} // namespace LVGL

@@ -9,10 +9,10 @@
  *
  */
 #pragma once
-#include <iostream>
-#include <vector>
-#include <string>
 #include "../lv_anim/lv_anim.h"
+#include <iostream>
+#include <string>
+#include <vector>
 
 namespace SmoothUIToolKit
 {
@@ -61,7 +61,7 @@ namespace SmoothUIToolKit
             uint32_t currentTime = 0;
             bool isFinished = false;
         };
-    }
+    } // namespace MENU
 
     class Menu_t : public Item_t
     {
@@ -146,9 +146,9 @@ namespace SmoothUIToolKit
          */
         void update(uint32_t currentTime);
 
-        // TODO 
+        // TODO
         void open();
-        // TODO 
+        // TODO
         void close();
     };
-}
+} // namespace SmoothUIToolKit

@@ -21,10 +21,7 @@ namespace SmoothUIToolKit
         int _height;
 
     public:
-        Camrea_t() : 
-            _width(0),
-            _height(0)
-            {}
+        Camrea_t() : _width(0), _height(0) {}
 
         inline void setSize(int width, int height)
         {
@@ -54,4 +51,4 @@ namespace SmoothUIToolKit
          */
         const RenderAttribute_t& getRenderAttribute();
     };
-}
+} // namespace SmoothUIToolKit

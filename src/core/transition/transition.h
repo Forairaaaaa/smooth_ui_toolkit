@@ -1,52 +1,52 @@
 /**
  * @file transition.h
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-12-30
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #pragma once
-#include "../types/types.h"
 #include "../easing_path/easing_path.h"
+#include "../types/types.h"
 #include <cstdint>
 // Refs:
 // https://developer.mozilla.org/en-US/docs/Web/CSS/transition
 
-
 namespace SmoothUIToolKit
 {
+    // Callback define
     class Transition;
     typedef void (*TransitionUpdateCallbackPtr)(Transition*);
 
     /**
-     * @brief Transition in esing path 
-     * 
+     * @brief Transition in esing path
+     *
      */
     class Transition
     {
     public:
         struct Config_t
         {
-            // Transition start 
+            // Transition start
             int startValue = 0;
 
-            // Transition end 
+            // Transition end
             int endValue = 0;
 
             // Transition duration (ms)
             std::uint32_t duration = 1000;
 
-            // Duration to wait before transition 
+            // Duration to wait before transition
             std::uint32_t delay = 0;
 
             // Transition path (easing path)
             EasingPathPtr transitionPath = EasingPath::easeOutQuad;
 
-            // Transition update callback 
-            TransitionUpdateCallbackPtr updateCallback= nullptr;
+            // Transition update callback
+            TransitionUpdateCallbackPtr updateCallback = nullptr;
 
             void* userData = nullptr;
         };
@@ -68,9 +68,12 @@ namespace SmoothUIToolKit
     public:
         Transition() = default;
         Transition(Config_t cfg) { _config = cfg; }
-        Transition(int start, int end, std::uint32_t duration, EasingPathPtr transitionPath) { setConfig(start, end, duration, transitionPath); }
+        Transition(int start, int end, std::uint32_t duration, EasingPathPtr transitionPath)
+        {
+            setConfig(start, end, duration, transitionPath);
+        }
 
-        // Transition configs 
+        // Transition configs
         inline Config_t getConfig() { return _config; }
         inline Config_t& setConfig(void) { return _config; }
         inline void setConfig(Config_t cfg) { _config = cfg; }
@@ -85,8 +88,8 @@ namespace SmoothUIToolKit
             _config.duration = duration;
             _config.transitionPath = transitionPath;
         }
-        
-        // Basic setter 
+
+        // Basic setter
         inline void setStartValue(int startValue) { _config.startValue = startValue; }
         inline void setEndValue(int endValue) { _config.endValue = endValue; }
         inline void setDuration(std::uint32_t duration) { _config.duration = duration; }
@@ -95,7 +98,7 @@ namespace SmoothUIToolKit
         inline void setUpdateCallback(TransitionUpdateCallbackPtr updateCallback) { _config.updateCallback = updateCallback; }
         inline void setUserData(void* userData) { _config.userData = userData; }
 
-        // Basic getter 
+        // Basic getter
         inline int getStartValue() { return _config.startValue; }
         inline int getEndValue() { return _config.endValue; }
         inline std::uint32_t getDuration() { return _config.duration; }
@@ -105,51 +108,51 @@ namespace SmoothUIToolKit
         inline void* getUserData() { return _config.userData; }
 
         /**
-         * @brief Start transition 
-         * 
-         * @param currentTime 
+         * @brief Start transition
+         *
+         * @param currentTime
          */
         void start(const std::uint32_t& currentTime);
 
         /**
-         * @brief Pause transition, call start() to continue 
-         * 
-         * @param currentTime 
+         * @brief Pause transition, call start() to continue
+         *
+         * @param currentTime
          */
         void pause(const std::uint32_t& currentTime);
 
         /**
-         * @brief End transition to the end 
-         * 
+         * @brief End transition to the end
+         *
          */
         void end();
 
         /**
-         * @brief Reset tansition to the start 
-         * 
+         * @brief Reset tansition to the start
+         *
          */
         void reset();
-        
+
         /**
-         * @brief Update transition 
-         * 
-         * @param currentTime 
+         * @brief Update transition
+         *
+         * @param currentTime
          */
         void update(const std::uint32_t& currentTime);
 
         /**
-         * @brief Get transtion's current value 
-         * 
-         * @return int 
+         * @brief Get transtion's current value
+         *
+         * @return int
          */
         inline const int& getValue() { return _data.current_value; }
 
         /**
-         * @brief Is transition finish 
-         * 
-         * @return true 
-         * @return false 
+         * @brief Is transition finish
+         *
+         * @return true
+         * @return false
          */
         inline bool isFinish() { return _data.is_finish; }
     };
-}
+} // namespace SmoothUIToolKit

@@ -67,21 +67,17 @@ void Selector_t::goToItem(int targetItem)
     _item_status.changed = true;
 }
 
-void Selector_t::goLast()
-{
-    goToItem(_item_status.target - 1);
-}
+void Selector_t::goLast() { goToItem(_item_status.target - 1); }
 
-void Selector_t::goNext()
-{
-    goToItem(_item_status.target + 1);
-}
+void Selector_t::goNext() { goToItem(_item_status.target + 1); }
 
 void Selector_t::pressed()
 {
     /* Squeeze selector  */
-    _anim_cntr.width.setAnim(_cfg.animPath_width, _anim_cntr.width.getValue(_anim_cntr.currentTime), _current_menu->getItemList()[_item_status.target]->width / 4 * 5, _cfg.animTime_width);
-    _anim_cntr.height.setAnim(_cfg.animPath_height, _anim_cntr.height.getValue(_anim_cntr.currentTime), _current_menu->getItemList()[_item_status.target]->height / 4 * 3, _cfg.animTime_height);
+    _anim_cntr.width.setAnim(_cfg.animPath_width, _anim_cntr.width.getValue(_anim_cntr.currentTime),
+                             _current_menu->getItemList()[_item_status.target]->width / 4 * 5, _cfg.animTime_width);
+    _anim_cntr.height.setAnim(_cfg.animPath_height, _anim_cntr.height.getValue(_anim_cntr.currentTime),
+                              _current_menu->getItemList()[_item_status.target]->height / 4 * 3, _cfg.animTime_height);
 
     _anim_cntr.width.resetTime(_anim_cntr.currentTime);
     _anim_cntr.height.resetTime(_anim_cntr.currentTime);
@@ -90,8 +86,10 @@ void Selector_t::pressed()
 void Selector_t::released()
 {
     /* Reset anim to target */
-    _anim_cntr.width.setAnim(_cfg.animPath_width, _anim_cntr.width.getValue(_anim_cntr.currentTime), _current_menu->getItemList()[_item_status.target]->width, _cfg.animTime_width);
-    _anim_cntr.height.setAnim(_cfg.animPath_height, _anim_cntr.height.getValue(_anim_cntr.currentTime), _current_menu->getItemList()[_item_status.target]->height, _cfg.animTime_height);
+    _anim_cntr.width.setAnim(_cfg.animPath_width, _anim_cntr.width.getValue(_anim_cntr.currentTime),
+                             _current_menu->getItemList()[_item_status.target]->width, _cfg.animTime_width);
+    _anim_cntr.height.setAnim(_cfg.animPath_height, _anim_cntr.height.getValue(_anim_cntr.currentTime),
+                              _current_menu->getItemList()[_item_status.target]->height, _cfg.animTime_height);
 
     _anim_cntr.width.resetTime(_anim_cntr.currentTime);
     _anim_cntr.height.resetTime(_anim_cntr.currentTime);
@@ -105,10 +103,14 @@ void Selector_t::update(uint32_t currentTime, bool renderAtOnce)
         _item_status.changed = false;
 
         /* Reset anim to target */
-        _anim_cntr.x.setAnim(_cfg.animPath_x, _anim_cntr.x.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->x, _cfg.animTime_x);
-        _anim_cntr.y.setAnim(_cfg.animPath_y, _anim_cntr.y.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->y, _cfg.animTime_y);
-        _anim_cntr.width.setAnim(_cfg.animPath_width, _anim_cntr.width.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->width, _cfg.animTime_width);
-        _anim_cntr.height.setAnim(_cfg.animPath_height, _anim_cntr.height.getValue(currentTime), _current_menu->getItemList()[_item_status.target]->height, _cfg.animTime_height);
+        _anim_cntr.x.setAnim(_cfg.animPath_x, _anim_cntr.x.getValue(currentTime),
+                             _current_menu->getItemList()[_item_status.target]->x, _cfg.animTime_x);
+        _anim_cntr.y.setAnim(_cfg.animPath_y, _anim_cntr.y.getValue(currentTime),
+                             _current_menu->getItemList()[_item_status.target]->y, _cfg.animTime_y);
+        _anim_cntr.width.setAnim(_cfg.animPath_width, _anim_cntr.width.getValue(currentTime),
+                                 _current_menu->getItemList()[_item_status.target]->width, _cfg.animTime_width);
+        _anim_cntr.height.setAnim(_cfg.animPath_height, _anim_cntr.height.getValue(currentTime),
+                                  _current_menu->getItemList()[_item_status.target]->height, _cfg.animTime_height);
 
         _reset_anim_time();
     }
@@ -139,10 +141,8 @@ void Selector_t::render(bool renderMenu)
     if (_render_callback != nullptr)
     {
         _render_callback->renderCallback(
-            _anim_cntr.x.getValue(_anim_cntr.currentTime),
-            _anim_cntr.y.getValue(_anim_cntr.currentTime),
-            _anim_cntr.width.getValue(_anim_cntr.currentTime),
-            _anim_cntr.height.getValue(_anim_cntr.currentTime));
+            _anim_cntr.x.getValue(_anim_cntr.currentTime), _anim_cntr.y.getValue(_anim_cntr.currentTime),
+            _anim_cntr.width.getValue(_anim_cntr.currentTime), _anim_cntr.height.getValue(_anim_cntr.currentTime));
     }
 
     /* Render menu */
