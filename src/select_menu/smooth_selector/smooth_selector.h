@@ -58,7 +58,8 @@ namespace SmoothUIToolKit
 
             struct Callback_t
             {
-                virtual void onRender(const std::vector<OptionProps_t>& optionProps, const SelectorProps_t& selector,
+                virtual void onRender(const std::vector<OptionProps_t>& optionProps,
+                                      const SelectorProps_t& selector,
                                       const CameraProps_t& camera)
                 {
                 }

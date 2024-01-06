@@ -20,9 +20,9 @@ namespace SmoothUIToolKit
     namespace SelectMenu
     {
         /**
-         * @brief Menu with smooth options
-         * Option moves looply in keyframe list, means keyframe num equals to the option num
-         * The option at the first keyframe currently treated as the selected one
+         * @brief Menu with smooth options.
+         * Option moves in loop to match the keyframe list, keyframe num equals option num
+         * The option matching the first keyframe at that time, treated as the selected one
          *
          */
         class SmoothOptions
@@ -81,8 +81,10 @@ namespace SmoothUIToolKit
             inline OptionProps_t& setOption(int index) { return _data.option_list[index]; }
             inline Vector4D_t getOptionCurrentFrame(const int& index)
             {
-                return {getOption(index).position.getValue().x, getOption(index).position.getValue().y,
-                        getOption(index).shape.getValue().width, getOption(index).shape.getValue().height};
+                return {getOption(index).position.getValue().x,
+                        getOption(index).position.getValue().y,
+                        getOption(index).shape.getValue().width,
+                        getOption(index).shape.getValue().height};
             }
 
             /**

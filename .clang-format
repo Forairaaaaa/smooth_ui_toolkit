@@ -12,6 +12,8 @@ AccessModifierOffset: -4
 DerivePointerAlignment: false
 PointerAlignment: Left
 BreakBeforeBraces: Allman
+BinPackArguments: false
+BinPackParameters: false
 # AllowShortBlocksOnASingleLine: Always
 # AllowShortCaseLabelsOnASingleLine: false
 
