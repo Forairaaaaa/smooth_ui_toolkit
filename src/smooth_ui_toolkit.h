@@ -15,6 +15,9 @@
 #include "core/transition2d/transition2d.h"
 #include "core/smooth_drag/smooth_drag.h"
 
+#include "select_menu/smooth_options/smooth_options.h"
+#include "select_menu/smooth_selector/smooth_selector.h"
+
 #include "smooth_widget/base/base.h"
 
 #include "old/camera/camera.h"

@@ -55,6 +55,8 @@ namespace SmoothUIToolKit
         }
     };
 
+    typedef std::uint32_t TimeSize_t;
+
     inline bool IsInRange(Vector2D_t range, int x)
     {
         if (x < range.x)

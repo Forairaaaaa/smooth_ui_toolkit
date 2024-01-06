@@ -37,10 +37,10 @@ namespace SmoothUIToolKit
             int endValue = 0;
 
             // Transition duration (ms)
-            std::uint32_t duration = 1000;
+            TimeSize_t duration = 1000;
 
             // Duration to wait before transition
-            std::uint32_t delay = 0;
+            TimeSize_t delay = 0;
 
             // Transition path (easing path)
             EasingPathPtr transitionPath = EasingPath::easeOutQuad;
@@ -54,21 +54,21 @@ namespace SmoothUIToolKit
     private:
         struct Data_t
         {
-            std::uint32_t time_offset = 0;
-            std::uint32_t pause_time = 0;
-            std::uint32_t pause_offset = 0;
+            TimeSize_t time_offset = 0;
+            TimeSize_t pause_time = 0;
+            TimeSize_t pause_offset = 0;
             int current_value = 0;
             bool is_paused = true;
             bool is_finish = false;
         };
         Data_t _data;
         Config_t _config;
-        void _update_value(const std::uint32_t& currentTime);
+        void _update_value(const TimeSize_t& currentTime);
 
     public:
         Transition() = default;
         Transition(Config_t cfg) { _config = cfg; }
-        Transition(int start, int end, std::uint32_t duration, EasingPathPtr transitionPath)
+        Transition(int start, int end, TimeSize_t duration, EasingPathPtr transitionPath)
         {
             setConfig(start, end, duration, transitionPath);
         }
@@ -82,7 +82,7 @@ namespace SmoothUIToolKit
             _config.startValue = start;
             _config.endValue = end;
         }
-        inline void setConfig(int start, int end, std::uint32_t duration, EasingPathPtr transitionPath)
+        inline void setConfig(int start, int end, TimeSize_t duration, EasingPathPtr transitionPath)
         {
             setConfig(start, end);
             _config.duration = duration;
@@ -92,8 +92,8 @@ namespace SmoothUIToolKit
         // Basic setter
         inline void setStartValue(int startValue) { _config.startValue = startValue; }
         inline void setEndValue(int endValue) { _config.endValue = endValue; }
-        inline void setDuration(std::uint32_t duration) { _config.duration = duration; }
-        inline void setDelay(std::uint32_t delay) { _config.delay = delay; }
+        inline void setDuration(TimeSize_t duration) { _config.duration = duration; }
+        inline void setDelay(TimeSize_t delay) { _config.delay = delay; }
         inline void setTransitionPath(EasingPathPtr transitionPath) { _config.transitionPath = transitionPath; }
         inline void setUpdateCallback(TransitionUpdateCallbackPtr updateCallback) { _config.updateCallback = updateCallback; }
         inline void setUserData(void* userData) { _config.userData = userData; }
@@ -101,8 +101,8 @@ namespace SmoothUIToolKit
         // Basic getter
         inline int getStartValue() { return _config.startValue; }
         inline int getEndValue() { return _config.endValue; }
-        inline std::uint32_t getDuration() { return _config.duration; }
-        inline std::uint32_t getDelay() { return _config.delay; }
+        inline TimeSize_t getDuration() { return _config.duration; }
+        inline TimeSize_t getDelay() { return _config.delay; }
         inline EasingPathPtr getTransitionPath() { return _config.transitionPath; }
         inline TransitionUpdateCallbackPtr getUpdateCallback() { return _config.updateCallback; }
         inline void* getUserData() { return _config.userData; }
@@ -112,14 +112,14 @@ namespace SmoothUIToolKit
          *
          * @param currentTime
          */
-        void start(const std::uint32_t& currentTime);
+        void start(const TimeSize_t& currentTime);
 
         /**
          * @brief Pause transition, call start() to continue
          *
          * @param currentTime
          */
-        void pause(const std::uint32_t& currentTime);
+        void pause(const TimeSize_t& currentTime);
 
         /**
          * @brief End transition to the end
@@ -138,7 +138,7 @@ namespace SmoothUIToolKit
          *
          * @param currentTime
          */
-        void update(const std::uint32_t& currentTime);
+        void update(const TimeSize_t& currentTime);
 
         /**
          * @brief Get transtion's current value

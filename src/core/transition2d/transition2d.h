@@ -47,12 +47,12 @@ namespace SmoothUIToolKit
         Transition2D(const Point_t& pSatrt) { jumpTo(pSatrt); }
 
         // Basic setter
-        inline void setDuration(std::uint32_t duration)
+        inline void setDuration(TimeSize_t duration)
         {
             _data.x_transition.setDuration(duration);
             _data.y_transition.setDuration(duration);
         }
-        inline void setDelay(std::uint32_t delay)
+        inline void setDelay(TimeSize_t delay)
         {
             _data.x_transition.setDelay(delay);
             _data.y_transition.setDelay(delay);
@@ -79,14 +79,14 @@ namespace SmoothUIToolKit
          *
          * @param currentTime
          */
-        void start(const std::uint32_t& currentTime);
+        void start(const TimeSize_t& currentTime);
 
         /**
          * @brief Pause moving, call start() to continue
          *
          * @param currentTime
          */
-        void pause(const std::uint32_t& currentTime);
+        void pause(const TimeSize_t& currentTime);
 
         /**
          * @brief End moving to the target point
@@ -105,7 +105,7 @@ namespace SmoothUIToolKit
          *
          * @param currentTime
          */
-        void update(const std::uint32_t& currentTime);
+        void update(const TimeSize_t& currentTime);
 
         /**
          * @brief Jump to target point with no transition

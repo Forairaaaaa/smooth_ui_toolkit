@@ -12,7 +12,7 @@
 
 using namespace SmoothUIToolKit;
 
-void Transition::start(const std::uint32_t& currentTime)
+void Transition::start(const TimeSize_t& currentTime)
 {
     // New time offset
     _data.time_offset = _data.time_offset + (currentTime - _data.pause_time) + _data.pause_offset;
@@ -23,7 +23,7 @@ void Transition::start(const std::uint32_t& currentTime)
     _data.pause_time = 0;
 }
 
-void Transition::pause(const std::uint32_t& currentTime)
+void Transition::pause(const TimeSize_t& currentTime)
 {
     _data.is_paused = true;
     _data.pause_offset = currentTime - _data.time_offset;
@@ -45,7 +45,7 @@ void Transition::reset()
     _data.time_offset = 0;
 }
 
-void Transition::update(const std::uint32_t& currentTime)
+void Transition::update(const TimeSize_t& currentTime)
 {
     if (!_data.is_paused && !_data.is_finish)
     {
@@ -75,9 +75,9 @@ void Transition::update(const std::uint32_t& currentTime)
     }
 }
 
-void Transition::_update_value(const std::uint32_t& currentTime)
+void Transition::_update_value(const TimeSize_t& currentTime)
 {
-    std::uint32_t t_current = EasingPath::maxT * (currentTime - _config.delay - _data.time_offset) / _config.duration;
+    TimeSize_t t_current = EasingPath::maxT * (currentTime - _config.delay - _data.time_offset) / _config.duration;
     _data.current_value =
         (_config.endValue - _config.startValue) * _config.transitionPath(t_current) / EasingPath::maxT + _config.startValue;
 }

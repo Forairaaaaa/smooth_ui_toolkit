@@ -12,13 +12,13 @@
 
 using namespace SmoothUIToolKit;
 
-void Transition2D::start(const std::uint32_t& currentTime)
+void Transition2D::start(const TimeSize_t& currentTime)
 {
     _data.x_transition.start(currentTime);
     _data.y_transition.start(currentTime);
 }
 
-void Transition2D::pause(const std::uint32_t& currentTime)
+void Transition2D::pause(const TimeSize_t& currentTime)
 {
     _data.x_transition.pause(currentTime);
     _data.y_transition.pause(currentTime);
@@ -36,7 +36,7 @@ void Transition2D::reset()
     _data.y_transition.reset();
 }
 
-void Transition2D::update(const std::uint32_t& currentTime)
+void Transition2D::update(const TimeSize_t& currentTime)
 {
     if (_data.is_changed)
     {
