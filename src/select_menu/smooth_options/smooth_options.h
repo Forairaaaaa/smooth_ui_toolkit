@@ -52,10 +52,13 @@ namespace SmoothUIToolKit
             {
                 std::vector<OptionProps_t> option_list;
                 std::vector<Vector4D_t> keyframe_list;
-                bool is_changed = true;
                 int selected_option_index = 0;
                 TimeSize_t read_input_time_count = 0;
                 TimeSize_t render_time_count = 0;
+                bool is_changed = true;
+                bool was_released = false;
+                bool is_opening = false;
+                bool was_opened = false;
             };
             Data_t _data;
             Config_t _config;
@@ -147,7 +150,7 @@ namespace SmoothUIToolKit
             virtual void goNext();
 
             /**
-             * @brief Update the selected option with pressed key frame
+             * @brief Press the selected option to the passing key frame
              *
              * @param pressedKeyframe
              */
@@ -158,6 +161,27 @@ namespace SmoothUIToolKit
              *
              */
             virtual void release();
+
+            /**
+             * @brief Open the selected option to the passing key frame
+             *
+             * @param pressedKeyframe
+             */
+            virtual void open(const Vector4D_t& pressedKeyframe);
+
+            /**
+             * @brief Is the selected option opening
+             *
+             * @return true
+             * @return false
+             */
+            inline const bool& isOpening() { return _data.is_opening; }
+
+            /**
+             * @brief Close the selected option
+             *
+             */
+            virtual void close();
 
             /**
              * @brief Update menu
@@ -171,6 +195,8 @@ namespace SmoothUIToolKit
             virtual void onGoNext() {}
             virtual void onPress() {}
             virtual void onRelease() {}
+            virtual void onClick() {}
+            virtual void onOpenEnd() {}
             virtual void onUpdate(const TimeSize_t& currentTime) {}
             virtual void onReadInput() {}
             virtual void onRender() {}

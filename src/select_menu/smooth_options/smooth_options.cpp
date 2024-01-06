@@ -85,9 +85,26 @@ void SmoothOptions::release()
 {
     // Set update flag, let _update_option_keyframe to change it back
     _data.is_changed = true;
+    _data.was_released = true;
 
     // Callback
     onRelease();
+}
+
+void SmoothOptions::open(const Vector4D_t& pressedKeyframe)
+{
+    // Update tarnsition target
+    _data.option_list[_data.selected_option_index].position.moveTo(pressedKeyframe.x, pressedKeyframe.y);
+    _data.option_list[_data.selected_option_index].shape.reshapeTo(pressedKeyframe.w, pressedKeyframe.h);
+
+    _data.is_opening = true;
+    _data.was_opened = true;
+}
+
+void SmoothOptions::close()
+{
+    _data.is_changed = true;
+    _data.is_opening = false;
 }
 
 void SmoothOptions::update(const std::uint32_t& currentTime)
@@ -115,6 +132,30 @@ void SmoothOptions::update(const std::uint32_t& currentTime)
     {
         onRender();
         _data.render_time_count = currentTime;
+    }
+
+    // On click callback
+    if (_data.was_released)
+    {
+        int matching_index;
+        getMatchingOptionIndex(0, matching_index);
+        if (getOption(matching_index).position.isFinish() && getOption(matching_index).shape.isFinish())
+        {
+            _data.was_released = false;
+            onClick();
+        }
+    }
+
+    // On open end callback
+    if (_data.was_opened)
+    {
+        int matching_index;
+        getMatchingOptionIndex(0, matching_index);
+        if (getOption(matching_index).position.isFinish() && getOption(matching_index).shape.isFinish())
+        {
+            _data.was_opened = false;
+            onOpenEnd();
+        }
     }
 }
 
