@@ -28,6 +28,10 @@ namespace SmoothUIToolKit
         class SmoothOptions
         {
         public:
+            /**
+             * @brief Option properties
+             *
+             */
             struct OptionProps_t
             {
                 Transition2D position;
@@ -35,50 +39,98 @@ namespace SmoothUIToolKit
                 void* userData = nullptr;
             };
 
-            struct Keyframe_t
+            struct Config_t
             {
-                Vector2D_t position;
-                Vector2D_t shape;
+                // Interval of onReadInput() callback
+                TimeSize_t readInputInterval = 20;
+                // Interval of onRender() callback
+                TimeSize_t renderInterval = 15;
             };
 
         protected:
             struct Data_t
             {
                 std::vector<OptionProps_t> option_list;
-                std::vector<Keyframe_t> keyframe_list;
+                std::vector<Vector4D_t> keyframe_list;
                 bool is_changed = true;
                 int selected_option_index = 0;
+                TimeSize_t read_input_time_count = 0;
+                TimeSize_t render_time_count = 0;
             };
             Data_t _data;
+            Config_t _config;
             void _update_option_keyframe();
             void _invoke_option_update(const TimeSize_t& currentTime);
 
         public:
-            inline const std::vector<Keyframe_t>& getKeyframeList() { return _data.keyframe_list; }
+            // Config
+            inline const Config_t getConfig() { return _config; }
+            inline void setConfig(Config_t cfg) { _config = cfg; }
+            inline Config_t& setConfig() { return _config; }
+
+            // Keyframe
+            inline const std::vector<Vector4D_t>& getKeyframeList() { return _data.keyframe_list; }
+            inline const Vector4D_t& getKeyframe(const int& index) { return _data.keyframe_list[index]; }
+            inline void setKeyframe(int index, Vector4D_t keyframe) { _data.keyframe_list[index] = keyframe; }
+            inline Vector4D_t& setKeyframe(int index) { return _data.keyframe_list[index]; }
+            inline void setLastKeyframe(Vector4D_t keyframe) { _data.keyframe_list.back() = keyframe; }
+
+            // Options
             inline const std::vector<OptionProps_t>& getOptionList() { return _data.option_list; }
-
-            /**
-             * @brief Set keyframe
-             *
-             * @param index
-             * @return Keyframe_t&
-             */
-            inline Keyframe_t& setKeyframe(int index) { return _data.keyframe_list[index]; }
-
-            /**
-             * @brief Set option properties
-             *
-             * @param index
-             * @return OptionProps_t&
-             */
+            inline OptionProps_t& getOption(const int& index) { return _data.option_list[index]; }
             inline OptionProps_t& setOption(int index) { return _data.option_list[index]; }
+            inline Vector4D_t getOptionCurrentFrame(const int& index)
+            {
+                return {getOption(index).position.getValue().x, getOption(index).position.getValue().y,
+                        getOption(index).shape.getValue().width, getOption(index).shape.getValue().height};
+            }
+
+            /**
+             * @brief Set the position transition duration to all options
+             *
+             * @param duration
+             */
+            void setPositionDuration(TimeSize_t duration);
+
+            /**
+             * @brief Set the shape transition duration to all optionos
+             *
+             * @param duration
+             */
+            void setShapeDuration(TimeSize_t duration);
+
+            /**
+             * @brief Set the postion transition path to all optionos
+             *
+             * @param path
+             */
+            void setPositionTransitionPath(EasingPathPtr path);
+
+            /**
+             * @brief Set the shape transition path to all optionos
+             *
+             * @param path
+             */
+            void setShapeTransitionPath(EasingPathPtr path);
+
+            inline void setDuration(TimeSize_t duration)
+            {
+                setPositionDuration(duration);
+                setShapeDuration(duration);
+            }
+
+            inline void setTransitionPath(EasingPathPtr path)
+            {
+                setPositionTransitionPath(path);
+                setShapeTransitionPath(path);
+            }
 
             /**
              * @brief Add option into menu
              *
              * @param userData
              */
-            void addOption(void* userData);
+            void addOption(void* userData = nullptr);
 
             /**
              * @brief Select last one
@@ -97,7 +149,7 @@ namespace SmoothUIToolKit
              *
              * @param pressedKeyframe
              */
-            virtual void press(const Keyframe_t& pressedKeyframe);
+            virtual void press(const Vector4D_t& pressedKeyframe);
 
             /**
              * @brief Release the selected option
@@ -118,6 +170,7 @@ namespace SmoothUIToolKit
             virtual void onPress() {}
             virtual void onRelease() {}
             virtual void onUpdate(const TimeSize_t& currentTime) {}
+            virtual void onReadInput() {}
             virtual void onRender() {}
 
         public:

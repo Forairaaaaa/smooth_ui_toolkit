@@ -12,6 +12,30 @@
 
 using namespace SmoothUIToolKit::SelectMenu;
 
+void SmoothOptions::setPositionDuration(TimeSize_t duration)
+{
+    for (auto& i : _data.option_list)
+        i.position.setDuration(duration);
+}
+
+void SmoothOptions::setShapeDuration(TimeSize_t duration)
+{
+    for (auto& i : _data.option_list)
+        i.shape.setDuration(duration);
+}
+
+void SmoothOptions::setPositionTransitionPath(EasingPathPtr path)
+{
+    for (auto& i : _data.option_list)
+        i.position.setTransitionPath(path);
+}
+
+void SmoothOptions::setShapeTransitionPath(EasingPathPtr path)
+{
+    for (auto& i : _data.option_list)
+        i.shape.setTransitionPath(path);
+}
+
 void SmoothOptions::addOption(void* userData)
 {
     _data.option_list.emplace_back();
@@ -47,11 +71,11 @@ void SmoothOptions::goNext()
     onGoNext();
 }
 
-void SmoothOptions::press(const Keyframe_t& pressedKeyframe)
+void SmoothOptions::press(const Vector4D_t& pressedKeyframe)
 {
     // Update tarnsition target
-    _data.option_list[_data.selected_option_index].position.moveTo(pressedKeyframe.position);
-    _data.option_list[_data.selected_option_index].shape.reshapeTo(pressedKeyframe.shape);
+    _data.option_list[_data.selected_option_index].position.moveTo(pressedKeyframe.x, pressedKeyframe.y);
+    _data.option_list[_data.selected_option_index].shape.reshapeTo(pressedKeyframe.w, pressedKeyframe.h);
 
     // Callback
     onPress();
@@ -71,6 +95,14 @@ void SmoothOptions::update(const std::uint32_t& currentTime)
     // Callback
     onUpdate(currentTime);
 
+    // Read input callback
+    if (currentTime - _data.read_input_time_count > _config.readInputInterval)
+    {
+        onReadInput();
+        _data.read_input_time_count = currentTime;
+    }
+
+    // Update
     if (_data.is_changed)
     {
         _data.is_changed = false;
@@ -78,8 +110,12 @@ void SmoothOptions::update(const std::uint32_t& currentTime)
     }
     _invoke_option_update(currentTime);
 
-    // Callback
-    onRender();
+    // Render callback
+    if (currentTime - _data.render_time_count > _config.renderInterval)
+    {
+        onRender();
+        _data.render_time_count = currentTime;
+    }
 }
 
 void SmoothOptions::getMatchingOptionIndex(const int& keyframeIndex, int& matchedOptionIndex)
@@ -98,8 +134,8 @@ void SmoothOptions::_update_option_keyframe()
         getMatchingOptionIndex(i, matching_index);
 
         // Update transition target
-        _data.option_list[matching_index].position.moveTo(_data.keyframe_list[i].position);
-        _data.option_list[matching_index].shape.reshapeTo(_data.keyframe_list[i].shape);
+        _data.option_list[matching_index].position.moveTo(_data.keyframe_list[i].x, _data.keyframe_list[i].y);
+        _data.option_list[matching_index].shape.reshapeTo(_data.keyframe_list[i].w, _data.keyframe_list[i].h);
     }
 }
 
