@@ -56,6 +56,7 @@ namespace SmoothUIToolKit
                 TimeSize_t read_input_time_count = 0;
                 TimeSize_t render_time_count = 0;
                 bool is_changed = true;
+                bool is_pressing = false;
                 bool was_released = false;
                 bool is_opening = false;
                 bool was_opened = false;
@@ -155,6 +156,14 @@ namespace SmoothUIToolKit
              * @param pressedKeyframe
              */
             virtual void press(const Vector4D_t& pressedKeyframe);
+
+            /**
+             * @brief Is the selected option being pressed
+             *
+             * @return true
+             * @return false
+             */
+            inline bool isPressing() { return _data.is_pressing; }
 
             /**
              * @brief Release the selected option
