@@ -58,9 +58,9 @@ namespace SmoothUIToolKit
     private:
         struct Data_t
         {
-            Point_t drag_start_point;
-            Point_t drag_start_offset;
-            Point_t target_buffer;
+            Vector2D_t drag_start_point;
+            Vector2D_t drag_start_offset;
+            Vector2D_t target_buffer;
             bool is_dragging = false;
             bool is_in_range = true;
         };
@@ -70,7 +70,7 @@ namespace SmoothUIToolKit
     public:
         SmoothDrag() = default;
         SmoothDrag(const int& xStart, const int& yStart) : Transition2D(xStart, yStart) {}
-        SmoothDrag(const Point_t& pSatrt) : Transition2D(pSatrt) {}
+        SmoothDrag(const Vector2D_t& pSatrt) : Transition2D(pSatrt) {}
 
         // Drag config
         inline Config_t getDragConfig() { return _config; }
@@ -92,7 +92,7 @@ namespace SmoothUIToolKit
          * @param y
          */
         void drag(const int& x, const int& y);
-        inline void drag(const Point_t& p) { drag(p.x, p.y); }
+        inline void drag(const Vector2D_t& p) { drag(p.x, p.y); }
 
         /**
          * @brief Stop dragging
@@ -103,8 +103,8 @@ namespace SmoothUIToolKit
         /**
          * @brief Get current drag and drop offset
          *
-         * @return Point_t
+         * @return Vector2D_t
          */
-        inline Point_t getOffset() { return getValue(); }
+        inline Vector2D_t getOffset() { return getValue(); }
     };
 } // namespace SmoothUIToolKit

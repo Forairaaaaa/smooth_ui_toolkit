@@ -21,8 +21,10 @@ namespace SmoothUIToolKit
     {
         /**
          * @brief Menu with smooth options.
-         * Option moves in loop to match the keyframe list, keyframe num equals option num
-         * The option matching the first keyframe at that time, treated as the selected one
+         * Option moves in loop to match the keyframe list, keyframe num equals option num.
+         * The option matching the first keyframe at that time, treated as the selected one.
+         * Each options has their own transition,
+         * handy for loop menu with complex position and shape transition.
          *
          */
         class SmoothOptions
