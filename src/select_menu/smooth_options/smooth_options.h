@@ -82,9 +82,10 @@ namespace SmoothUIToolKit
             inline void setLastKeyframe(Vector4D_t keyframe) { _data.keyframe_list.back() = keyframe; }
 
             // Options
+            void addOption(void* userData = nullptr);
+            inline OptionProps_t& setOption(int index) { return _data.option_list[index]; }
             inline const std::vector<OptionProps_t>& getOptionList() { return _data.option_list; }
             inline OptionProps_t& getOption(const int& index) { return _data.option_list[index]; }
-            inline OptionProps_t& setOption(int index) { return _data.option_list[index]; }
             inline Vector4D_t getOptionCurrentFrame(const int& index)
             {
                 return {getOption(index).position.getValue().x,
@@ -132,13 +133,6 @@ namespace SmoothUIToolKit
                 setPositionTransitionPath(path);
                 setShapeTransitionPath(path);
             }
-
-            /**
-             * @brief Add option into menu
-             *
-             * @param userData
-             */
-            void addOption(void* userData = nullptr);
 
             /**
              * @brief Select last one
