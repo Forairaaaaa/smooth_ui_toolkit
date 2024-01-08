@@ -139,7 +139,7 @@ void SmoothOptions::update(const std::uint32_t& currentTime)
     // On click callback
     if (_data.was_released)
     {
-        // Check if is transition done
+        // Check if transition is done
         int matching_index = getMatchingOptionIndex(0);
         if (getOption(matching_index).position.isFinish() && getOption(matching_index).shape.isFinish())
         {
@@ -152,7 +152,7 @@ void SmoothOptions::update(const std::uint32_t& currentTime)
     // On open end callback
     if (_data.was_opened)
     {
-        // Check if is transition done
+        // Check if transition is done
         int matching_index = getMatchingOptionIndex(0);
         if (getOption(matching_index).position.isFinish() && getOption(matching_index).shape.isFinish())
         {

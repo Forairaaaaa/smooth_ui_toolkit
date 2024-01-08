@@ -28,10 +28,43 @@ void SmoothSelector::goNext()
     _data.is_changed = true;
 }
 
-void SmoothSelector::press(const Vector4D_t& pressedKeyframe) {}
-void SmoothSelector::release() {}
-void SmoothSelector::open(const Vector4D_t& pressedKeyframe) {}
-void SmoothSelector::close() {}
+void SmoothSelector::press(const Vector4D_t& pressedKeyframe)
+{
+    _data.is_pressing = true;
+
+    // Update tarnsition target
+    _data.selector_postion.moveTo(pressedKeyframe.x, pressedKeyframe.y);
+    _data.selector_shape.reshapeTo(pressedKeyframe.w, pressedKeyframe.h);
+
+    // Callback
+    onPress();
+}
+
+void SmoothSelector::release()
+{
+    // Let update to change it back
+    _data.is_changed = true;
+    _data.was_released = true;
+
+    // Callback
+    onRelease();
+}
+
+void SmoothSelector::open(const Vector4D_t& pressedKeyframe)
+{
+    _data.is_opening = true;
+    _data.was_opened = true;
+
+    // Update tarnsition target
+    _data.selector_postion.moveTo(pressedKeyframe.x, pressedKeyframe.y);
+    _data.selector_shape.reshapeTo(pressedKeyframe.w, pressedKeyframe.h);
+}
+
+void SmoothSelector::close()
+{
+    _data.is_changed = true;
+    _data.is_opening = false;
+}
 
 void SmoothSelector::update(const TimeSize_t& currentTime)
 {
@@ -66,7 +99,24 @@ void SmoothSelector::update(const TimeSize_t& currentTime)
     // On click callback
     if (_data.was_released)
     {
-        
+        // Check if transition is done
+        if (_data.selector_postion.isFinish() && _data.selector_shape.isFinish())
+        {
+            _data.was_released = false;
+            _data.is_pressing = false;
+            onClick();
+        }
+    }
+
+    // On open end callback
+    if (_data.was_opened)
+    {
+        // Check if transition is done
+        if (_data.selector_postion.isFinish() && _data.selector_shape.isFinish())
+        {
+            _data.was_opened = false;
+            onOpenEnd();
+        }
     }
 }
 
