@@ -86,6 +86,7 @@ namespace SmoothUIToolKit
             inline OptionProps_t& setOption(int index) { return _data.option_list[index]; }
             inline const std::vector<OptionProps_t>& getOptionList() { return _data.option_list; }
             inline OptionProps_t& getOption(const int& index) { return _data.option_list[index]; }
+            inline OptionProps_t& getSelectedOption() { return _data.option_list[getMatchingOptionIndex(0)]; }
             inline Vector4D_t getOptionCurrentFrame(const int& index)
             {
                 return {getOption(index).position.getValue().x,
@@ -215,6 +216,7 @@ namespace SmoothUIToolKit
              * @param matchedOptionIndex
              */
             void getMatchingOptionIndex(const int& keyframeIndex, int& matchedOptionIndex);
+            int getMatchingOptionIndex(const int& keyframeIndex);
         };
     } // namespace SelectMenu
 } // namespace SmoothUIToolKit

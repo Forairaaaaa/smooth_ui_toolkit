@@ -68,6 +68,8 @@ namespace SmoothUIToolKit
             };
             Data_t _data;
             Config_t _config;
+            virtual void _update_selector_keyframe();
+            virtual void _update_camera_keyframe();
 
         public:
             // Configs
@@ -79,6 +81,7 @@ namespace SmoothUIToolKit
             inline void addOption(OptionProps_t optionProps) { _data.option_list.push_back(optionProps); }
             inline const std::vector<OptionProps_t>& getOptionList() { return _data.option_list; }
             inline OptionProps_t getSelectedOption() { return _data.option_list[_data.selected_option_index]; }
+            inline Vector4D_t getSelectedKeyframe() { return getSelectedOption().keyframe; }
 
             // Selector
             inline Transition2D& selectorPostion() { return _data.selector_postion; }

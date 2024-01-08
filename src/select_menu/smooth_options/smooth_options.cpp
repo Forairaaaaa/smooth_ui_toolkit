@@ -78,7 +78,7 @@ void SmoothOptions::press(const Vector4D_t& pressedKeyframe)
     // Update tarnsition target
     _data.option_list[_data.selected_option_index].position.moveTo(pressedKeyframe.x, pressedKeyframe.y);
     _data.option_list[_data.selected_option_index].shape.reshapeTo(pressedKeyframe.w, pressedKeyframe.h);
-    
+
     // Callback
     onPress();
 }
@@ -139,8 +139,8 @@ void SmoothOptions::update(const std::uint32_t& currentTime)
     // On click callback
     if (_data.was_released)
     {
-        int matching_index;
-        getMatchingOptionIndex(0, matching_index);
+        // Check if is transition done
+        int matching_index = getMatchingOptionIndex(0);
         if (getOption(matching_index).position.isFinish() && getOption(matching_index).shape.isFinish())
         {
             _data.was_released = false;
@@ -152,8 +152,8 @@ void SmoothOptions::update(const std::uint32_t& currentTime)
     // On open end callback
     if (_data.was_opened)
     {
-        int matching_index;
-        getMatchingOptionIndex(0, matching_index);
+        // Check if is transition done
+        int matching_index = getMatchingOptionIndex(0);
         if (getOption(matching_index).position.isFinish() && getOption(matching_index).shape.isFinish())
         {
             _data.was_opened = false;
@@ -168,6 +168,16 @@ void SmoothOptions::getMatchingOptionIndex(const int& keyframeIndex, int& matche
     // If out of limit, connect to back
     if (matchedOptionIndex >= _data.keyframe_list.size())
         matchedOptionIndex = matchedOptionIndex - _data.keyframe_list.size();
+}
+
+int SmoothOptions::getMatchingOptionIndex(const int& keyframeIndex)
+{
+    int matched_option_index = keyframeIndex + _data.selected_option_index;
+    // If out of limit, connect to back
+    if (matched_option_index >= _data.keyframe_list.size())
+        matched_option_index = matched_option_index - _data.keyframe_list.size();
+
+    return matched_option_index;
 }
 
 void SmoothOptions::_update_option_keyframe()
