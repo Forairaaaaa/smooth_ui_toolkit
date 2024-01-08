@@ -80,28 +80,29 @@ namespace SmoothUIToolKit
             // Options
             inline void addOption(OptionProps_t optionProps) { _data.option_list.push_back(optionProps); }
             inline const std::vector<OptionProps_t>& getOptionList() { return _data.option_list; }
-            inline OptionProps_t getSelectedOption() { return _data.option_list[_data.selected_option_index]; }
-            inline Vector4D_t getSelectedKeyframe() { return getSelectedOption().keyframe; }
+            inline const OptionProps_t& getSelectedOption() { return _data.option_list[_data.selected_option_index]; }
+            inline const Vector4D_t& getSelectedKeyframe() { return getSelectedOption().keyframe; }
 
             // Selector
-            inline Transition2D& selectorPostion() { return _data.selector_postion; }
-            inline Transition2D& selectorShape() { return _data.selector_shape; }
+            inline Transition2D& getSelectorPostion() { return _data.selector_postion; }
+            inline Transition2D& getSelectorShape() { return _data.selector_shape; }
             inline Vector4D_t getSelectorCurrentFrame()
             {
-                return {selectorPostion().getValue().x,
-                        selectorPostion().getValue().y,
-                        selectorShape().getValue().width,
-                        selectorShape().getValue().height};
+                return {getSelectorPostion().getValue().x,
+                        getSelectorPostion().getValue().y,
+                        getSelectorShape().getValue().width,
+                        getSelectorShape().getValue().height};
             }
 
             // Camera
+            inline Transition2D& getCamera() { return _data.camera_offset; }
+            inline Vector2D_t getCameraOffset() { return _data.camera_offset.getValue(); }
             inline void setCameraSize(int width, int height)
             {
                 _config.cameraSize.width = width;
                 _config.cameraSize.height = height;
             }
-            inline Transition2D& getCamera() { return _data.camera_offset; }
-            inline Vector2D_t getCameraOffset() { return _data.camera_offset.getValue(); }
+            inline const Vector2D_t& getCameraSize() { return _config.cameraSize; }
 
             /**
              * @brief Select last one
@@ -114,6 +115,20 @@ namespace SmoothUIToolKit
              *
              */
             virtual void goNext();
+
+            /**
+             * @brief Move to option smoothly
+             *
+             * @param optionIndex
+             */
+            virtual void moveTo(int optionIndex);
+
+            /**
+             * @brief Jump to the option with on transition
+             *
+             * @param optionIndex
+             */
+            virtual void jumpTo(int optionIndex);
 
             /**
              * @brief Press selector to the passing key frame

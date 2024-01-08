@@ -14,18 +14,52 @@ using namespace SmoothUIToolKit::SelectMenu;
 
 void SmoothSelector::goLast()
 {
+    if (_data.option_list.size() == 0)
+        return;
+
     _data.selected_option_index--;
     if (_data.selected_option_index < 0)
         _data.selected_option_index = _config.moveInLoop ? _data.option_list.size() - 1 : 0;
     _data.is_changed = true;
+
+    // Callback
+    onGoLast();
 }
 
 void SmoothSelector::goNext()
 {
+    if (_data.option_list.size() == 0)
+        return;
+
     _data.selected_option_index++;
     if (_data.selected_option_index >= _data.option_list.size())
         _data.selected_option_index = _config.moveInLoop ? 0 : _data.option_list.size() - 1;
     _data.is_changed = true;
+
+    // Callback
+    onGoNext();
+}
+
+void SmoothSelector::moveTo(int optionIndex)
+{
+    if (optionIndex < 0 || optionIndex > (_data.option_list.size() - 1))
+        return;
+
+    // Update tarnsition target
+    _data.selected_option_index = optionIndex;
+    _data.selector_postion.moveTo(_data.option_list[optionIndex].keyframe.x, _data.option_list[optionIndex].keyframe.y);
+    _data.selector_shape.reshapeTo(_data.option_list[optionIndex].keyframe.w, _data.option_list[optionIndex].keyframe.h);
+}
+
+void SmoothSelector::jumpTo(int optionIndex)
+{
+    if (optionIndex < 0 || optionIndex > (_data.option_list.size() - 1))
+        return;
+
+    // Update tarnsition target
+    _data.selected_option_index = optionIndex;
+    _data.selector_postion.jumpTo(_data.option_list[optionIndex].keyframe.x, _data.option_list[optionIndex].keyframe.y);
+    _data.selector_shape.resizeTo(_data.option_list[optionIndex].keyframe.w, _data.option_list[optionIndex].keyframe.h);
 }
 
 void SmoothSelector::press(const Vector4D_t& pressedKeyframe)
@@ -122,6 +156,9 @@ void SmoothSelector::update(const TimeSize_t& currentTime)
 
 void SmoothSelector::_update_selector_keyframe()
 {
+    if (_data.option_list.size() == 0)
+        return;
+
     _data.selector_postion.moveTo(_data.option_list[_data.selected_option_index].keyframe.x,
                                   _data.option_list[_data.selected_option_index].keyframe.y);
     _data.selector_shape.reshapeTo(_data.option_list[_data.selected_option_index].keyframe.w,
@@ -140,9 +177,10 @@ void SmoothSelector::_update_camera_keyframe()
     // Left
     if (getSelectedKeyframe().x < new_x_offset)
         new_x_offset = getSelectedKeyframe().x;
+
     // Right
     else if (getSelectedKeyframe().x + getSelectedKeyframe().w > new_x_offset + _config.cameraSize.width)
-        new_x_offset = getSelectedKeyframe().x + getSelectedKeyframe().w;
+        new_x_offset = getSelectedKeyframe().x + getSelectedKeyframe().w - _config.cameraSize.width;
 
     // Top
     if (getSelectedKeyframe().y < new_y_offset)
@@ -150,7 +188,7 @@ void SmoothSelector::_update_camera_keyframe()
 
     // Bottom
     else if (getSelectedKeyframe().y + getSelectedKeyframe().h > new_y_offset + _config.cameraSize.height)
-        new_y_offset = getSelectedKeyframe().y + getSelectedKeyframe().h;
+        new_y_offset = getSelectedKeyframe().y + getSelectedKeyframe().h - _config.cameraSize.height;
 
     _data.camera_offset.moveTo(new_x_offset, new_y_offset);
 }
