@@ -146,8 +146,8 @@ namespace SmoothUIToolKit
 
         /**
          * @brief Get current point
-         *
-         * @return int
+         * 
+         * @return Vector2D_t 
          */
         inline Vector2D_t getValue() { return Vector2D_t(_data.x_transition.getValue(), _data.y_transition.getValue()); }
 

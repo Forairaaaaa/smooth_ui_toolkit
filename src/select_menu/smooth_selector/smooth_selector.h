@@ -81,6 +81,7 @@ namespace SmoothUIToolKit
             // Options
             inline void addOption(OptionProps_t optionProps) { _data.option_list.push_back(optionProps); }
             inline const std::vector<OptionProps_t>& getOptionList() { return _data.option_list; }
+            inline int getSelectedOptionIndex() { return _data.selected_option_index; }
             inline const OptionProps_t& getSelectedOption() { return _data.option_list[_data.selected_option_index]; }
             inline const Vector4D_t& getSelectedKeyframe() { return getSelectedOption().keyframe; }
 
@@ -104,6 +105,46 @@ namespace SmoothUIToolKit
                 _config.cameraSize.height = height;
             }
             inline const Vector2D_t& getCameraSize() { return _config.cameraSize; }
+
+            /**
+             * @brief Set selector's position transition duration
+             *
+             * @param duration
+             */
+            void setPositionDuration(TimeSize_t duration) { _data.selector_postion.setDuration(duration); }
+
+            /**
+             * @brief Set selector's shape transition duration
+             *
+             * @param duration
+             */
+            void setShapeDuration(TimeSize_t duration) { _data.selector_shape.setDuration(duration); }
+
+            /**
+             * @brief Set selector's postion transition path
+             *
+             * @param path
+             */
+            void setPositionTransitionPath(EasingPathPtr path) { _data.selector_postion.setTransitionPath(path); }
+
+            /**
+             * @brief Set selector's shape transition path
+             *
+             * @param path
+             */
+            void setShapeTransitionPath(EasingPathPtr path) { _data.selector_shape.setTransitionPath(path); }
+
+            inline void setDuration(TimeSize_t duration)
+            {
+                setPositionDuration(duration);
+                setShapeDuration(duration);
+            }
+
+            inline void setTransitionPath(EasingPathPtr path)
+            {
+                setPositionTransitionPath(path);
+                setShapeTransitionPath(path);
+            }
 
             /**
              * @brief Select last one
