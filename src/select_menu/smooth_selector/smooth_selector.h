@@ -10,6 +10,7 @@
  */
 #pragma once
 #include "../../core/transition2d/transition2d.h"
+#include "../base/select_menu_base.h"
 #include <cstdint>
 #include <vector>
 
@@ -25,7 +26,7 @@ namespace SmoothUIToolKit
          * Handy for list menu with a moving selector,
          * or moving options with simple postition and shape transition. (Use selector as coordinate origin)
          */
-        class SmoothSelector
+        class SmoothSelector : public SelectMenuBase
         {
         public:
             /**
@@ -108,13 +109,13 @@ namespace SmoothUIToolKit
              * @brief Select last one
              *
              */
-            virtual void goLast();
+            virtual void goLast() override;
 
             /**
              * @brief Select next one
              *
              */
-            virtual void goNext();
+            virtual void goNext() override;
 
             /**
              * @brief Move to option smoothly
@@ -177,18 +178,7 @@ namespace SmoothUIToolKit
              *
              * @param currentTime
              */
-            virtual void update(const TimeSize_t& currentTime);
-
-        public:
-            virtual void onGoLast() {}
-            virtual void onGoNext() {}
-            virtual void onPress() {}
-            virtual void onRelease() {}
-            virtual void onClick() {}
-            virtual void onOpenEnd() {}
-            virtual void onUpdate(const TimeSize_t& currentTime) {}
-            virtual void onReadInput() {}
-            virtual void onRender() {}
+            virtual void update(const TimeSize_t& currentTime) override;
         };
     } // namespace SelectMenu
 } // namespace SmoothUIToolKit

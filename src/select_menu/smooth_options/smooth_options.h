@@ -10,6 +10,7 @@
  */
 #pragma once
 #include "../../core/transition2d/transition2d.h"
+#include "../base/select_menu_base.h"
 #include <cstddef>
 #include <cstdint>
 #include <iterator>
@@ -27,7 +28,7 @@ namespace SmoothUIToolKit
          * handy for loop menu with complex position and shape transition.
          *
          */
-        class SmoothOptions
+        class SmoothOptions : public SelectMenuBase
         {
         public:
             /**
@@ -140,13 +141,13 @@ namespace SmoothUIToolKit
              * @brief Select last one
              *
              */
-            virtual void goLast();
+            virtual void goLast() override;
 
             /**
              * @brief Select next one
              *
              */
-            virtual void goNext();
+            virtual void goNext() override;
 
             /**
              * @brief Press the selected option to the passing key frame
@@ -195,18 +196,7 @@ namespace SmoothUIToolKit
              *
              * @param currentTime
              */
-            virtual void update(const TimeSize_t& currentTime);
-
-        public:
-            virtual void onGoLast() {}
-            virtual void onGoNext() {}
-            virtual void onPress() {}
-            virtual void onRelease() {}
-            virtual void onClick() {}
-            virtual void onOpenEnd() {}
-            virtual void onUpdate(const TimeSize_t& currentTime) {}
-            virtual void onReadInput() {}
-            virtual void onRender() {}
+            virtual void update(const TimeSize_t& currentTime) override;
 
         public:
             /**
