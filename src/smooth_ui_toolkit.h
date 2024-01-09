@@ -19,10 +19,3 @@
 #include "select_menu/smooth_selector/smooth_selector.h"
 
 #include "smooth_widget/base/base.h"
-
-#include "old/camera/camera.h"
-#include "old/lv_anim/lv_anim.h"
-#include "old/menu/menu.h"
-#include "old/selector/selector.h"
-#include "old/simple_menu/simple_menu.h"
-
