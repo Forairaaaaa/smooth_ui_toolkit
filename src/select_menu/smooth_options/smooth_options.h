@@ -87,6 +87,7 @@ namespace SmoothUIToolKit
             inline const std::vector<OptionProps_t>& getOptionList() { return _data.option_list; }
             inline OptionProps_t& getOption(const int& index) { return _data.option_list[index]; }
             inline OptionProps_t& getSelectedOption() { return _data.option_list[getMatchingOptionIndex(0)]; }
+            inline int getSelectedOptionIndex() { return getMatchingOptionIndex(0); }
             inline Vector4D_t getOptionCurrentFrame(const int& index)
             {
                 return {getOption(index).position.getValue().x,
