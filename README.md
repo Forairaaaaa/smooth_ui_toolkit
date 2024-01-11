@@ -39,7 +39,7 @@
 
 ### EasingPath
 
-动画曲线函数，参考：https://easings.net/，[示例](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/main/simu_project/smooth_ui_toolkit_test/easing_path/easing_path_test.cpp#L30)：
+动画曲线函数，参考：https://easings.net/,  [示例](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/main/simu_project/smooth_ui_toolkit_test/easing_path/easing_path_test.cpp#L30)：
 
 ```cpp
 using namespace SmoothUIToolKit;
