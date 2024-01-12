@@ -19,4 +19,6 @@
 #include "select_menu/smooth_options/smooth_options.h"
 #include "select_menu/smooth_selector/smooth_selector.h"
 
+#include "utils/ring_buffer/ring_buffer.h"
+
 #include "smooth_widget/base/base.h"

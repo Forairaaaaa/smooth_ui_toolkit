@@ -14,6 +14,7 @@ PointerAlignment: Left
 BreakBeforeBraces: Allman
 BinPackArguments: false
 BinPackParameters: false
+AlwaysBreakTemplateDeclarations: Yes
 # AllowShortBlocksOnASingleLine: Always
 # AllowShortCaseLabelsOnASingleLine: false
 
