@@ -42,6 +42,8 @@ namespace SmoothUIToolKit
         inline Config_t& setConfig() { return _config; }
         inline const Config_t& getConfig() { return _config; }
 
+        inline void allowOverwrite(bool allow) { _config.allowOverwrite = allow; }
+
         inline bool isFull() { return (_data.w_index + 1) % Capacity == _data.r_index; }
         inline bool isEmpty() { return _data.r_index == _data.w_index; }
 
