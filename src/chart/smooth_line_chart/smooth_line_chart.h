@@ -82,9 +82,24 @@ namespace SmoothUIToolKit
             inline bool isFinish() { return _data.offset_transition.isFinish() && _data.zoom_transition.isFinish(); }
             virtual void update(const TimeSize_t& currentTime);
 
+            /**
+             * @brief Get the point that map into chart
+             *
+             * @param rawX Raw x
+             * @param rawY Raw y
+             * @return const Vector2D_t& Point that applied chart's offset and zoom
+             */
             const Vector2D_t& getChartPoint(int rawX, int rawY);
             inline const Vector2D_t& getChartPoint(Vector2D_t rawPoint) { return getChartPoint(rawPoint.x, rawPoint.y); }
 
+            /**
+             * @brief Check is the point inside of chart
+             *
+             * @param chartX
+             * @param chartY
+             * @return true
+             * @return false
+             */
             bool isInChart(const int& chartX, const int& chartY);
             inline bool isInchart(const Vector2D_t& chartPoint) { return isInChart(chartPoint.x, chartPoint.y); }
 
