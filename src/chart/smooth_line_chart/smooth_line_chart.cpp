@@ -44,15 +44,15 @@ void SmoothLineChart::update(const TimeSize_t& currentTime)
 
 const Vector2D_t& SmoothLineChart::getChartPoint(int rawX, int rawY)
 {
-    // Apply offset
-    _data.temp_buffer = getOffset();
-    _data.result_buffer.x = rawX + _config.origin.x + _data.temp_buffer.x;
-    _data.result_buffer.y = rawY + _config.origin.y + _data.temp_buffer.y;
-
     // Apply zoom
     _data.temp_buffer = getZoom();
-    _data.result_buffer.x = _data.result_buffer.x * _data.temp_buffer.x / ZoomBase;
-    _data.result_buffer.y = _data.result_buffer.y * _data.temp_buffer.y / ZoomBase;
+    _data.result_buffer.x = rawX * _data.temp_buffer.x / ZoomBase;
+    _data.result_buffer.y = rawY * _data.temp_buffer.y / ZoomBase;
+
+    // Apply offset
+    _data.temp_buffer = getOffset();
+    _data.result_buffer.x = _data.result_buffer.x + _config.origin.x + _data.temp_buffer.x;
+    _data.result_buffer.y = _data.result_buffer.y + _config.origin.y + _data.temp_buffer.y;
 
     return _data.result_buffer;
 }

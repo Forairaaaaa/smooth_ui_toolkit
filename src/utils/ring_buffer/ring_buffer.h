@@ -47,6 +47,8 @@ namespace SmoothUIToolKit
         inline bool isFull() { return (_data.w_index + 1) % Capacity == _data.r_index; }
         inline bool isEmpty() { return _data.r_index == _data.w_index; }
 
+        inline size_t size() { return Capacity; }
+
         bool put(const T& value)
         {
             if (isFull())

@@ -59,7 +59,9 @@ namespace SmoothUIToolKit
             inline Config_t& setConfig() { return _config; }
             inline const Config_t& getConfig() { return _config; }
 
+            inline const Vector2D_t& getOrigin() { return _config.origin; }
             inline void setOrigin(int x, int y) { _config.origin.x = x, _config.origin.y = y; }
+            inline const Vector2D_t& getSize() { return _config.size; }
             inline void setSize(int width, int height)
             {
                 _config.size.width = width;
@@ -77,6 +79,7 @@ namespace SmoothUIToolKit
             inline void jumpOffsetTo(int xOffset, int yOffset) { _data.offset_transition.jumpTo(xOffset, yOffset); }
             inline void moveZoomTo(int xZoom, int yZoom) { _data.zoom_transition.moveTo(xZoom, yZoom); }
             inline void jumpZoomTo(int xZoom, int yZoom) { _data.zoom_transition.jumpTo(xZoom, yZoom); }
+            inline bool isFinish() { return _data.offset_transition.isFinish() && _data.zoom_transition.isFinish(); }
             virtual void update(const TimeSize_t& currentTime);
 
             const Vector2D_t& getChartPoint(int rawX, int rawY);
