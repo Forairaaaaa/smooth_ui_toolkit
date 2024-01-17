@@ -9,9 +9,9 @@
  *
  */
 #pragma once
+#include "../easing_path/easing_path.h"
 #include "../transition/transition.h"
 #include "../types/types.h"
-#include "core/easing_path/easing_path.h"
 
 namespace SmoothUIToolKit
 {
@@ -71,7 +71,10 @@ namespace SmoothUIToolKit
         {
             return Vector2D_t(_data.x_transition.getStartValue(), _data.y_transition.getStartValue());
         }
-        inline Vector2D_t getTargetPoint() { return Vector2D_t(_data.x_transition.getEndValue(), _data.y_transition.getEndValue()); }
+        inline Vector2D_t getTargetPoint()
+        {
+            return Vector2D_t(_data.x_transition.getEndValue(), _data.y_transition.getEndValue());
+        }
         inline Transition2DUpdateCallbackPtr getUpdateCallback() { return _config.updateCallback; }
 
         /**
@@ -146,8 +149,8 @@ namespace SmoothUIToolKit
 
         /**
          * @brief Get current point
-         * 
-         * @return Vector2D_t 
+         *
+         * @return Vector2D_t
          */
         inline Vector2D_t getValue() { return Vector2D_t(_data.x_transition.getValue(), _data.y_transition.getValue()); }
 

@@ -9,8 +9,8 @@
  *
  */
 #pragma once
+#include "../easing_path/easing_path.h"
 #include "../transition2d/transition2d.h"
-#include "core/easing_path/easing_path.h"
 
 namespace SmoothUIToolKit
 {
