@@ -10,6 +10,7 @@
  */
 #pragma once
 #include "core/easing_path/easing_path.h"
+#include "core/smooth_color/smooth_rgb/smooth_rgb.h"
 #include "core/smooth_drag/smooth_drag.h"
 #include "core/transition/transition.h"
 #include "core/transition2d/transition2d.h"
