@@ -9,6 +9,7 @@
  *
  */
 #include "smooth_drag.h"
+#include "../math/math.h"
 
 using namespace SmoothUIToolKit;
 
