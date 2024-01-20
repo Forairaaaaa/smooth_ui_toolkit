@@ -12,13 +12,10 @@
 #include "../easing_path/easing_path.h"
 #include "../transition/transition.h"
 #include "../types/types.h"
+#include <functional>
 
 namespace SmoothUIToolKit
 {
-    // Callback define
-    class Transition2D;
-    typedef void (*Transition2DUpdateCallbackPtr)(Transition2D*);
-
     /**
      * @brief A container of 2 Transitions, provides dynamic transition methods
      *
@@ -28,7 +25,7 @@ namespace SmoothUIToolKit
     public:
         struct Config_t
         {
-            Transition2DUpdateCallbackPtr updateCallback = nullptr;
+            std::function<void(Transition2D*)> updateCallback = nullptr;
         };
 
     private:
@@ -57,12 +54,15 @@ namespace SmoothUIToolKit
             _data.x_transition.setDelay(delay);
             _data.y_transition.setDelay(delay);
         }
-        inline void setTransitionPath(EasingPathPtr transitionPath)
+        inline void setTransitionPath(EasingPath_t transitionPath)
         {
             _data.x_transition.setTransitionPath(transitionPath);
             _data.y_transition.setTransitionPath(transitionPath);
         }
-        inline void setUpdateCallback(Transition2DUpdateCallbackPtr updateCallback) { _config.updateCallback = updateCallback; }
+        inline void setUpdateCallback(std::function<void(Transition2D*)> updateCallback)
+        {
+            _config.updateCallback = updateCallback;
+        }
 
         // Basic getter
         inline Transition& getXTransition() { return _data.x_transition; }
@@ -75,7 +75,7 @@ namespace SmoothUIToolKit
         {
             return Vector2D_t(_data.x_transition.getEndValue(), _data.y_transition.getEndValue());
         }
-        inline Transition2DUpdateCallbackPtr getUpdateCallback() { return _config.updateCallback; }
+        inline std::function<void(Transition2D*)> getUpdateCallback() { return _config.updateCallback; }
 
         /**
          * @brief Start moving

@@ -116,14 +116,14 @@ namespace SmoothUIToolKit
              *
              * @param path
              */
-            void setPositionTransitionPath(EasingPathPtr path);
+            void setPositionTransitionPath(EasingPath_t path);
 
             /**
              * @brief Set the shape transition path to all optionos
              *
              * @param path
              */
-            void setShapeTransitionPath(EasingPathPtr path);
+            void setShapeTransitionPath(EasingPath_t path);
 
             inline void setDuration(TimeSize_t duration)
             {
@@ -131,7 +131,7 @@ namespace SmoothUIToolKit
                 setShapeDuration(duration);
             }
 
-            inline void setTransitionPath(EasingPathPtr path)
+            inline void setTransitionPath(EasingPath_t path)
             {
                 setPositionTransitionPath(path);
                 setShapeTransitionPath(path);

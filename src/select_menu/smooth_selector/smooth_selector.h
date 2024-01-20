@@ -125,14 +125,14 @@ namespace SmoothUIToolKit
              *
              * @param path
              */
-            void setPositionTransitionPath(EasingPathPtr path) { _data.selector_postion.setTransitionPath(path); }
+            void setPositionTransitionPath(EasingPath_t path) { _data.selector_postion.setTransitionPath(path); }
 
             /**
              * @brief Set selector's shape transition path
              *
              * @param path
              */
-            void setShapeTransitionPath(EasingPathPtr path) { _data.selector_shape.setTransitionPath(path); }
+            void setShapeTransitionPath(EasingPath_t path) { _data.selector_shape.setTransitionPath(path); }
 
             inline void setDuration(TimeSize_t duration)
             {
@@ -140,7 +140,7 @@ namespace SmoothUIToolKit
                 setShapeDuration(duration);
             }
 
-            inline void setTransitionPath(EasingPathPtr path)
+            inline void setTransitionPath(EasingPath_t path)
             {
                 setPositionTransitionPath(path);
                 setShapeTransitionPath(path);

@@ -10,6 +10,7 @@
  */
 #pragma once
 #include "../types/types.h"
+#include <functional>
 // Refs:
 // https://cubic-bezier.com/#.17,.67,.83,.67
 // https://en.wikipedia.org/wiki/B%C3%A9zier_curve
@@ -58,5 +59,6 @@ namespace SmoothUIToolKit
         int easeInOutBounce(const int& t);
     } // namespace EasingPath
 
-    typedef int (*EasingPathPtr)(const int&);
+    typedef std::function<int(const int&)> EasingPath_t;
+
 } // namespace SmoothUIToolKit

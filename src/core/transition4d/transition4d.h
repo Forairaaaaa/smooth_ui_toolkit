@@ -62,7 +62,7 @@ namespace SmoothUIToolKit
             _data.w_transition.setDelay(delay);
             _data.h_transition.setDelay(delay);
         }
-        inline void setTransitionPath(EasingPathPtr transitionPath)
+        inline void setTransitionPath(EasingPath_t transitionPath)
         {
             _data.x_transition.setTransitionPath(transitionPath);
             _data.y_transition.setTransitionPath(transitionPath);

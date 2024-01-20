@@ -11,13 +11,10 @@
 #pragma once
 #include "../easing_path/easing_path.h"
 #include "../transition2d/transition2d.h"
+#include <functional>
 
 namespace SmoothUIToolKit
 {
-    // Callback define
-    class SmoothDrag;
-    typedef void (*SmoothDragUpdateCallbackPtr)(SmoothDrag*);
-
     /**
      * @brief A class to provide drag and drop offset with transition
      *
@@ -49,10 +46,10 @@ namespace SmoothUIToolKit
             Vector2D_t yOffsetLimit;
 
             // Drag transition path
-            EasingPathPtr dragTransitionPath = EasingPath::easeOutQuad;
+            EasingPath_t dragTransitionPath = EasingPath::easeOutQuad;
 
             // Reset transition path when droped
-            EasingPathPtr resetTransitionPath = EasingPath::easeOutQuad;
+            EasingPath_t resetTransitionPath = EasingPath::easeOutQuad;
         };
 
     private:
@@ -78,12 +75,8 @@ namespace SmoothUIToolKit
         inline void setDragConfig(Config_t cfg) { _config = cfg; }
 
         // Basic setter
-        inline void setTransitionPath(EasingPathPtr transitionPath) { _config.dragTransitionPath = transitionPath; }
-        inline void setResetTransitionPath(EasingPathPtr transitionPath) { _config.resetTransitionPath = transitionPath; }
-        inline void setUpdateCallback(SmoothDragUpdateCallbackPtr updateCallback)
-        {
-            Transition2D::setUpdateCallback(reinterpret_cast<Transition2DUpdateCallbackPtr>(updateCallback));
-        }
+        inline void setTransitionPath(EasingPath_t transitionPath) { _config.dragTransitionPath = transitionPath; }
+        inline void setResetTransitionPath(EasingPath_t transitionPath) { _config.resetTransitionPath = transitionPath; }
 
         /**
          * @brief Start dragging

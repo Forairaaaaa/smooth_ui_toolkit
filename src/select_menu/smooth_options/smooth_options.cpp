@@ -24,13 +24,13 @@ void SmoothOptions::setShapeDuration(TimeSize_t duration)
         i.shape.setDuration(duration);
 }
 
-void SmoothOptions::setPositionTransitionPath(EasingPathPtr path)
+void SmoothOptions::setPositionTransitionPath(EasingPath_t path)
 {
     for (auto& i : _data.option_list)
         i.position.setTransitionPath(path);
 }
 
-void SmoothOptions::setShapeTransitionPath(EasingPathPtr path)
+void SmoothOptions::setShapeTransitionPath(EasingPath_t path)
 {
     for (auto& i : _data.option_list)
         i.shape.setTransitionPath(path);
