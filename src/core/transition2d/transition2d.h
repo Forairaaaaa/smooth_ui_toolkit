@@ -20,7 +20,7 @@ namespace SmoothUIToolKit
     typedef void (*Transition2DUpdateCallbackPtr)(Transition2D*);
 
     /**
-     * @brief A container of 2 Transition, provides dynamic transition methods
+     * @brief A container of 2 Transitions, provides dynamic transition methods
      *
      */
     class Transition2D

@@ -35,12 +35,58 @@ namespace SmoothUIToolKit
         }
     };
 
+    struct Vector3D_t
+    {
+        union
+        {
+            int x;
+            int red;
+        };
+        union
+        {
+            int y;
+            int green;
+        };
+        union
+        {
+            int z;
+            int blue;
+        };
+
+        Vector3D_t(int x = 0, int y = 0, int z = 0) { reset(x, y, z); }
+
+        void reset(int x = 0, int y = 0, int z = 0)
+        {
+            this->x = x;
+            this->y = y;
+            this->z = z;
+        }
+    };
+
+    typedef Vector3D_t RGB_t;
+
     struct Vector4D_t
     {
-        int x;
-        int y;
-        int w;
-        int h;
+        union
+        {
+            int x;
+            int red;
+        };
+        union
+        {
+            int y;
+            int green;
+        };
+        union
+        {
+            int w;
+            int blue;
+        };
+        union
+        {
+            int h;
+            int alpha;
+        };
 
         Vector4D_t(int x = 0, int y = 0, int w = 0, int h = 0) { reset(x, y, w, h); }
 
@@ -52,6 +98,8 @@ namespace SmoothUIToolKit
             this->h = h;
         }
     };
+
+    typedef Vector4D_t RGBA_t;
 
     typedef std::uint32_t TimeSize_t;
 
