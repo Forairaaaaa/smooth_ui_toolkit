@@ -9,6 +9,7 @@
  *
  */
 #include "math.h"
+#include "core/types/types.h"
 
 bool SmoothUIToolKit::IsInRange(Vector2D_t range, int x)
 {
@@ -44,4 +45,14 @@ int SmoothUIToolKit::Clamp(int value, Vector2D_t range, bool& isInRange)
         return range.y;
     isInRange = true;
     return value;
+}
+
+SmoothUIToolKit::RGB_t SmoothUIToolKit::Hex2Rgb(std::uint32_t color)
+{
+    return RGB_t((color >> 16) & 0x0000FF, (color >> 8) & 0x0000FF, color & 0x0000FF);
+}
+
+std::uint32_t SmoothUIToolKit::Rgb2Hex(RGB_t color)
+{
+    return ((color.red & 0xff) << 16) + ((color.green & 0xff) << 8) + (color.blue & 0xff);
 }

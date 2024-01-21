@@ -22,7 +22,7 @@ namespace SmoothUIToolKit
     public:
         struct Config_t
         {
-            bool allowOverwrite = false;
+            bool allowOverwrite = true;
         };
 
     private:
@@ -31,6 +31,7 @@ namespace SmoothUIToolKit
             T* buffer = nullptr;
             size_t w_index = 0;
             size_t r_index = 0;
+            size_t capacity = Capacity;
         };
         Data_t _data;
         Config_t _config;
@@ -44,10 +45,19 @@ namespace SmoothUIToolKit
 
         inline void allowOverwrite(bool allow) { _config.allowOverwrite = allow; }
 
-        inline bool isFull() { return (_data.w_index + 1) % Capacity == _data.r_index; }
+        inline bool isFull() { return (_data.w_index + 1) % _data.capacity == _data.r_index; }
         inline bool isEmpty() { return _data.r_index == _data.w_index; }
 
-        inline size_t size() { return Capacity; }
+        inline size_t size() { return _data.capacity; }
+        inline void reSize(size_t capacity)
+        {
+            if (_data.capacity == capacity)
+                return;
+
+            _data.capacity = capacity;
+            delete _data.buffer;
+            _data.buffer = new T[_data.capacity];
+        }
 
         bool put(const T& value)
         {
@@ -55,13 +65,13 @@ namespace SmoothUIToolKit
             {
                 // If allow overwrite, push read index
                 if (_config.allowOverwrite)
-                    _data.r_index = (_data.r_index + 1) % Capacity;
+                    _data.r_index = (_data.r_index + 1) % _data.capacity;
                 else
                     return false;
             }
 
             _data.buffer[_data.w_index] = value;
-            _data.w_index = (_data.w_index + 1) % Capacity;
+            _data.w_index = (_data.w_index + 1) % _data.capacity;
             return true;
         }
 
@@ -71,7 +81,7 @@ namespace SmoothUIToolKit
                 return false;
 
             value = _data.buffer[_data.r_index];
-            _data.r_index = (_data.r_index + 1) % Capacity;
+            _data.r_index = (_data.r_index + 1) % _data.capacity;
             return true;
         }
 
@@ -107,7 +117,7 @@ namespace SmoothUIToolKit
             while (peek_index != _data.w_index)
             {
                 valueCallback(_data.buffer[peek_index]);
-                peek_index = (peek_index + 1) % Capacity;
+                peek_index = (peek_index + 1) % _data.capacity;
             }
             return true;
         }

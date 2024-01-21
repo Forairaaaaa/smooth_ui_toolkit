@@ -11,6 +11,8 @@
 #pragma once
 #include "../transition/transition.h"
 #include "../types/types.h"
+#include "core/math/math.h"
+#include <cstdint>
 #include <functional>
 
 namespace SmoothUIToolKit
@@ -164,7 +166,8 @@ namespace SmoothUIToolKit
     public:
         SmoothRGB() = default;
         SmoothRGB(const int& red, const int& green, const int& blue) { jumpTo(red, green, blue); }
-        SmoothRGB(const RGB_t& colorStart) { jumpTo(colorStart.red, colorStart.green, colorStart.blue); }
+        SmoothRGB(const RGB_t& colorStart) { jumpTo(colorStart); }
+        SmoothRGB(const std::uint32_t& colorSatrt) { jumpTo(colorSatrt); }
 
         /**
          * @brief Jump to target color without transition
@@ -175,6 +178,7 @@ namespace SmoothUIToolKit
          */
         inline void jumpTo(const int& red, const int& green, const int& blue) { Transition3D::jumpTo(red, green, blue); }
         inline void jumpTo(const RGB_t color) { jumpTo(color.red, color.green, color.blue); }
+        inline void jumpTo(const std::uint32_t& color) { jumpTo(Hex2Rgb(color)); }
 
         /**
          * @brief Move to target point with transition
@@ -185,6 +189,7 @@ namespace SmoothUIToolKit
          */
         inline void moveTo(const int& red, const int& green, const int& blue) { Transition3D::moveTo(red, green, blue); }
         inline void moveTo(const RGB_t color) { moveTo(color.red, color.green, color.blue); }
+        inline void moveTo(const std::uint32_t& color) { moveTo(Hex2Rgb(color)); }
 
         inline const int& getCurrentRed() { return getXTransition().getValue(); }
         inline const int& getCurrentGreen() { return getYTransition().getValue(); }
