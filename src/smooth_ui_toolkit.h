@@ -25,4 +25,4 @@
 #include "chart/smooth_line_chart/smooth_line_chart.h"
 #include "utils/ring_buffer/ring_buffer.h"
 
-#include "smooth_widget/base/base.h"
+#include "widgets/base/base.h"
