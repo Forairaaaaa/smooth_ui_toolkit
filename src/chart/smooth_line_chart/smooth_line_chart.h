@@ -33,8 +33,8 @@ namespace SmoothUIToolKit
                 TimeSize_t readInputInterval = 20;
                 // Interval of onRender() callback
                 TimeSize_t renderInterval = 15;
-                // Take zoomBase as 1, so zoom to 1/2, means zoom value goes to zoomBase/2 (by default 5000)
-                int zoomBase = 10000;
+                // Since our transition is base on int, we scale the value to represent float, default 1000(.3f)
+                int valueScale = 1000;
             };
 
         protected:
@@ -42,11 +42,11 @@ namespace SmoothUIToolKit
             {
                 Transition2D offset_transition;
                 Transition2D zoom_transition;
-                Vector2D_t temp_buffer;
-                Vector2D_t point_buffer;
                 TimeSize_t read_input_time_count = 0;
                 TimeSize_t render_time_count = 0;
                 bool is_changed = false;
+                Vector2D_t temp_buffer;
+                Vector2D_t point_buffer;
                 VectorFloat2D_t float_zoom_buffer;
             };
             Data_t _data;
@@ -72,39 +72,29 @@ namespace SmoothUIToolKit
 
             // Offset
             inline Transition2D& getOffsetTransition() { return _data.offset_transition; }
-            inline Vector2D_t getOffset() { return _data.offset_transition.getValue(); }
+            inline const VectorFloat2D_t& getOffset() { return _int_2_float(_data.offset_transition.getValue()); }
 
             // Zoom
             inline Transition2D& getZoomTransition() { return _data.zoom_transition; }
-            inline Vector2D_t getIntZoom() { return _data.zoom_transition.getValue(); }
-            inline const VectorFloat2D_t& getFloatZoom() { return intZoom2FloatZoom(_data.zoom_transition.getValue()); }
-            inline const int& getZoomBase() { return _config.zoomBase; }
+            inline const VectorFloat2D_t& getZoom() { return _int_2_float(_data.zoom_transition.getValue()); }
+
+        private:
+            // Convert
+            int _float_2_int(const float& value);
+            const float& _int_2_float(const int& value);
+            const VectorFloat2D_t& _int_2_float(const Vector2D_t& value);
 
         public:
-            /**
-             * @brief Convert float zoom into int zoom.
-             *
-             * @param zoom
-             * @return int
-             */
-            int floatZoom2IntZoom(const float& floatZoom);
-
-            /**
-             * @brief Convert int zoom into float zoom.
-             *
-             * @param intZoom
-             * @return const float&
-             */
-            const float& intZoom2FloatZoom(const int& intZoom);
-            const VectorFloat2D_t& intZoom2FloatZoom(const Vector2D_t& intZoom);
-
             /**
              * @brief Move to target offset smoothly.
              *
              * @param xOffset
              * @param yOffset
              */
-            inline void moveOffsetTo(int xOffset, int yOffset) { _data.offset_transition.moveTo(xOffset, yOffset); }
+            inline void moveOffsetTo(const float& xOffset, const float& yOffset)
+            {
+                _data.offset_transition.moveTo(_float_2_int(xOffset), _float_2_int(yOffset));
+            }
 
             /**
              * @brief Jump to target offset with on transition.
@@ -112,45 +102,32 @@ namespace SmoothUIToolKit
              * @param xOffset
              * @param yOffset
              */
-            inline void jumpOffsetTo(int xOffset, int yOffset) { _data.offset_transition.jumpTo(xOffset, yOffset); }
-
-            /**
-             * @brief Move to target float zoom smoothly.
-             *
-             * @param xZoom
-             * @param yZoom
-             */
-            inline void moveFloatZoomTo(const float& xZoom, const float& yZoom)
+            inline void jumpOffsetTo(const float& xOffset, const float& yOffset)
             {
-                moveIntZoomTo(floatZoom2IntZoom(xZoom), floatZoom2IntZoom(yZoom));
+                _data.offset_transition.jumpTo(_float_2_int(xOffset), _float_2_int(yOffset));
             }
 
             /**
-             * @brief Move to target int zoom smoothly.
+             * @brief Move to target zoom smoothly.
              *
              * @param xZoom
              * @param yZoom
              */
-            inline void moveIntZoomTo(int xZoom, int yZoom) { _data.zoom_transition.moveTo(xZoom, yZoom); }
-
-            /**
-             * @brief Jump to target float zoom without transition.
-             *
-             * @param xZoom
-             * @param yZoom
-             */
-            inline void jumpFloatZoomTo(const float& xZoom, const float& yZoom)
+            inline void moveZoomTo(const float& xZoom, const float& yZoom)
             {
-                jumpIntZoomTo(floatZoom2IntZoom(xZoom), floatZoom2IntZoom(yZoom));
+                _data.zoom_transition.moveTo(_float_2_int(xZoom), _float_2_int(yZoom));
             }
 
             /**
-             * @brief Jump to target int zoom without transition.
+             * @brief Jump to target zoom without transition.
              *
              * @param xZoom
              * @param yZoom
              */
-            inline void jumpIntZoomTo(int xZoom, int yZoom) { _data.zoom_transition.jumpTo(xZoom, yZoom); }
+            inline void jumpZoomTo(const float& xZoom, const float& yZoom)
+            {
+                _data.zoom_transition.jumpTo(_float_2_int(xZoom), _float_2_int(yZoom));
+            }
 
             /**
              * @brief Is transition finished.
@@ -170,17 +147,14 @@ namespace SmoothUIToolKit
             /**
              * @brief Get point that applied chart's offset and zoom.
              *
-             * @param rawX Raw x
-             * @param rawY Raw y
-             * @return const Vector2D_t& Point that applied chart's offset and zoom
+             * @param rawX
+             * @param rawY
+             * @return const Vector2D_t&
              */
-            const Vector2D_t& getChartPoint(const int& rawX, const int& rawY);
-            inline const Vector2D_t& getChartPoint(const Vector2D_t& rawPoint) { return getChartPoint(rawPoint.x, rawPoint.y); }
-
             const Vector2D_t& getChartPoint(const float& rawX, const float& rawY);
 
             /**
-             * @brief Check is the point inside of chart.
+             * @brief Check if is the point inside of chart.
              *
              * @param chartX
              * @param chartY
@@ -190,12 +164,7 @@ namespace SmoothUIToolKit
             bool isInChart(const int& chartX, const int& chartY);
             inline bool isInchart(const Vector2D_t& chartPoint) { return isInChart(chartPoint.x, chartPoint.y); }
 
-            const float& getYFloatZoomByRange(const float& minY, const float& maxY);
-            inline void moveYZoomToRange(const float& minY, const float& maxY)
-            {
-                moveIntZoomTo(getZoomTransition().getXTransition().getEndValue(),
-                              floatZoom2IntZoom(getYFloatZoomByRange(minY, maxY)));
-            }
+            const float& getYZoomByRange(const float& minY, const float& maxY);
 
         public:
             virtual void onUpdate(const TimeSize_t& currentTime) {}
