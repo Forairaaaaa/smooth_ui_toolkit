@@ -102,4 +102,26 @@ namespace SmoothUIToolKit
     typedef Vector4D_t RGBA_t;
 
     typedef std::uint32_t TimeSize_t;
+
+    struct VectorFloat2D_t
+    {
+        union
+        {
+            float x;
+            float width;
+        };
+        union
+        {
+            float y;
+            float height;
+        };
+
+        VectorFloat2D_t(float x = 0, float y = 0) { reset(x, y); }
+
+        void reset(float x = 0, float y = 0)
+        {
+            this->x = x;
+            this->y = y;
+        }
+    };
 } // namespace SmoothUIToolKit
