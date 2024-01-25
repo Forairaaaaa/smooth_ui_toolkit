@@ -9,6 +9,8 @@
  *
  */
 #include "smooth_line_chart.h"
+#include "../../utils/fpm/fixed.hpp"
+#include "../../utils/fpm/math.hpp"
 
 using namespace SmoothUIToolKit;
 using namespace SmoothUIToolKit::Chart;
@@ -16,7 +18,7 @@ using namespace SmoothUIToolKit::Chart;
 SmoothLineChart::SmoothLineChart()
 {
     // Default no zoom
-    _data.zoom_transition.jumpTo(ZoomBase, ZoomBase);
+    _data.zoom_transition.jumpTo(_config.zoomBase, _config.zoomBase);
 }
 
 void SmoothLineChart::update(const TimeSize_t& currentTime)
@@ -45,9 +47,9 @@ void SmoothLineChart::update(const TimeSize_t& currentTime)
 const Vector2D_t& SmoothLineChart::getChartPoint(int rawX, int rawY)
 {
     // Apply zoom
-    _data.temp_buffer = getZoom();
-    _data.result_buffer.x = rawX * _data.temp_buffer.x / ZoomBase;
-    _data.result_buffer.y = rawY * _data.temp_buffer.y / ZoomBase;
+    _data.temp_buffer = getIntZoom();
+    _data.result_buffer.x = rawX * _data.temp_buffer.x / _config.zoomBase;
+    _data.result_buffer.y = rawY * _data.temp_buffer.y / _config.zoomBase;
 
     // Apply offset
     _data.temp_buffer = getOffset();
@@ -68,4 +70,26 @@ bool SmoothLineChart::isInChart(const int& chartX, const int& chartY)
     if (chartY > _config.origin.y + _config.size.height)
         return false;
     return true;
+}
+
+int SmoothLineChart::floatZoom2IntZoom(const float& floatZoom)
+{
+    fpm::fixed_16_16 fz{floatZoom};
+    return static_cast<int>(fz * _config.zoomBase);
+}
+
+const float& SmoothLineChart::intZoom2FloatZoom(const int& intZoom)
+{
+    fpm::fixed_16_16 fz{intZoom};
+    _data.zoom_value_buffer.x = static_cast<float>(fz / _config.zoomBase);
+    return _data.zoom_value_buffer.x;
+}
+
+const SmoothLineChart::FloatZoom2D_t& SmoothLineChart::intZoom2FloatZoom(const Vector2D_t& intZoom)
+{
+    fpm::fixed_16_16 fzx{intZoom.x};
+    fpm::fixed_16_16 fzy{intZoom.y};
+    _data.zoom_value_buffer.x = static_cast<float>(fzx / _config.zoomBase);
+    _data.zoom_value_buffer.y = static_cast<float>(fzy / _config.zoomBase);
+    return _data.zoom_value_buffer;
 }

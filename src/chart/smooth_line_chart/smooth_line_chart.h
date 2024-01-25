@@ -16,9 +16,6 @@ namespace SmoothUIToolKit
 {
     namespace Chart
     {
-        // Take 1000 as 1, 500 as 1/2, 1500 as 3/2
-        constexpr int ZoomBase = 1000;
-
         /**
          * @brief Line chart with smooth xy offset and zoom.
          *
@@ -36,6 +33,14 @@ namespace SmoothUIToolKit
                 TimeSize_t readInputInterval = 20;
                 // Interval of onRender() callback
                 TimeSize_t renderInterval = 15;
+                // Take zoomBase as 1, so zoom to 1/2, means zoom value goes to zoomBase/2 (by default 5000)
+                int zoomBase = 10000;
+            };
+
+            struct FloatZoom2D_t
+            {
+                float x = 0.0f;
+                float y = 0.0f;
             };
 
         protected:
@@ -48,6 +53,7 @@ namespace SmoothUIToolKit
                 TimeSize_t read_input_time_count = 0;
                 TimeSize_t render_time_count = 0;
                 bool is_changed = false;
+                FloatZoom2D_t zoom_value_buffer;
             };
             Data_t _data;
             Config_t _config;
@@ -55,10 +61,12 @@ namespace SmoothUIToolKit
         public:
             SmoothLineChart();
 
+            // Config
             inline void setConfig(const Config_t& cfg) { _config = cfg; }
             inline Config_t& setConfig() { return _config; }
             inline const Config_t& getConfig() { return _config; }
 
+            // Chart
             inline const Vector2D_t& getOrigin() { return _config.origin; }
             inline void setOrigin(int x, int y) { _config.origin.x = x, _config.origin.y = y; }
             inline const Vector2D_t& getSize() { return _config.size; }
@@ -68,22 +76,105 @@ namespace SmoothUIToolKit
                 _config.size.height = height;
             }
 
+            // Offset
             inline Transition2D& getOffsetTransition() { return _data.offset_transition; }
-            inline Transition2D& getZoomTransition() { return _data.zoom_transition; }
-
             inline Vector2D_t getOffset() { return _data.offset_transition.getValue(); }
-            inline Vector2D_t getZoom() { return _data.zoom_transition.getValue(); }
+
+            // Zoom
+            inline Transition2D& getZoomTransition() { return _data.zoom_transition; }
+            inline Vector2D_t getIntZoom() { return _data.zoom_transition.getValue(); }
+            inline const FloatZoom2D_t& getFloatZoom() { return intZoom2FloatZoom(_data.zoom_transition.getValue()); }
+            inline const int& getZoomBase() { return _config.zoomBase; }
 
         public:
+            /**
+             * @brief Convert float zoom into int zoom.
+             *
+             * @param zoom
+             * @return int
+             */
+            int floatZoom2IntZoom(const float& floatZoom);
+
+            /**
+             * @brief Convert int zoom into float zoom.
+             *
+             * @param zoomValue
+             * @return float
+             */
+            const float& intZoom2FloatZoom(const int& intZoom);
+            const FloatZoom2D_t& intZoom2FloatZoom(const Vector2D_t& intZoom);
+
+            /**
+             * @brief Move to target offset smoothly.
+             *
+             * @param xOffset
+             * @param yOffset
+             */
             inline void moveOffsetTo(int xOffset, int yOffset) { _data.offset_transition.moveTo(xOffset, yOffset); }
+
+            /**
+             * @brief Jump to target offset with on transition.
+             *
+             * @param xOffset
+             * @param yOffset
+             */
             inline void jumpOffsetTo(int xOffset, int yOffset) { _data.offset_transition.jumpTo(xOffset, yOffset); }
-            inline void moveZoomTo(int xZoom, int yZoom) { _data.zoom_transition.moveTo(xZoom, yZoom); }
-            inline void jumpZoomTo(int xZoom, int yZoom) { _data.zoom_transition.jumpTo(xZoom, yZoom); }
+
+            /**
+             * @brief Move to target float zoom smoothly.
+             *
+             * @param xZoom
+             * @param yZoom
+             */
+            inline void moveFloatZoomTo(const float& xZoom, const float& yZoom)
+            {
+                moveIntZoomTo(floatZoom2IntZoom(xZoom), floatZoom2IntZoom(yZoom));
+            }
+
+            /**
+             * @brief Move to target int zoom smoothly.
+             *
+             * @param xZoom
+             * @param yZoom
+             */
+            inline void moveIntZoomTo(int xZoom, int yZoom) { _data.zoom_transition.moveTo(xZoom, yZoom); }
+
+            /**
+             * @brief Jump to target float zoom without transition.
+             *
+             * @param xZoom
+             * @param yZoom
+             */
+            inline void jumpFloatZoomTo(const float& xZoom, const float& yZoom)
+            {
+                jumpIntZoomTo(floatZoom2IntZoom(xZoom), floatZoom2IntZoom(yZoom));
+            }
+
+            /**
+             * @brief Jump to target int zoom without transition.
+             *
+             * @param xZoom
+             * @param yZoom
+             */
+            inline void jumpIntZoomTo(int xZoom, int yZoom) { _data.zoom_transition.jumpTo(xZoom, yZoom); }
+
+            /**
+             * @brief Is transition finished.
+             *
+             * @return true
+             * @return false
+             */
             inline bool isFinish() { return _data.offset_transition.isFinish() && _data.zoom_transition.isFinish(); }
+
+            /**
+             * @brief Update chart.
+             *
+             * @param currentTime
+             */
             virtual void update(const TimeSize_t& currentTime);
 
             /**
-             * @brief Get the point that map into chart
+             * @brief Get the point that map into chart.
              *
              * @param rawX Raw x
              * @param rawY Raw y
@@ -93,7 +184,7 @@ namespace SmoothUIToolKit
             inline const Vector2D_t& getChartPoint(Vector2D_t rawPoint) { return getChartPoint(rawPoint.x, rawPoint.y); }
 
             /**
-             * @brief Check is the point inside of chart
+             * @brief Check is the point inside of chart.
              *
              * @param chartX
              * @param chartY
