@@ -86,6 +86,7 @@ namespace SmoothUIToolKit
         public:
             /**
              * @brief Move to target zoom smoothly.
+             * Since offset depends on zoom, move or jump offset should be called again after this.
              *
              * @param xZoom
              * @param yZoom
@@ -96,15 +97,16 @@ namespace SmoothUIToolKit
             }
             inline void moveXZoomTo(const float& offset)
             {
-                _data.zoom_transition.moveTo(_float_2_int(offset), _data.zoom_transition.getYTransition().getEndValue());
+                _data.zoom_transition.moveTo(_float_2_int(offset), _data.zoom_transition.getTargetPoint().y);
             }
             inline void moveYZoomTo(const float& offset)
             {
-                _data.zoom_transition.moveTo(_data.zoom_transition.getXTransition().getEndValue(), _float_2_int(offset));
+                _data.zoom_transition.moveTo(_data.zoom_transition.getTargetPoint().x, _float_2_int(offset));
             }
 
             /**
              * @brief Jump to target zoom without transition.
+             * Since offset depends on zoom, move or jump offset should be called again after this.
              *
              * @param xZoom
              * @param yZoom
@@ -115,16 +117,15 @@ namespace SmoothUIToolKit
             }
             inline void jumpXZoomTo(const float& offset)
             {
-                _data.zoom_transition.jumpTo(_float_2_int(offset), _data.zoom_transition.getYTransition().getEndValue());
+                _data.zoom_transition.jumpTo(_float_2_int(offset), _data.zoom_transition.getTargetPoint().y);
             }
             inline void jumpYZoomTo(const float& offset)
             {
-                _data.zoom_transition.jumpTo(_data.zoom_transition.getXTransition().getEndValue(), _float_2_int(offset));
+                _data.zoom_transition.jumpTo(_data.zoom_transition.getTargetPoint().x, _float_2_int(offset));
             }
 
             /**
              * @brief Move to target offset smoothly.
-             * Because offset depends on zoom, this method should be called after target zoom changed.
              *
              * @param xOffset
              * @param yOffset
@@ -132,16 +133,15 @@ namespace SmoothUIToolKit
             void moveOffsetTo(const float& xOffset, const float& yOffset);
             inline void moveXOffsetTo(const float& offset)
             {
-                moveOffsetTo(offset, _int_2_float(getOffsetTransition().getYTransition().getEndValue()));
+                moveOffsetTo(offset, _int_2_float(getOffsetTransition().getTargetPoint().y));
             }
             inline void moveYOffsetTo(const float& offset)
             {
-                moveOffsetTo(_int_2_float(getOffsetTransition().getXTransition().getEndValue()), offset);
+                moveOffsetTo(_int_2_float(getOffsetTransition().getTargetPoint().x), offset);
             }
 
             /**
              * @brief Jump to target offset with on transition.
-             * Because offset depends on zoom, this method should be called after target zoom changed.
              *
              * @param xOffset
              * @param yOffset
@@ -149,11 +149,11 @@ namespace SmoothUIToolKit
             void jumpOffsetTo(const float& xOffset, const float& yOffset);
             inline void jumpXOffsetTo(const float& offset)
             {
-                jumpOffsetTo(offset, _int_2_float(getOffsetTransition().getYTransition().getEndValue()));
+                jumpOffsetTo(offset, _int_2_float(getOffsetTransition().getTargetPoint().y));
             }
             inline void jumpYOffsetTo(const float& offset)
             {
-                jumpOffsetTo(_int_2_float(getOffsetTransition().getXTransition().getEndValue()), offset);
+                jumpOffsetTo(_int_2_float(getOffsetTransition().getTargetPoint().x), offset);
             }
 
             /**
