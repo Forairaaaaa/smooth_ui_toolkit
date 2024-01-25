@@ -16,11 +16,7 @@
 using namespace SmoothUIToolKit;
 using namespace SmoothUIToolKit::Chart;
 
-SmoothLineChart::SmoothLineChart()
-{
-    jumpZoomTo(1, 1);
-    // moveZoomTo(1, 1);
-}
+SmoothLineChart::SmoothLineChart() { jumpZoomTo(1, 1); }
 
 void SmoothLineChart::update(const TimeSize_t& currentTime)
 {
@@ -73,15 +69,6 @@ const VectorFloat2D_t& SmoothLineChart::_int_2_float(const Vector2D_t& value)
 /* -------------------------------------------------------------------------- */
 /*                                Current value                               */
 /* -------------------------------------------------------------------------- */
-const float& SmoothLineChart::getZoomByRange(const float& min, const float& max, const float& target)
-{
-    fpm::fixed_24_8 f_min{min};
-    fpm::fixed_24_8 f_max{max};
-    fpm::fixed_24_8 f_target{target};
-    _data.temp_float_buffer.x = static_cast<float>(f_target / (f_max - f_min));
-    return _data.temp_float_buffer.x;
-}
-
 const VectorFloat2D_t& SmoothLineChart::getCurrentOffset()
 {
     fpm::fixed_24_8 f_offset_x{_data.offset_transition.getValue().x};
@@ -199,7 +186,12 @@ void SmoothLineChart::jumpYOffsetTo(const float& offset)
 /* -------------------------------------------------------------------------- */
 /*                              Chart point apis                              */
 /* -------------------------------------------------------------------------- */
-const Vector2D_t& SmoothLineChart::getChartPoint(const float& rawX, const float& rawY)
+void SmoothLineChart::mirrorChartPointY(Vector2D_t& chartPoint)
+{
+    chartPoint.y = 2 * _config.origin.y + _config.size.height - chartPoint.y;
+}
+
+const Vector2D_t& SmoothLineChart::getChartPoint(const float& rawX, const float& rawY, const bool& mirrorY)
 {
     fpm::fixed_24_8 f_x{rawX};
     fpm::fixed_24_8 f_y{rawY};
@@ -216,6 +208,10 @@ const Vector2D_t& SmoothLineChart::getChartPoint(const float& rawX, const float&
 
     _data.temp_buffer.x = static_cast<int>(f_x);
     _data.temp_buffer.y = static_cast<int>(f_y);
+
+    if (mirrorY)
+        mirrorChartPointY(_data.temp_buffer);
+
     return _data.temp_buffer;
 }
 
@@ -235,6 +231,15 @@ bool SmoothLineChart::isInChart(const int& chartX, const int& chartY)
 /* -------------------------------------------------------------------------- */
 /*                                    Range                                   */
 /* -------------------------------------------------------------------------- */
+const float& SmoothLineChart::getZoomByRange(const float& min, const float& max, const float& target)
+{
+    fpm::fixed_24_8 f_min{min};
+    fpm::fixed_24_8 f_max{max};
+    fpm::fixed_24_8 f_target{target};
+    _data.temp_float_buffer.x = static_cast<float>(f_target / (f_max - f_min));
+    return _data.temp_float_buffer.x;
+}
+
 void SmoothLineChart::moveYIntoRange(const float& minY, const float& maxY)
 {
     moveYZoomTo(getZoomByRange(minY, maxY, _config.size.height));

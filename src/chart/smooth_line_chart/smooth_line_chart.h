@@ -86,6 +86,21 @@ namespace SmoothUIToolKit
 
         public:
             /**
+             * @brief Update chart.
+             *
+             * @param currentTime
+             */
+            virtual void update(const TimeSize_t& currentTime);
+
+            /**
+             * @brief Is transition finished.
+             *
+             * @return true
+             * @return false
+             */
+            inline bool isFinish() { return _data.offset_transition.isFinish() && _data.zoom_transition.isFinish(); }
+
+            /**
              * @brief Move to target zoom smoothly.
              *
              * @param xZoom
@@ -126,28 +141,22 @@ namespace SmoothUIToolKit
             void jumpYOffsetTo(const float& offset);
 
             /**
-             * @brief Is transition finished.
+             * @brief Mirror the passing chart point's y.
+             * Since most of the gfx start at top left corner, require config size height.
              *
-             * @return true
-             * @return false
+             * @param chartPoint
              */
-            inline bool isFinish() { return _data.offset_transition.isFinish() && _data.zoom_transition.isFinish(); }
-
-            /**
-             * @brief Update chart.
-             *
-             * @param currentTime
-             */
-            virtual void update(const TimeSize_t& currentTime);
+            void mirrorChartPointY(Vector2D_t& chartPoint);
 
             /**
              * @brief Get point that applied chart's offset and zoom.
              *
              * @param rawX
              * @param rawY
+             * @param mirrorY
              * @return const Vector2D_t&
              */
-            const Vector2D_t& getChartPoint(const float& rawX, const float& rawY);
+            const Vector2D_t& getChartPoint(const float& rawX, const float& rawY, const bool& mirrorY = true);
 
             /**
              * @brief Check if is the point inside of chart.
