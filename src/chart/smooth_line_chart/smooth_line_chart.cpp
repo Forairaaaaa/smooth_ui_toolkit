@@ -45,6 +45,160 @@ void SmoothLineChart::update(const TimeSize_t& currentTime)
     }
 }
 
+/* -------------------------------------------------------------------------- */
+/*                                   Convert                                  */
+/* -------------------------------------------------------------------------- */
+int SmoothLineChart::_float_2_int(const float& value)
+{
+    fpm::fixed_24_8 f_value{value};
+    return static_cast<int>(f_value * _config.valueScale);
+}
+
+const float& SmoothLineChart::_int_2_float(const int& value)
+{
+    fpm::fixed_24_8 f_value{value};
+    _data.temp_float_buffer.x = static_cast<float>(f_value / _config.valueScale);
+    return _data.temp_float_buffer.x;
+}
+
+const VectorFloat2D_t& SmoothLineChart::_int_2_float(const Vector2D_t& value)
+{
+    fpm::fixed_24_8 f_value_x{value.x};
+    fpm::fixed_24_8 f_value_y{value.y};
+    _data.temp_float_buffer.x = static_cast<float>(f_value_x / _config.valueScale);
+    _data.temp_float_buffer.y = static_cast<float>(f_value_y / _config.valueScale);
+    return _data.temp_float_buffer;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                Current value                               */
+/* -------------------------------------------------------------------------- */
+const float& SmoothLineChart::getZoomByRange(const float& min, const float& max, const float& target)
+{
+    fpm::fixed_24_8 f_min{min};
+    fpm::fixed_24_8 f_max{max};
+    fpm::fixed_24_8 f_target{target};
+    _data.temp_float_buffer.x = static_cast<float>(f_target / (f_max - f_min));
+    return _data.temp_float_buffer.x;
+}
+
+const VectorFloat2D_t& SmoothLineChart::getCurrentOffset()
+{
+    fpm::fixed_24_8 f_offset_x{_data.offset_transition.getValue().x};
+    fpm::fixed_24_8 f_offset_y{_data.offset_transition.getValue().y};
+    _data.temp_float_buffer.x = static_cast<float>(f_offset_x / _data.zoom_transition.getTargetPoint().x);
+    _data.temp_float_buffer.y = static_cast<float>(f_offset_y / _data.zoom_transition.getTargetPoint().y);
+    return _data.temp_float_buffer;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                  Move zoom                                 */
+/* -------------------------------------------------------------------------- */
+void SmoothLineChart::moveZoomTo(const float& xZoom, const float& yZoom)
+{
+    _data.zoom_transition.moveTo(_float_2_int(xZoom), _float_2_int(yZoom));
+    // Since offset depends on zoom, kick offset again
+    moveOffsetTo(_data.last_offset.x, _data.last_offset.y);
+}
+
+void SmoothLineChart::moveXZoomTo(const float& zoom)
+{
+    _data.zoom_transition.moveTo(_float_2_int(zoom), _data.zoom_transition.getTargetPoint().y);
+    moveOffsetTo(_data.last_offset.x, _data.last_offset.y);
+}
+
+void SmoothLineChart::moveYZoomTo(const float& zoom)
+{
+    _data.zoom_transition.moveTo(_data.zoom_transition.getTargetPoint().x, _float_2_int(zoom));
+    moveOffsetTo(_data.last_offset.x, _data.last_offset.y);
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                  Jump zoom                                 */
+/* -------------------------------------------------------------------------- */
+void SmoothLineChart::jumpZoomTo(const float& xZoom, const float& yZoom)
+{
+    _data.zoom_transition.jumpTo(_float_2_int(xZoom), _float_2_int(yZoom));
+    jumpOffsetTo(_data.last_offset.x, _data.last_offset.y);
+}
+
+void SmoothLineChart::jumpXZoomTo(const float& zoom)
+{
+    _data.zoom_transition.jumpTo(_float_2_int(zoom), _data.zoom_transition.getTargetPoint().y);
+    jumpOffsetTo(_data.last_offset.x, _data.last_offset.y);
+}
+
+void SmoothLineChart::jumpYZoomTo(const float& zoom)
+{
+    _data.zoom_transition.jumpTo(_data.zoom_transition.getTargetPoint().x, _float_2_int(zoom));
+    jumpOffsetTo(_data.last_offset.x, _data.last_offset.y);
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 Move offset                                */
+/* -------------------------------------------------------------------------- */
+void SmoothLineChart::moveOffsetTo(const float& xOffset, const float& yOffset)
+{
+    fpm::fixed_24_8 f_x_offset{xOffset};
+    fpm::fixed_24_8 f_y_offset{yOffset};
+    _data.offset_transition.moveTo(static_cast<int>(f_x_offset * _data.zoom_transition.getTargetPoint().x),
+                                   static_cast<int>(f_y_offset * _data.zoom_transition.getTargetPoint().y));
+
+    _data.last_offset.reset(xOffset, yOffset);
+}
+
+void SmoothLineChart::moveXOffsetTo(const float& offset)
+{
+    fpm::fixed_24_8 f_x_offset{offset};
+    _data.offset_transition.moveTo(static_cast<int>(f_x_offset * _data.zoom_transition.getTargetPoint().x),
+                                   _data.offset_transition.getTargetPoint().y);
+
+    _data.last_offset.x = offset;
+}
+
+void SmoothLineChart::moveYOffsetTo(const float& offset)
+{
+    fpm::fixed_24_8 f_y_offset{offset};
+    _data.offset_transition.moveTo(_data.offset_transition.getTargetPoint().x,
+                                   static_cast<int>(f_y_offset * _data.zoom_transition.getTargetPoint().y));
+
+    _data.last_offset.y = offset;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 Jump offset                                */
+/* -------------------------------------------------------------------------- */
+void SmoothLineChart::jumpOffsetTo(const float& xOffset, const float& yOffset)
+{
+    fpm::fixed_24_8 f_x_offset{xOffset};
+    fpm::fixed_24_8 f_y_offset{yOffset};
+    _data.offset_transition.jumpTo(static_cast<int>(f_x_offset * _data.zoom_transition.getTargetPoint().x),
+                                   static_cast<int>(f_y_offset * _data.zoom_transition.getTargetPoint().y));
+
+    _data.last_offset.reset(xOffset, yOffset);
+}
+
+void SmoothLineChart::jumpXOffsetTo(const float& offset)
+{
+    fpm::fixed_24_8 f_x_offset{offset};
+    _data.offset_transition.jumpTo(static_cast<int>(f_x_offset * _data.zoom_transition.getTargetPoint().x),
+                                   _data.offset_transition.getTargetPoint().y);
+
+    _data.last_offset.x = offset;
+}
+
+void SmoothLineChart::jumpYOffsetTo(const float& offset)
+{
+    fpm::fixed_24_8 f_y_offset{offset};
+    _data.offset_transition.jumpTo(_data.offset_transition.getTargetPoint().x,
+                                   static_cast<int>(f_y_offset * _data.zoom_transition.getTargetPoint().y));
+
+    _data.last_offset.y = offset;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                              Chart point apis                              */
+/* -------------------------------------------------------------------------- */
 const Vector2D_t& SmoothLineChart::getChartPoint(const float& rawX, const float& rawY)
 {
     fpm::fixed_24_8 f_x{rawX};
@@ -78,62 +232,9 @@ bool SmoothLineChart::isInChart(const int& chartX, const int& chartY)
     return true;
 }
 
-int SmoothLineChart::_float_2_int(const float& value)
-{
-    fpm::fixed_24_8 f_value{value};
-    return static_cast<int>(f_value * _config.valueScale);
-}
-
-const float& SmoothLineChart::_int_2_float(const int& value)
-{
-    fpm::fixed_24_8 f_value{value};
-    _data.temp_float_buffer.x = static_cast<float>(f_value / _config.valueScale);
-    return _data.temp_float_buffer.x;
-}
-
-const VectorFloat2D_t& SmoothLineChart::_int_2_float(const Vector2D_t& value)
-{
-    fpm::fixed_24_8 f_value_x{value.x};
-    fpm::fixed_24_8 f_value_y{value.y};
-    _data.temp_float_buffer.x = static_cast<float>(f_value_x / _config.valueScale);
-    _data.temp_float_buffer.y = static_cast<float>(f_value_y / _config.valueScale);
-    return _data.temp_float_buffer;
-}
-
-const float& SmoothLineChart::getZoomByRange(const float& min, const float& max, const float& target)
-{
-    fpm::fixed_24_8 f_min{min};
-    fpm::fixed_24_8 f_max{max};
-    fpm::fixed_24_8 f_target{target};
-    _data.temp_float_buffer.x = static_cast<float>(f_target / (f_max - f_min));
-    return _data.temp_float_buffer.x;
-}
-
-const VectorFloat2D_t& SmoothLineChart::getCurrentOffset()
-{
-    fpm::fixed_24_8 f_offset_x{_data.offset_transition.getValue().x};
-    fpm::fixed_24_8 f_offset_y{_data.offset_transition.getValue().y};
-    _data.temp_float_buffer.x = static_cast<float>(f_offset_x / _data.zoom_transition.getTargetPoint().x);
-    _data.temp_float_buffer.y = static_cast<float>(f_offset_y / _data.zoom_transition.getTargetPoint().y);
-    return _data.temp_float_buffer;
-}
-
-void SmoothLineChart::moveOffsetTo(const float& xOffset, const float& yOffset)
-{
-    fpm::fixed_24_8 f_x_offset{xOffset};
-    fpm::fixed_24_8 f_y_offset{yOffset};
-    _data.offset_transition.moveTo(static_cast<int>(f_x_offset * _data.zoom_transition.getTargetPoint().x),
-                                   static_cast<int>(f_y_offset * _data.zoom_transition.getTargetPoint().y));
-}
-
-void SmoothLineChart::jumpOffsetTo(const float& xOffset, const float& yOffset)
-{
-    fpm::fixed_24_8 f_x_offset{xOffset};
-    fpm::fixed_24_8 f_y_offset{yOffset};
-    _data.offset_transition.jumpTo(static_cast<int>(f_x_offset * _data.zoom_transition.getTargetPoint().x),
-                                   static_cast<int>(f_y_offset * _data.zoom_transition.getTargetPoint().y));
-}
-
+/* -------------------------------------------------------------------------- */
+/*                                    Range                                   */
+/* -------------------------------------------------------------------------- */
 void SmoothLineChart::moveYIntoRange(const float& minY, const float& maxY)
 {
     moveYZoomTo(getZoomByRange(minY, maxY, _config.size.height));
