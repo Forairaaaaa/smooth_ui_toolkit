@@ -238,5 +238,11 @@ bool SmoothLineChart::isInChart(const int& chartX, const int& chartY)
 void SmoothLineChart::moveYIntoRange(const float& minY, const float& maxY)
 {
     moveYZoomTo(getZoomByRange(minY, maxY, _config.size.height));
-    moveYOffsetTo(std::abs(minY));
+    moveYOffsetTo(-minY);
+}
+
+void SmoothLineChart::moveXIntoRange(const float& minX, const float& maxX)
+{
+    moveXZoomTo(getZoomByRange(minX, maxX, _config.size.width));
+    moveXOffsetTo(-minX);
 }

@@ -178,6 +178,14 @@ namespace SmoothUIToolKit
              */
             void moveYIntoRange(const float& minY, const float& maxY);
 
+            /**
+             * @brief Move x's zoom and offset to fit the target range smoothly.
+             *
+             * @param minX
+             * @param maxX
+             */
+            void moveXIntoRange(const float& minX, const float& maxX);
+
         public:
             virtual void onUpdate(const TimeSize_t& currentTime) {}
             virtual void onReadInput() {}
