@@ -121,5 +121,24 @@ namespace SmoothUIToolKit
             }
             return true;
         }
+
+        size_t valueNum()
+        {
+            if (isFull())
+                return _data.capacity;
+            if (isEmpty())
+                return 0;
+
+            if (_data.r_index < _data.w_index)
+                return _data.w_index - _data.r_index;
+            else
+                return _data.capacity - _data.r_index + _data.w_index;
+        }
+
+        const T* rawBuffer() { return _data.buffer; }
+
+        const size_t& readIndex() { return _data.r_index; }
+
+        const size_t& writeIndex() { return _data.w_index; }
     };
 } // namespace SmoothUIToolKit
