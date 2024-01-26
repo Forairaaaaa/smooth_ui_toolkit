@@ -12,6 +12,7 @@
 #include "../../utils/fpm/math.hpp"
 #include "core/types/types.h"
 #include "math.h"
+#include <algorithm>
 #include <cmath>
 // Refs:
 // https://en.wikipedia.org/wiki/Xiaolin_Wu%27s_line_algorithm
