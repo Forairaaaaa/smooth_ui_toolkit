@@ -101,3 +101,6 @@ void SmoothUIToolKit::DrawLineAAWidth(
         }
     }
 }
+
+// Todo
+// https://stackoverflow.com/questions/69362718/bresenhams-algorithm-anti-aliased-quadratic-b%C3%A9zier-curve-with-line-thickness
