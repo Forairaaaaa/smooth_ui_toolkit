@@ -12,6 +12,7 @@
 #include "../../utils/fpm/math.hpp"
 #include "core/types/types.h"
 #include "math.h"
+#include <cmath>
 // Refs:
 // https://en.wikipedia.org/wiki/Xiaolin_Wu%27s_line_algorithm
 // http://members.chello.at/~easyfilter/bresenham.html
@@ -19,15 +20,15 @@
 void SmoothUIToolKit::DrawLineAA(
     int x0, int y0, int x1, int y1, std::function<void(const int& x, const int& y, const int& t)> plotCallback)
 {
-    int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-    int dy = abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+    int dx = std::abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+    int dy = std::abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
     int err = dx - dy, e2, x2; /* error value e_xy */
     int ed = dx + dy == 0 ? 1 : static_cast<int>(fpm::sqrt(fpm::fixed_24_8{dx * dx + dy * dy}));
 
     /* pixel loop */
     for (;;)
     {
-        plotCallback(x0, y0, 255 * abs(err - dx + dy) / ed);
+        plotCallback(x0, y0, 255 * std::abs(err - dx + dy) / ed);
         e2 = err;
         x2 = x0;
         if (2 * e2 >= -dx)
@@ -58,12 +59,12 @@ void SmoothUIToolKit::DrawLineAAWidth(
     int dx = std::abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
     int dy = std::abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
     int err = dx - dy, e2, x2, y2; /* error value e_xy */
+    float ed = dx + dy == 0 ? 1 : sqrt((float)dx * dx + (float)dy * dy);
     fpm::fixed_24_8 f_ed;
-    if (dy == 0)
-        f_ed = fpm::fixed_24_8{dx + 1};
+    if (dx + dy == 0)
+        f_ed = fpm::fixed_24_8{1};
     else
-        f_ed = dx + fpm::sqrt(fpm::fixed_24_8{dx * dx + dy * dy});
-
+        f_ed = fpm::sqrt(fpm::fixed_24_8{dx * dx + dy * dy});
     fpm::fixed_24_8 f_t;
 
     /* pixel loop */
@@ -101,6 +102,3 @@ void SmoothUIToolKit::DrawLineAAWidth(
         }
     }
 }
-
-// Todo
-// https://stackoverflow.com/questions/69362718/bresenhams-algorithm-anti-aliased-quadratic-b%C3%A9zier-curve-with-line-thickness
