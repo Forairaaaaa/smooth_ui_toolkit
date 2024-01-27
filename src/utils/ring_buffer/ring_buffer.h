@@ -108,7 +108,7 @@ namespace SmoothUIToolKit
             return true;
         }
 
-        bool peekAll(std::function<void(T)> valueCallback)
+        bool peekAll(std::function<void(const T&)> valueCallback)
         {
             if (isEmpty())
                 return false;
@@ -140,5 +140,13 @@ namespace SmoothUIToolKit
         const size_t& readIndex() { return _data.r_index; }
 
         const size_t& writeIndex() { return _data.w_index; }
+
+        const T& lastValue()
+        {
+            if (_data.w_index == 0)
+                return _data.buffer[_data.capacity - 1];
+            else
+                return _data.buffer[_data.w_index - 1];
+        }
     };
 } // namespace SmoothUIToolKit
