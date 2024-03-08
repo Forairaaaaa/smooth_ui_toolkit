@@ -70,6 +70,8 @@ namespace SmoothUIToolKit
             void _invoke_option_update(const TimeSize_t& currentTime);
 
         public:
+            virtual ~SmoothOptions() {}
+
             // Config
             inline const Config_t getConfig() { return _config; }
             inline void setConfig(Config_t cfg) { _config = cfg; }

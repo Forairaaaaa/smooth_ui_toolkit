@@ -73,6 +73,8 @@ namespace SmoothUIToolKit
             virtual void _update_camera_keyframe();
 
         public:
+            virtual ~SmoothSelector() {}
+
             // Configs
             inline const Config_t& getConfig() { return _config; }
             inline void setConfig(Config_t cfg) { _config = cfg; }
