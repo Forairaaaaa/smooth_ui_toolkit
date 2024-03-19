@@ -122,6 +122,24 @@ namespace SmoothUIToolKit
             return true;
         }
 
+        bool peekAllWithBreak(std::function<void(const T&, bool& stopPeeking)> valueCallback)
+        {
+            if (isEmpty())
+                return false;
+
+            size_t peek_index = _data.r_index;
+            bool stop_peeking = false;
+            while (peek_index != _data.w_index)
+            {
+                valueCallback(_data.buffer[peek_index], stop_peeking);
+                peek_index = (peek_index + 1) % _data.capacity;
+
+                if (stop_peeking)
+                    break;
+            }
+            return true;
+        }
+
         size_t valueNum()
         {
             if (isFull())
