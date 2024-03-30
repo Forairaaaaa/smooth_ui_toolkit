@@ -46,13 +46,13 @@ void WaterWaveGenerator::update()
 int WaterWaveGenerator::_wave_a_formula(const int& x)
 {
     fpm::fixed_16_16 fx{x};
-    fx = fpm::sin(fx / 60) * 10;
+    fx = fpm::sin(fx / 60) * _config.waveAScale + _config.waveAYOffet;
     return static_cast<int>(fx);
 }
 
 int WaterWaveGenerator::_wave_b_formula(const int& x)
 {
     fpm::fixed_16_16 fx{x - 20};
-    fx = fpm::sin(fx / 60) * 13 - 10;
+    fx = fpm::sin(fx / 60) * _config.waveBScale + _config.waveBYOffet;
     return static_cast<int>(fx);
 }

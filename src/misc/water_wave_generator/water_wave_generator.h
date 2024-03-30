@@ -24,6 +24,15 @@ namespace SmoothUIToolKit
          */
         class WaterWaveGenerator
         {
+        public:
+            struct Config_t
+            {
+                int waveAScale = 10;
+                int waveBScale = 13;
+                int waveAYOffet = 0;
+                int waveBYOffet = -10;
+            };
+
         private:
             struct Data_t
             {
@@ -32,6 +41,7 @@ namespace SmoothUIToolKit
                 uint16_t wave_x = 0;
             };
             Data_t _data;
+            Config_t _config;
 
         protected:
             virtual int _wave_a_formula(const int& x);
@@ -39,6 +49,8 @@ namespace SmoothUIToolKit
 
         public:
             void init(size_t waveLenght);
+            inline Config_t& setConfig() { return _config; }
+
             virtual void update();
             inline RingBuffer<int, 1>& getWaveA() { return _data.wave_a_buffer; }
             inline RingBuffer<int, 1>& getWaveB() { return _data.wave_b_buffer; }
