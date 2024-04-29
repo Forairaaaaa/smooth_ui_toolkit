@@ -82,7 +82,7 @@ void Transition4D::moveTo(const int& x, const int& y, const int& w, const int& h
     _data.x_transition.setConfig(_data.x_transition.getValue(), x);
     _data.y_transition.setConfig(_data.y_transition.getValue(), y);
     _data.w_transition.setConfig(_data.w_transition.getValue(), w);
-    _data.h_transition.setConfig(_data.h_transition.getValue(), w);
+    _data.h_transition.setConfig(_data.h_transition.getValue(), h);
     reset();
 
     // Tell update to start moving
