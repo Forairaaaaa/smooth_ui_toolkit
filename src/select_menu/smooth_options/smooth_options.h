@@ -66,7 +66,7 @@ namespace SmoothUIToolKit
             };
             Data_t _data;
             Config_t _config;
-            void _update_option_keyframe();
+            void _update_option_keyframe(bool isJump = false);
             void _invoke_option_update(const TimeSize_t& currentTime);
 
         public:
@@ -150,6 +150,20 @@ namespace SmoothUIToolKit
              *
              */
             virtual void goNext() override;
+
+            /**
+             * @brief Move to option smoothly
+             *
+             * @param optionIndex
+             */
+            virtual void moveTo(int optionIndex);
+
+            /**
+             * @brief Jump to the option with on transition
+             *
+             * @param optionIndex
+             */
+            virtual void jumpTo(int optionIndex);
 
             /**
              * @brief Press the selected option to the passing key frame

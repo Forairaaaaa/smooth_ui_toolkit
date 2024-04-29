@@ -71,6 +71,26 @@ void SmoothOptions::goNext()
     onGoNext();
 }
 
+void SmoothOptions::moveTo(int optionIndex)
+{
+    if (optionIndex < 0 || optionIndex > (_data.option_list.size() - 1))
+        return;
+
+    // Update tarnsition target
+    _data.selected_option_index = optionIndex;
+    _data.is_changed = true;
+}
+
+void SmoothOptions::jumpTo(int optionIndex)
+{
+    if (optionIndex < 0 || optionIndex > (_data.option_list.size() - 1))
+        return;
+
+    // Update tarnsition target
+    _data.selected_option_index = optionIndex;
+    _update_option_keyframe(true);
+}
+
 void SmoothOptions::press(const Vector4D_t& pressedKeyframe)
 {
     _data.is_pressing = true;
@@ -180,7 +200,7 @@ int SmoothOptions::getMatchingOptionIndex(const int& keyframeIndex)
     return matched_option_index;
 }
 
-void SmoothOptions::_update_option_keyframe()
+void SmoothOptions::_update_option_keyframe(bool isJump)
 {
     int matching_index = 0;
     for (int i = 0; i < _data.keyframe_list.size(); i++)
@@ -188,8 +208,16 @@ void SmoothOptions::_update_option_keyframe()
         getMatchingOptionIndex(i, matching_index);
 
         // Update transition target
-        _data.option_list[matching_index].position.moveTo(_data.keyframe_list[i].x, _data.keyframe_list[i].y);
-        _data.option_list[matching_index].shape.reshapeTo(_data.keyframe_list[i].w, _data.keyframe_list[i].h);
+        if (isJump)
+        {
+            _data.option_list[matching_index].position.jumpTo(_data.keyframe_list[i].x, _data.keyframe_list[i].y);
+            _data.option_list[matching_index].shape.resizeTo(_data.keyframe_list[i].w, _data.keyframe_list[i].h);
+        }
+        else
+        {
+            _data.option_list[matching_index].position.moveTo(_data.keyframe_list[i].x, _data.keyframe_list[i].y);
+            _data.option_list[matching_index].shape.reshapeTo(_data.keyframe_list[i].w, _data.keyframe_list[i].h);
+        }
     }
 }
 
