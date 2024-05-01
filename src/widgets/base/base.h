@@ -10,6 +10,7 @@
  */
 #pragma once
 #include "../../core/types/types.h"
+#include <functional>
 #include <vector>
 
 namespace SmoothUIToolKit
@@ -36,14 +37,21 @@ namespace SmoothUIToolKit
 
                 // If not, stop invoking onRender (children included)
                 bool isVisible = true;
+
+                // Auto invoke render() after root widget update
+                bool renderOnUpdate = true;
             };
-            Data_t _data;
+            Data_t _base_data;
 
         public:
             WidgetBase() = default;
             WidgetBase(WidgetBase* parent) { setParent(parent); }
             virtual ~WidgetBase();
 
+            /* -------------------------------------------------------------------------- */
+            /*                                 Widget tree                                */
+            /* -------------------------------------------------------------------------- */
+        public:
             /**
              * @brief Set parent widget
              *
@@ -56,14 +64,21 @@ namespace SmoothUIToolKit
              *
              * @return WidgetBase*
              */
-            inline WidgetBase* getParent() { return _data.parent; }
+            inline WidgetBase* getParent() { return _base_data.parent; }
 
             /**
              * @brief Get children widget list
              *
              * @return const std::vector<WidgetBase*>&
              */
-            inline const std::vector<WidgetBase*>& getChildren() { return _data.children; }
+            inline const std::vector<WidgetBase*>& getChildren() { return _base_data.children; }
+
+            /**
+             * @brief Helper method to iterate every child
+             *
+             * @param callback
+             */
+            void iterateChildren(std::function<void(WidgetBase* child)> callback);
 
             /**
              * @brief Is widget's child
@@ -87,7 +102,7 @@ namespace SmoothUIToolKit
              * @return true
              * @return false
              */
-            inline bool isRoot() { return _data.parent == nullptr; }
+            inline bool isRoot() { return _base_data.parent == nullptr; }
 
             /**
              * @brief Is leaf widget
@@ -95,8 +110,11 @@ namespace SmoothUIToolKit
              * @return true
              * @return false
              */
-            inline bool isLeaf() { return _data.children.empty(); }
+            inline bool isLeaf() { return _base_data.children.empty(); }
 
+            /* -------------------------------------------------------------------------- */
+            /*                                   Status                                   */
+            /* -------------------------------------------------------------------------- */
         public:
             /**
              * @brief Set widget's enanle state.
@@ -104,8 +122,8 @@ namespace SmoothUIToolKit
              *
              * @param enable
              */
-            void setEnable(bool isEnable);
-            inline bool isEnable() { return _data.isEnable; }
+            inline void setEnable(bool isEnable) { _base_data.isEnable = isEnable; }
+            inline bool isEnable() { return _base_data.isEnable; }
 
             /**
              * @brief Set widget's visible state.
@@ -113,9 +131,12 @@ namespace SmoothUIToolKit
              *
              * @param isVisible
              */
-            void setVisible(bool isVisible);
-            inline bool isVisible() { return _data.isVisible; }
+            inline void setVisible(bool isVisible) { _base_data.isVisible = isVisible; }
+            inline bool isVisible() { return _base_data.isVisible; }
 
+            /* -------------------------------------------------------------------------- */
+            /*                                   Update                                   */
+            /* -------------------------------------------------------------------------- */
         public:
             /**
              * @brief Update widget
@@ -124,16 +145,41 @@ namespace SmoothUIToolKit
              */
             virtual void update(const TimeSize_t& currentTime);
 
-            /**
-             * @brief Update child widgets
-             *
-             * @param currentTime
-             */
-            virtual void updateChildren(const TimeSize_t& currentTime);
-
+            /* -------------------------------------------------------------------------- */
+            /*                                   Render                                   */
+            /* -------------------------------------------------------------------------- */
         public:
+            /**
+             * @brief Render widget
+             *
+             */
+            virtual void render();
+
+            /* -------------------------------------------------------------------------- */
+            /*                               Common methods                               */
+            /* -------------------------------------------------------------------------- */
+        public:
+            /**
+             * @brief Init your shit
+             *
+             */
+            virtual void init();
+
+            /**
+             * @brief Reset anim or whatever
+             *
+             */
+            virtual void reset();
+
+            /* -------------------------------------------------------------------------- */
+            /*                                  Callbacks                                 */
+            /* -------------------------------------------------------------------------- */
+        public:
+            virtual void onInit() {}
+            virtual void onReset() {}
             virtual void onUpdate(const TimeSize_t& currentTime) {}
             virtual void onRender() {}
+            virtual void onPostRender() {}
         };
     } // namespace Widgets
 } // namespace SmoothUIToolKit

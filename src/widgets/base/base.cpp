@@ -14,7 +14,7 @@ using namespace SmoothUIToolKit::Widgets;
 
 WidgetBase::~WidgetBase()
 {
-    for (const auto& i : _data.children)
+    for (const auto& i : _base_data.children)
     {
         delete i;
     }
@@ -27,7 +27,7 @@ bool WidgetBase::isChild(WidgetBase* child)
     if (child == nullptr || child == this)
         return false;
 
-    for (const auto& i : _data.children)
+    for (const auto& i : _base_data.children)
     {
         if (i == child)
             return true;
@@ -41,41 +41,49 @@ void WidgetBase::addChild(WidgetBase* child)
 {
     if (isChild(child))
         return;
-    _data.children.push_back(child);
+    _base_data.children.push_back(child);
     child->setParent(this);
 }
 
-void WidgetBase::setEnable(bool isEnable)
+void WidgetBase::iterateChildren(std::function<void(WidgetBase* child)> callback)
 {
-    _data.isEnable = isEnable;
-    for (const auto i : _data.children)
-        i->setEnable(isEnable);
-}
-
-void WidgetBase::setVisible(bool isVisible)
-{
-    _data.isVisible = isVisible;
-    for (const auto i : _data.children)
-        i->setVisible(isVisible);
+    for (const auto i : _base_data.children)
+        callback(i);
 }
 
 void WidgetBase::update(const TimeSize_t& currentTime)
 {
     // Update
-    if (!_data.isEnable)
+    if (!_base_data.isEnable)
         return;
     onUpdate(currentTime);
 
-    // Render
-    if (_data.isVisible)
-        onRender();
-
     // Children
-    updateChildren(currentTime);
+    iterateChildren([&](WidgetBase* child) { child->update(currentTime); });
+
+    // Render
+    if (isRoot() && _base_data.renderOnUpdate)
+        render();
 }
 
-void WidgetBase::updateChildren(const std::uint32_t& currentTime)
+void WidgetBase::render()
 {
-    for (const auto i : _data.children)
-        i->update(currentTime);
+    if (!_base_data.isVisible)
+        return;
+
+    onRender();
+    iterateChildren([&](WidgetBase* child) { child->render(); });
+    onPostRender();
+}
+
+void WidgetBase::init()
+{
+    onInit();
+    iterateChildren([&](WidgetBase* child) { child->init(); });
+}
+
+void WidgetBase::reset()
+{
+    onReset();
+    iterateChildren([&](WidgetBase* child) { child->reset(); });
 }
