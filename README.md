@@ -6,11 +6,14 @@
 
 ![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/main/pics/Mix1.gif?raw=true)
 
+![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/main/pics/oled.gif?raw=true)
+
 带动画曲线插值的 UI 抽象工具集，无依赖
 
 - 动画曲线插值抽象，定点数优化浮点计算，自定义曲线
 - 选择菜单抽象，适用于普通选择菜单、启动器等
 - 更多控件抽象 (TODO)
+- 控件树 (TODO)
 
 视频：https://www.bilibili.com/video/BV1TT4y1W7tz
 
