@@ -33,6 +33,15 @@ namespace SmoothUIToolKit
             this->x = x;
             this->y = y;
         }
+
+        bool equals(int x, int y)
+        {
+            if (x != this->x)
+                return false;
+            if (y != this->y)
+                return false;
+            return true;
+        }
     };
 
     struct Vector3D_t
@@ -60,6 +69,17 @@ namespace SmoothUIToolKit
             this->x = x;
             this->y = y;
             this->z = z;
+        }
+
+        bool equals(int x, int y, int z)
+        {
+            if (x != this->x)
+                return false;
+            if (y != this->y)
+                return false;
+            if (z != this->z)
+                return false;
+            return true;
         }
     };
 
@@ -96,6 +116,19 @@ namespace SmoothUIToolKit
             this->y = y;
             this->w = w;
             this->h = h;
+        }
+
+        bool equals(int x, int y, int w, int h)
+        {
+            if (x != this->x)
+                return false;
+            if (y != this->y)
+                return false;
+            if (w != this->w)
+                return false;
+            if (h != this->h)
+                return false;
+            return true;
         }
     };
 

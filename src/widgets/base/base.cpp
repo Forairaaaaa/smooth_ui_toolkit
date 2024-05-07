@@ -51,15 +51,15 @@ void WidgetBase::iterateChildren(std::function<void(WidgetBase* child)> callback
         callback(i);
 }
 
-void WidgetBase::update(const TimeSize_t& currentTime)
+void WidgetBase::update()
 {
     // Update
     if (!_base_data.isEnable)
         return;
-    onUpdate(currentTime);
+    onUpdate();
 
     // Children
-    iterateChildren([&](WidgetBase* child) { child->update(currentTime); });
+    iterateChildren([&](WidgetBase* child) { child->update(); });
 
     // Render
     if (isRoot() && _base_data.renderOnUpdate)
@@ -72,7 +72,9 @@ void WidgetBase::render()
         return;
 
     onRender();
+
     iterateChildren([&](WidgetBase* child) { child->render(); });
+
     onPostRender();
 }
 

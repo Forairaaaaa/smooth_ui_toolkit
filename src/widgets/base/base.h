@@ -40,6 +40,12 @@ namespace SmoothUIToolKit
 
                 // Auto invoke render() after root widget update
                 bool renderOnUpdate = true;
+
+                // // If true, onRender() will be invoked on next render()
+                // bool needRender = true;
+
+                // // If true, onRender() will be invoked on every render()
+                // bool alwaysRender = false;
             };
             Data_t _base_data;
 
@@ -134,6 +140,21 @@ namespace SmoothUIToolKit
             inline void setVisible(bool isVisible) { _base_data.isVisible = isVisible; }
             inline bool isVisible() { return _base_data.isVisible; }
 
+            // /**
+            //  * @brief Notice widget is render needed
+            //  *
+            //  */
+            // inline void needRender() { _base_data.needRender = true; }
+            // inline bool isNeedRender() { return _base_data.needRender; }
+
+            // /**
+            //  * @brief Set the Always Render flag
+            //  *
+            //  * @param alwaysRender
+            //  */
+            // inline void setAlwaysRender(bool alwaysRender) { _base_data.alwaysRender = alwaysRender; }
+            // inline bool isAlwaysRender() { return _base_data.alwaysRender; }
+
             /* -------------------------------------------------------------------------- */
             /*                                   Update                                   */
             /* -------------------------------------------------------------------------- */
@@ -141,9 +162,8 @@ namespace SmoothUIToolKit
             /**
              * @brief Update widget
              *
-             * @param currentTime
              */
-            virtual void update(const TimeSize_t& currentTime);
+            virtual void update();
 
             /* -------------------------------------------------------------------------- */
             /*                                   Render                                   */
@@ -177,7 +197,7 @@ namespace SmoothUIToolKit
         public:
             virtual void onInit() {}
             virtual void onReset() {}
-            virtual void onUpdate(const TimeSize_t& currentTime) {}
+            virtual void onUpdate() {}
             virtual void onRender() {}
             virtual void onPostRender() {}
         };
