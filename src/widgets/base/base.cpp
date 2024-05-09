@@ -89,3 +89,51 @@ void WidgetBase::reset()
     onReset();
     iterateChildren([&](WidgetBase* child) { child->reset(); });
 }
+
+void WidgetBase::popOut()
+{
+    onPopOut();
+    iterateChildren([&](WidgetBase* child) { child->popOut(); });
+    _base_data.isWidgetRetracting = false;
+}
+
+void WidgetBase::retract()
+{
+    onRetract();
+    iterateChildren([&](WidgetBase* child) { child->retract(); });
+    _base_data.isWidgetRetracting = true;
+}
+
+bool WidgetBase::isRetracting()
+{
+    // Self check
+    if (!isAnimFinish())
+        return false;
+    if (!_base_data.isWidgetRetracting)
+        return false;
+
+    // Children check
+    for (const auto& i : _base_data.children)
+    {
+        if (!(i->isRetracting()))
+            return false;
+    }
+    return true;
+}
+
+bool WidgetBase::isPoppedOut()
+{
+    // Self check
+    if (!isAnimFinish())
+        return false;
+    if (_base_data.isWidgetRetracting)
+        return false;
+
+    // Children check
+    for (const auto& i : _base_data.children)
+    {
+        if (!(i->isPoppedOut()))
+            return false;
+    }
+    return true;
+}

@@ -18,7 +18,7 @@ namespace SmoothUIToolKit
     namespace Widgets
     {
         /**
-         * @brief Provide tree structure and common props.
+         * @brief Provide tree structure and common widget logic callbacks for animation
          *
          */
         class WidgetBase
@@ -41,11 +41,8 @@ namespace SmoothUIToolKit
                 // Auto invoke render() after root widget update
                 bool renderOnUpdate = true;
 
-                // // If true, onRender() will be invoked on next render()
-                // bool needRender = true;
-
-                // // If true, onRender() will be invoked on every render()
-                // bool alwaysRender = false;
+                // Poped out or retracting
+                bool isWidgetRetracting = true;
             };
             Data_t _base_data;
 
@@ -140,20 +137,29 @@ namespace SmoothUIToolKit
             inline void setVisible(bool isVisible) { _base_data.isVisible = isVisible; }
             inline bool isVisible() { return _base_data.isVisible; }
 
-            // /**
-            //  * @brief Notice widget is render needed
-            //  *
-            //  */
-            // inline void needRender() { _base_data.needRender = true; }
-            // inline bool isNeedRender() { return _base_data.needRender; }
+            /**
+             * @brief Is popup or any anim is finished
+             *
+             * @return true
+             * @return false
+             */
+            virtual bool isAnimFinish() { return true; }
 
-            // /**
-            //  * @brief Set the Always Render flag
-            //  *
-            //  * @param alwaysRender
-            //  */
-            // inline void setAlwaysRender(bool alwaysRender) { _base_data.alwaysRender = alwaysRender; }
-            // inline bool isAlwaysRender() { return _base_data.alwaysRender; }
+            /**
+             * @brief Is widget completely retracting
+             *
+             * @return true
+             * @return false
+             */
+            virtual bool isRetracting();
+
+            /**
+             * @brief Is widget completely popped out
+             *
+             * @return true
+             * @return false
+             */
+            virtual bool isPoppedOut();
 
             /* -------------------------------------------------------------------------- */
             /*                                   Update                                   */
@@ -178,6 +184,7 @@ namespace SmoothUIToolKit
             /* -------------------------------------------------------------------------- */
             /*                               Common methods                               */
             /* -------------------------------------------------------------------------- */
+            // Children methods will also be invoked
         public:
             /**
              * @brief Init your shit
@@ -186,10 +193,22 @@ namespace SmoothUIToolKit
             virtual void init();
 
             /**
-             * @brief Reset anim or whatever
+             * @brief Reset widget
              *
              */
             virtual void reset();
+
+            /**
+             * @brief Set your pop out anim maybe
+             *
+             */
+            virtual void popOut();
+
+            /**
+             * @brief Set your retract anim maybe
+             *
+             */
+            virtual void retract();
 
             /* -------------------------------------------------------------------------- */
             /*                                  Callbacks                                 */
@@ -197,6 +216,8 @@ namespace SmoothUIToolKit
         public:
             virtual void onInit() {}
             virtual void onReset() {}
+            virtual void onPopOut() {}
+            virtual void onRetract() {}
             virtual void onUpdate() {}
             virtual void onRender() {}
             virtual void onPostRender() {}
