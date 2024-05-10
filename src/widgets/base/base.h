@@ -18,7 +18,7 @@ namespace SmoothUIToolKit
     namespace Widgets
     {
         /**
-         * @brief Provide tree structure and common widget logic callbacks for animation
+         * @brief Provide tree structure, basic status, methods and callbacks
          *
          */
         class WidgetBase
@@ -33,16 +33,13 @@ namespace SmoothUIToolKit
                 std::vector<WidgetBase*> children;
 
                 // If not, stop invoking onUpdate and onRender (children included)
-                bool isEnable = true;
+                bool is_enable = true;
 
                 // If not, stop invoking onRender (children included)
-                bool isVisible = true;
+                bool is_visible = true;
 
                 // Auto invoke render() after root widget update
-                bool renderOnUpdate = true;
-
-                // Poped out or retracting
-                bool isWidgetRetracting = true;
+                bool render_on_update = true;
             };
             Data_t _base_data;
 
@@ -115,9 +112,6 @@ namespace SmoothUIToolKit
              */
             inline bool isLeaf() { return _base_data.children.empty(); }
 
-            /* -------------------------------------------------------------------------- */
-            /*                                   Status                                   */
-            /* -------------------------------------------------------------------------- */
         public:
             /**
              * @brief Set widget's enanle state.
@@ -125,8 +119,8 @@ namespace SmoothUIToolKit
              *
              * @param enable
              */
-            inline void setEnable(bool isEnable) { _base_data.isEnable = isEnable; }
-            inline bool isEnable() { return _base_data.isEnable; }
+            inline void setEnable(bool isEnable) { _base_data.is_enable = isEnable; }
+            inline bool isEnable() { return _base_data.is_enable; }
 
             /**
              * @brief Set widget's visible state.
@@ -134,58 +128,9 @@ namespace SmoothUIToolKit
              *
              * @param isVisible
              */
-            inline void setVisible(bool isVisible) { _base_data.isVisible = isVisible; }
-            inline bool isVisible() { return _base_data.isVisible; }
+            inline void setVisible(bool isVisible) { _base_data.is_visible = isVisible; }
+            inline bool isVisible() { return _base_data.is_visible; }
 
-            /**
-             * @brief Is popup or any anim is finished
-             *
-             * @return true
-             * @return false
-             */
-            virtual bool isAnimFinish() { return true; }
-
-            /**
-             * @brief Is widget completely retracting
-             *
-             * @return true
-             * @return false
-             */
-            virtual bool isRetracting();
-
-            /**
-             * @brief Is widget completely popped out
-             *
-             * @return true
-             * @return false
-             */
-            virtual bool isPoppedOut();
-
-            /* -------------------------------------------------------------------------- */
-            /*                                   Update                                   */
-            /* -------------------------------------------------------------------------- */
-        public:
-            /**
-             * @brief Update widget
-             *
-             */
-            virtual void update();
-
-            /* -------------------------------------------------------------------------- */
-            /*                                   Render                                   */
-            /* -------------------------------------------------------------------------- */
-        public:
-            /**
-             * @brief Render widget
-             *
-             */
-            virtual void render();
-
-            /* -------------------------------------------------------------------------- */
-            /*                               Common methods                               */
-            /* -------------------------------------------------------------------------- */
-            // Children methods will also be invoked
-        public:
             /**
              * @brief Init your shit
              *
@@ -193,22 +138,22 @@ namespace SmoothUIToolKit
             virtual void init();
 
             /**
+             * @brief Update widget
+             *
+             */
+            virtual void update(void);
+
+            /**
+             * @brief Render widget
+             *
+             */
+            virtual void render();
+
+            /**
              * @brief Reset widget
              *
              */
             virtual void reset();
-
-            /**
-             * @brief Set your pop out anim maybe
-             *
-             */
-            virtual void popOut();
-
-            /**
-             * @brief Set your retract anim maybe
-             *
-             */
-            virtual void retract();
 
             /* -------------------------------------------------------------------------- */
             /*                                  Callbacks                                 */
@@ -216,8 +161,6 @@ namespace SmoothUIToolKit
         public:
             virtual void onInit() {}
             virtual void onReset() {}
-            virtual void onPopOut() {}
-            virtual void onRetract() {}
             virtual void onUpdate() {}
             virtual void onRender() {}
             virtual void onPostRender() {}

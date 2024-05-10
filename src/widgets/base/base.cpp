@@ -51,10 +51,10 @@ void WidgetBase::iterateChildren(std::function<void(WidgetBase* child)> callback
         callback(i);
 }
 
-void WidgetBase::update()
+void WidgetBase::update(void)
 {
     // Update
-    if (!_base_data.isEnable)
+    if (!_base_data.is_enable)
         return;
     onUpdate();
 
@@ -62,13 +62,13 @@ void WidgetBase::update()
     iterateChildren([&](WidgetBase* child) { child->update(); });
 
     // Render
-    if (isRoot() && _base_data.renderOnUpdate)
+    if (isRoot() && _base_data.render_on_update)
         render();
 }
 
 void WidgetBase::render()
 {
-    if (!_base_data.isVisible)
+    if (!_base_data.is_visible)
         return;
 
     onRender();
@@ -88,52 +88,4 @@ void WidgetBase::reset()
 {
     onReset();
     iterateChildren([&](WidgetBase* child) { child->reset(); });
-}
-
-void WidgetBase::popOut()
-{
-    onPopOut();
-    iterateChildren([&](WidgetBase* child) { child->popOut(); });
-    _base_data.isWidgetRetracting = false;
-}
-
-void WidgetBase::retract()
-{
-    onRetract();
-    iterateChildren([&](WidgetBase* child) { child->retract(); });
-    _base_data.isWidgetRetracting = true;
-}
-
-bool WidgetBase::isRetracting()
-{
-    // Self check
-    if (!isAnimFinish())
-        return false;
-    if (!_base_data.isWidgetRetracting)
-        return false;
-
-    // Children check
-    for (const auto& i : _base_data.children)
-    {
-        if (!(i->isRetracting()))
-            return false;
-    }
-    return true;
-}
-
-bool WidgetBase::isPoppedOut()
-{
-    // Self check
-    if (!isAnimFinish())
-        return false;
-    if (_base_data.isWidgetRetracting)
-        return false;
-
-    // Children check
-    for (const auto& i : _base_data.children)
-    {
-        if (!(i->isPoppedOut()))
-            return false;
-    }
-    return true;
 }
