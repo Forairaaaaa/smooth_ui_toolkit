@@ -30,7 +30,7 @@ namespace SmoothUIToolKit
                 Transition4D transition;
 
                 // Transition direction
-                bool is_widget_retracting = true;
+                bool is_hiding = true;
             };
             SmoothBaseData_t _smooth_base_data;
 
@@ -49,10 +49,10 @@ namespace SmoothUIToolKit
             virtual void popOut();
 
             /**
-             * @brief Retract widget
+             * @brief Hide widget
              *
              */
-            virtual void retract();
+            virtual void hide();
 
             /**
              * @brief Is transition finished
@@ -63,12 +63,12 @@ namespace SmoothUIToolKit
             virtual bool isTransitionFinish() { return _smooth_base_data.transition.isFinish(); }
 
             /**
-             * @brief Is widget completely retracting
+             * @brief Is widget completely isHidden
              *
              * @return true
              * @return false
              */
-            virtual bool isRetracting();
+            virtual bool isHidden();
 
             /**
              * @brief Is widget completely popped out
@@ -77,6 +77,22 @@ namespace SmoothUIToolKit
              * @return false
              */
             virtual bool isPoppedOut();
+
+            /**
+             * @brief Is widget hidding currently
+             *
+             * @return true
+             * @return false
+             */
+            virtual bool isHidding();
+
+            /**
+             * @brief Is widget popping out currently
+             *
+             * @return true
+             * @return false
+             */
+            virtual bool isPoppingOut();
 
             /**
              * @brief Update transition
@@ -103,10 +119,10 @@ namespace SmoothUIToolKit
             virtual void onPopOut() {}
 
             /**
-             * @brief Setup your retract transition
+             * @brief Setup your hiding transition
              *
              */
-            virtual void onRetract() {}
+            virtual void onHide() {}
         };
     } // namespace Widgets
 } // namespace SmoothUIToolKit

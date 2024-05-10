@@ -16,28 +16,28 @@ void SmoothWidgetBase::popOut()
 {
     onPopOut();
     iterateChildren([&](WidgetBase* child) { ((SmoothWidgetBase*)child)->popOut(); });
-    _smooth_base_data.is_widget_retracting = false;
+    _smooth_base_data.is_hiding = false;
 }
 
-void SmoothWidgetBase::retract()
+void SmoothWidgetBase::hide()
 {
-    onRetract();
-    iterateChildren([&](WidgetBase* child) { ((SmoothWidgetBase*)child)->retract(); });
-    _smooth_base_data.is_widget_retracting = true;
+    onHide();
+    iterateChildren([&](WidgetBase* child) { ((SmoothWidgetBase*)child)->hide(); });
+    _smooth_base_data.is_hiding = true;
 }
 
-bool SmoothWidgetBase::isRetracting()
+bool SmoothWidgetBase::isHidden()
 {
     // Self check
     if (!isTransitionFinish())
         return false;
-    if (!_smooth_base_data.is_widget_retracting)
+    if (!_smooth_base_data.is_hiding)
         return false;
 
     // Children check
     for (const auto& i : _base_data.children)
     {
-        if (!((SmoothWidgetBase*)i)->isRetracting())
+        if (!((SmoothWidgetBase*)i)->isHidden())
             return false;
     }
     return true;
@@ -48,7 +48,7 @@ bool SmoothWidgetBase::isPoppedOut()
     // Self check
     if (!isTransitionFinish())
         return false;
-    if (_smooth_base_data.is_widget_retracting)
+    if (_smooth_base_data.is_hiding)
         return false;
 
     // Children check
@@ -58,6 +58,20 @@ bool SmoothWidgetBase::isPoppedOut()
             return false;
     }
     return true;
+}
+
+bool SmoothWidgetBase::isHidding()
+{
+    if (_smooth_base_data.is_hiding && !isHidden())
+        return true;
+    return false;
+}
+
+bool SmoothWidgetBase::isPoppingOut()
+{
+    if (!_smooth_base_data.is_hiding && !isPoppedOut())
+        return true;
+    return false;
 }
 
 void SmoothWidgetBase::updateTransition(const TimeSize_t& currentTime)
