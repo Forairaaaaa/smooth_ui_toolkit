@@ -91,6 +91,29 @@ namespace SmoothUIToolKit
                               _data.h_transition.getEndValue());
         }
 
+        // Helper setter
+        inline void setEachDuration(TimeSize_t x, TimeSize_t y, TimeSize_t w, TimeSize_t h)
+        {
+            _data.x_transition.setDuration(x);
+            _data.y_transition.setDuration(y);
+            _data.w_transition.setDuration(w);
+            _data.h_transition.setDuration(h);
+        }
+        inline void setEachDelay(TimeSize_t x, TimeSize_t y, TimeSize_t w, TimeSize_t h)
+        {
+            _data.x_transition.setDelay(x);
+            _data.y_transition.setDelay(y);
+            _data.w_transition.setDelay(w);
+            _data.h_transition.setDelay(h);
+        }
+        inline void setEachTransitionPath(EasingPath_t x, EasingPath_t y, EasingPath_t w, EasingPath_t h)
+        {
+            _data.x_transition.setTransitionPath(x);
+            _data.y_transition.setTransitionPath(y);
+            _data.w_transition.setTransitionPath(w);
+            _data.h_transition.setTransitionPath(h);
+        }
+
     public:
         /**
          * @brief Jump to target point without transition

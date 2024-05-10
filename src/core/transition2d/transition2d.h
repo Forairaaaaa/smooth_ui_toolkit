@@ -77,6 +77,23 @@ namespace SmoothUIToolKit
         }
         inline std::function<void(Transition2D*)> getUpdateCallback() { return _config.updateCallback; }
 
+        // Helper setter
+        inline void setEachDuration(TimeSize_t x, TimeSize_t y)
+        {
+            _data.x_transition.setDuration(x);
+            _data.y_transition.setDuration(y);
+        }
+        inline void setEachDelay(TimeSize_t x, TimeSize_t y)
+        {
+            _data.x_transition.setDelay(x);
+            _data.y_transition.setDelay(y);
+        }
+        inline void setEachTransitionPath(EasingPath_t x, EasingPath_t y)
+        {
+            _data.x_transition.setTransitionPath(x);
+            _data.y_transition.setTransitionPath(y);
+        }
+
         /**
          * @brief Start moving
          *
