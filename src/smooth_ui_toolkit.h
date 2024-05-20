@@ -26,6 +26,8 @@
 #include "utils/ring_buffer/ring_buffer.h"
 
 #include "widgets/base/base.h"
+#include "widgets/selector/base/option.h"
+#include "widgets/selector/base/selelctor.h"
 #include "widgets/smooth_widget/smooth_widget.h"
 
 #include "misc/water_wave_generator/water_wave_generator.h"
