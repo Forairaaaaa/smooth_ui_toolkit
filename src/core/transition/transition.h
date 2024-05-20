@@ -56,7 +56,7 @@ namespace SmoothUIToolKit
             TimeSize_t pause_offset = 0;
             int current_value = 0;
             bool is_paused = true;
-            bool is_finish = false;
+            bool is_finish = true;
         };
         Data_t _data;
         Config_t _config;
