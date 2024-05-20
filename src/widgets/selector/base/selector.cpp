@@ -12,11 +12,27 @@
 
 using namespace SmoothUIToolKit::Widgets::Selector;
 
+SmoothUIToolKit::Widgets::WidgetBase* SelectorBase::getSelectedWidget()
+{
+    if (_selector_base_data.current_widget == nullptr)
+        return nullptr;
+    if (_selector_base_data.selected_option_index < 0)
+        return nullptr;
+    return _selector_base_data.current_widget->getChildren()[_selector_base_data.selected_option_index];
+}
+
 void SelectorBase::enter(WidgetBase* widget)
 {
     if (widget == nullptr)
         return;
+
+    // Set current widget
     _selector_base_data.current_widget = widget;
+    onEnter();
+
+    // Select first widget
+    if (!_selector_base_data.current_widget->isLeaf())
+        goTo(0);
 }
 
 bool SelectorBase::back()
@@ -24,12 +40,13 @@ bool SelectorBase::back()
     if (_selector_base_data.current_widget->isRoot())
         return false;
     _selector_base_data.current_widget = _selector_base_data.current_widget->getParent();
+    onBack();
     return true;
 }
 
 void SelectorBase::goLast()
 {
-    if (getOptionNum() <= 0)
+    if (getOptionNum() == 0)
         return;
 
     int new_index = _selector_base_data.selected_option_index - 1;
@@ -42,7 +59,7 @@ void SelectorBase::goLast()
 
 void SelectorBase::goNext()
 {
-    if (getOptionNum() <= 0)
+    if (getOptionNum() == 0)
         return;
 
     int new_index = _selector_base_data.selected_option_index + 1;
@@ -55,7 +72,7 @@ void SelectorBase::goNext()
 
 void SelectorBase::goTo(int optionIndex)
 {
-    if (getOptionNum() <= 0)
+    if (getOptionNum() == 0)
         return;
     if (optionIndex < 0 || optionIndex > (getOptionNum() - 1))
         return;

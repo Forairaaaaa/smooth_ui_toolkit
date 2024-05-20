@@ -9,9 +9,6 @@
  *
  */
 #pragma once
-#include "../../../core/transition4d/transition4d.h"
-#include "../../base/base.h"
-#include <functional>
 
 namespace SmoothUIToolKit
 {

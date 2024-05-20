@@ -9,7 +9,6 @@
  *
  */
 #pragma once
-#include "../../../core/transition4d/transition4d.h"
 #include "../../base/base.h"
 #include "option.h"
 #include <cstddef>
@@ -32,7 +31,7 @@ namespace SmoothUIToolKit
                 {
                     WidgetBase* current_widget = nullptr;
                     bool move_in_loop = true;
-                    int selected_option_index = 0;
+                    int selected_option_index = -1;
                 };
                 SelectorBaseData_t _selector_base_data;
 
@@ -40,6 +39,7 @@ namespace SmoothUIToolKit
                 inline void moveInloop(bool moveInLoop) { _selector_base_data.move_in_loop = moveInLoop; }
                 inline size_t getOptionNum() { return _selector_base_data.current_widget->getChildren().size(); }
                 inline int getSelectedOptionIndex() { return _selector_base_data.selected_option_index; }
+                WidgetBase* getSelectedWidget();
 
             public:
                 /**
@@ -64,6 +64,8 @@ namespace SmoothUIToolKit
                 void goTo(int optionIndex);
 
             public:
+                virtual void onEnter() {}
+                virtual void onBack() {}
                 virtual void onGoLast() {}
                 virtual void onGoNext() {}
                 virtual void onGoTo() {}
