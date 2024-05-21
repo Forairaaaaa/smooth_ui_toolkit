@@ -16,7 +16,7 @@ using namespace SmoothUIToolKit::Widgets::Selector;
 void SmoothSelector::onGoTo()
 {
     // Get selected widget frame
-    auto target_frame = ((SmoothOption*)getSelectedWidget())->getTransition().getTargetPoint();
+    auto target_frame = ((SmoothOption*)getHoveringWidget())->getTransition().getTargetPoint();
     getTransition().moveTo(target_frame);
 }
 

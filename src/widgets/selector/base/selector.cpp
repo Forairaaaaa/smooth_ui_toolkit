@@ -12,13 +12,21 @@
 
 using namespace SmoothUIToolKit::Widgets::Selector;
 
-SmoothUIToolKit::Widgets::WidgetBase* SelectorBase::getSelectedWidget()
+SmoothUIToolKit::Widgets::WidgetBase* SelectorBase::getHoveringWidget()
 {
     if (_selector_base_data.current_widget == nullptr)
         return nullptr;
-    if (_selector_base_data.selected_option_index < 0)
+    if (_selector_base_data.hovering_option_index < 0)
         return nullptr;
-    return _selector_base_data.current_widget->getChildren()[_selector_base_data.selected_option_index];
+    return _selector_base_data.current_widget->getChildren()[_selector_base_data.hovering_option_index];
+}
+
+bool SelectorBase::isHoveringOptionSelected()
+{
+    auto hovering_widget = getHoveringWidget();
+    if (hovering_widget == nullptr)
+        return false;
+    return ((OptionBase*)hovering_widget)->isSelected();
 }
 
 void SelectorBase::enter(WidgetBase* widget)
@@ -49,7 +57,7 @@ void SelectorBase::goLast()
     if (getOptionNum() == 0)
         return;
 
-    int new_index = _selector_base_data.selected_option_index - 1;
+    int new_index = _selector_base_data.hovering_option_index - 1;
     if (new_index < 0)
         new_index = _selector_base_data.move_in_loop ? getOptionNum() - 1 : 0;
 
@@ -62,7 +70,7 @@ void SelectorBase::goNext()
     if (getOptionNum() == 0)
         return;
 
-    int new_index = _selector_base_data.selected_option_index + 1;
+    int new_index = _selector_base_data.hovering_option_index + 1;
     if (new_index >= getOptionNum())
         new_index = _selector_base_data.move_in_loop ? 0 : getOptionNum() - 1;
 
@@ -77,6 +85,29 @@ void SelectorBase::goTo(int optionIndex)
     if (optionIndex < 0 || optionIndex > (getOptionNum() - 1))
         return;
 
-    _selector_base_data.selected_option_index = optionIndex;
+    _selector_base_data.hovering_option_index = optionIndex;
     onGoTo();
+
+    // Hover option
+    ((OptionBase*)getHoveringWidget())->hover();
+}
+
+void SelectorBase::selectOption()
+{
+    auto hovering_widget = getHoveringWidget();
+    if (hovering_widget == nullptr)
+        return;
+
+    ((OptionBase*)hovering_widget)->select();
+    onSelectOption();
+}
+
+void SelectorBase::unSelectOption()
+{
+    auto hovering_widget = getHoveringWidget();
+    if (hovering_widget == nullptr)
+        return;
+
+    ((OptionBase*)hovering_widget)->unSelect();
+    onUnSelectOption();
 }

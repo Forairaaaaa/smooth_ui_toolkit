@@ -31,15 +31,16 @@ namespace SmoothUIToolKit
                 {
                     WidgetBase* current_widget = nullptr;
                     bool move_in_loop = true;
-                    int selected_option_index = -1;
+                    int hovering_option_index = -1;
                 };
                 SelectorBaseData_t _selector_base_data;
 
             public:
                 inline void moveInloop(bool moveInLoop) { _selector_base_data.move_in_loop = moveInLoop; }
                 inline size_t getOptionNum() { return _selector_base_data.current_widget->getChildren().size(); }
-                inline int getSelectedOptionIndex() { return _selector_base_data.selected_option_index; }
-                WidgetBase* getSelectedWidget();
+                inline int getHoveringOptionIndex() { return _selector_base_data.hovering_option_index; }
+                WidgetBase* getHoveringWidget();
+                bool isHoveringOptionSelected();
 
             public:
                 /**
@@ -63,12 +64,18 @@ namespace SmoothUIToolKit
 
                 virtual void goTo(int optionIndex);
 
+                virtual void selectOption();
+
+                virtual void unSelectOption();
+
             public:
                 virtual void onEnter() {}
                 virtual void onBack() {}
                 virtual void onGoLast() {}
                 virtual void onGoNext() {}
                 virtual void onGoTo() {}
+                virtual void onSelectOption() {}
+                virtual void onUnSelectOption() {}
             };
         } // namespace Selector
     }     // namespace Widgets
