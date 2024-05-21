@@ -132,6 +132,14 @@ namespace SmoothUIToolKit
             inline bool isVisible() { return _base_data.is_visible; }
 
             /**
+             * @brief Set auto invoke render() after root widget update
+             *
+             * @param renderOnUpdate
+             */
+            inline void setRenderOnUpdate(bool renderOnUpdate) { _base_data.render_on_update = renderOnUpdate; }
+            inline bool getRenderOnUpdate() { return _base_data.render_on_update; }
+
+            /**
              * @brief Init your shit
              *
              */

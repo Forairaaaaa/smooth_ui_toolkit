@@ -20,7 +20,30 @@ namespace SmoothUIToolKit
         {
             class SmoothSelector : public SmoothWidgetBase, public SelectorBase
             {
-                void onGoTo() override;
+            public:
+                /**
+                 * @brief Override to add option frame matching
+                 *
+                 */
+                virtual void onGoTo() override;
+
+                /**
+                 * @brief Move to option with transition
+                 *
+                 * @param optionIndex
+                 */
+                virtual void moveTo(int optionIndex);
+
+                /**
+                 * @brief Jump to option without transition
+                 *
+                 * @param optionIndex
+                 */
+                virtual void jumpTo(int optionIndex);
+
+            public:
+                virtual void onMoveTo() {}
+                virtual void onJumpTo() {}
             };
         } // namespace Selector
     }     // namespace Widgets

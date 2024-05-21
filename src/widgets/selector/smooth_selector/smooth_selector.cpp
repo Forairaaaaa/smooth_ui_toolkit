@@ -19,3 +19,11 @@ void SmoothSelector::onGoTo()
     auto target_frame = ((SmoothOption*)getSelectedWidget())->getTransition().getTargetPoint();
     getTransition().moveTo(target_frame);
 }
+
+void SmoothSelector::moveTo(int optionIndex) { goTo(optionIndex); }
+
+void SmoothSelector::jumpTo(int optionIndex)
+{
+    goTo(optionIndex);
+    getTransition().jumpTo(getTransition().getTargetPoint());
+}

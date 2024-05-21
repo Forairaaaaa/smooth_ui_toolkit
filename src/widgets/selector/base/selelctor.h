@@ -47,7 +47,7 @@ namespace SmoothUIToolKit
                  *
                  * @param widget
                  */
-                void enter(WidgetBase* widget);
+                virtual void enter(WidgetBase* widget);
 
                 /**
                  * @brief Go back to last widget
@@ -55,13 +55,13 @@ namespace SmoothUIToolKit
                  * @return true
                  * @return false
                  */
-                bool back();
+                virtual bool back();
 
-                void goLast();
+                virtual void goLast();
 
-                void goNext();
+                virtual void goNext();
 
-                void goTo(int optionIndex);
+                virtual void goTo(int optionIndex);
 
             public:
                 virtual void onEnter() {}
