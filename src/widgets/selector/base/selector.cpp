@@ -87,9 +87,6 @@ void SelectorBase::goTo(int optionIndex)
 
     _selector_base_data.hovering_option_index = optionIndex;
     onGoTo();
-
-    // Hover option
-    ((OptionBase*)getHoveringWidget())->hover();
 }
 
 void SelectorBase::selectOption()

@@ -40,7 +40,7 @@ namespace SmoothUIToolKit
                 inline size_t getOptionNum() { return _selector_base_data.current_widget->getChildren().size(); }
                 inline int getHoveringOptionIndex() { return _selector_base_data.hovering_option_index; }
                 WidgetBase* getHoveringWidget();
-                bool isHoveringOptionSelected();
+                virtual bool isHoveringOptionSelected();
 
             public:
                 /**

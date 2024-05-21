@@ -21,6 +21,14 @@ namespace SmoothUIToolKit
             class SmoothSelector : public SmoothWidgetBase, public SelectorBase
             {
             public:
+                // Override to fit new class structure
+
+                bool isHoveringOptionSelected() override;
+
+                void selectOption() override;
+                
+                void unSelectOption() override;
+
                 /**
                  * @brief Override to add option frame matching
                  *
