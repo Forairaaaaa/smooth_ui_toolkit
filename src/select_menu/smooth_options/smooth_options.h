@@ -88,6 +88,7 @@ namespace SmoothUIToolKit
             void addOption(void* userData = nullptr);
             inline OptionProps_t& setOption(int index) { return _data.option_list[index]; }
             inline const std::vector<OptionProps_t>& getOptionList() { return _data.option_list; }
+            inline std::vector<OptionProps_t>& setOptionList() { return _data.option_list; }
             inline OptionProps_t& getOption(const int& index) { return _data.option_list[index]; }
             inline OptionProps_t& getSelectedOption() { return _data.option_list[getMatchingOptionIndex(0)]; }
             inline int getSelectedOptionIndex() { return getMatchingOptionIndex(0); }
