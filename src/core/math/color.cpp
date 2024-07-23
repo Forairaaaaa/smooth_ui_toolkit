@@ -23,7 +23,7 @@ std::uint32_t SmoothUIToolKit::Rgb2Hex(RGB_t color)
     return ((color.red & 0xff) << 16) + ((color.green & 0xff) << 8) + (color.blue & 0xff);
 }
 
-SmoothUIToolKit::RGB_t SmoothUIToolKit::BlendColorInDiffernce(RGB_t bgColor, RGB_t fgColor)
+SmoothUIToolKit::RGB_t SmoothUIToolKit::BlendColorInDifference(RGB_t bgColor, RGB_t fgColor)
 {
     // 计算差值
     uint8_t resultRed = std::abs(bgColor.red - fgColor.red);
@@ -35,7 +35,7 @@ SmoothUIToolKit::RGB_t SmoothUIToolKit::BlendColorInDiffernce(RGB_t bgColor, RGB
     return ret;
 }
 
-std::uint32_t SmoothUIToolKit::BlendColorInDiffernce(std::uint32_t bgColor, std::uint32_t fgColor)
+std::uint32_t SmoothUIToolKit::BlendColorInDifference(std::uint32_t bgColor, std::uint32_t fgColor)
 {
-    return Rgb2Hex(BlendColorInDiffernce(Hex2Rgb(bgColor), Hex2Rgb(fgColor)));
+    return Rgb2Hex(BlendColorInDifference(Hex2Rgb(bgColor), Hex2Rgb(fgColor)));
 }
