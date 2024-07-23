@@ -28,6 +28,8 @@ namespace SmoothUIToolKit
     /* -------------------------------------------------------------------------- */
     RGB_t Hex2Rgb(std::uint32_t color);
     std::uint32_t Rgb2Hex(RGB_t color);
+    RGB_t BlendColorInDiffernce(RGB_t bgColor, RGB_t fgColor);
+    std::uint32_t BlendColorInDiffernce(std::uint32_t bgColor, std::uint32_t fgColor);
 
     /* -------------------------------------------------------------------------- */
     /*                                   Graphic                                  */
