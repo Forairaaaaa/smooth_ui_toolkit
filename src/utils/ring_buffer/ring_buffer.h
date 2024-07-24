@@ -166,5 +166,11 @@ namespace SmoothUIToolKit
             else
                 return _data.buffer[_data.w_index - 1];
         }
+
+        void clear()
+        {
+            _data.w_index = 0;
+            _data.r_index = 0;
+        }
     };
 } // namespace SmoothUIToolKit
