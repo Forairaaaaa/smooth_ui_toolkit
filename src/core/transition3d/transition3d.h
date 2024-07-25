@@ -215,5 +215,6 @@ namespace SmoothUIToolKit
         inline const int& getCurrentGreen() { return getYTransition().getValue(); }
         inline const int& getCurrentBlue() { return getZTransition().getValue(); }
         inline RGB_t getCurrentColor() { return getValue(); }
+        inline uint32_t getCurrentColorHex() { return Rgb2Hex(getValue()); }
     };
 } // namespace SmoothUIToolKit

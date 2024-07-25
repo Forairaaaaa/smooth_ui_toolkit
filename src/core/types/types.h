@@ -81,6 +81,8 @@ namespace SmoothUIToolKit
                 return false;
             return true;
         }
+
+        uint32_t toHex();
     };
 
     typedef Vector3D_t RGB_t;
