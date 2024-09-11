@@ -101,6 +101,8 @@ namespace SmoothUIToolKit
              */
             virtual void updateTransition(const TimeSize_t& currentTime);
 
+            using WidgetBase::update;
+
             /**
              * @brief Update widget with transition update
              *
