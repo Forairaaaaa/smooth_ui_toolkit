@@ -60,7 +60,7 @@ void SmoothUIToolKit::DrawLineAAWidth(
     int dx = std::abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
     int dy = std::abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
     int err = dx - dy, e2, x2, y2; /* error value e_xy */
-    float ed = dx + dy == 0 ? 1 : sqrt((float)dx * dx + (float)dy * dy);
+    // float ed = dx + dy == 0 ? 1 : sqrt((float)dx * dx + (float)dy * dy);
     fpm::fixed_24_8 f_ed;
     if (dx + dy == 0)
         f_ed = fpm::fixed_24_8{1};
