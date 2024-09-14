@@ -1,12 +1,12 @@
 # Smooth UI Toolkit
 
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/main/pics/SmoothMenuDemo2.gif?raw=true)
+![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/SmoothMenuDemo2.gif?raw=true)
 
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/main/pics/SmoothMenuDemo1.gif?raw=true)
+![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/SmoothMenuDemo1.gif?raw=true)
 
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/main/pics/Mix1.gif?raw=true)
+![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/Mix1.gif?raw=true)
 
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/main/pics/oled.gif?raw=true)
+![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/oled.gif?raw=true)
 
 带动画曲线插值的 UI 抽象工具集，无依赖
 
@@ -66,7 +66,7 @@ for (int t = 0; t < EasingPath::maxT; t++)
 
 ### Transition
 
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/main/pics/EasingPath.gif?raw=true)
+![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/EasingPath.gif?raw=true)
 
 一维过渡抽象，[示例](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/dd72391ed4b9aed22d91b95fc760bb65d9fe5807/simu_project/smooth_ui_toolkit_test/transition/transition_test.cpp#L24)：
 
@@ -105,7 +105,7 @@ while (1)
 
 ### Transition2D
 
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/main/pics/Transition2D.gif?raw=true)
+![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/Transition2D.gif?raw=true)
 
 二维过渡抽象，最常用的一集 (xy 坐标，wh 形状...)，[示例](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/dd72391ed4b9aed22d91b95fc760bb65d9fe5807/simu_project/smooth_ui_toolkit_test/transition_2d/transition_2d_test.cpp#L25)：
 
@@ -150,7 +150,7 @@ while (1)
 
 ### SmoothSelector
 
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/main/pics/SmoothSelector.gif?raw=true)
+![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/SmoothSelector.gif?raw=true)
 
 三个概念：
 
@@ -225,7 +225,7 @@ while (1)
 
 ### SmoothOptions
 
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/main/pics/SmoothOptions.gif?raw=true)
+![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/SmoothOptions.gif?raw=true)
 
 两个概念：
 
