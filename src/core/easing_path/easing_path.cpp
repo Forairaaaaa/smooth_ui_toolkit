@@ -236,6 +236,18 @@ namespace SmoothUIToolKit
             return static_cast<int>(ft * maxT);
         }
 
+        int easeOutBackHalf(const int& t)
+        {
+            // 减小回弹幅度的一半
+            constexpr fpm::fixed_16_16 c1_half{0.85079};
+            constexpr fpm::fixed_16_16 c3_half{0.85079 + 1};
+
+            fpm::fixed_16_16 ft{t};
+            ft = ft / maxT;
+            ft = 1 + c3_half * fpm::pow(ft - 1, 3) + c1_half * fpm::pow(ft - 1, 2);
+            return static_cast<int>(ft * maxT);
+        }
+
         int easeInOutBack(const int& t)
         {
             fpm::fixed_16_16 ft{t};

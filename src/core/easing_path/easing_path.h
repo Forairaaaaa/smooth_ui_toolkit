@@ -50,6 +50,7 @@ namespace SmoothUIToolKit
         int easeInOutCirc(const int& t);
         int easeInBack(const int& t);
         int easeOutBack(const int& t);
+        int easeOutBackHalf(const int& t);
         int easeInOutBack(const int& t);
         int easeInElastic(const int& t);
         int easeOutElastic(const int& t);
