@@ -1,29 +1,9 @@
-# Basic CMakeLists.txt
-cmake_minimum_required(VERSION 3.10)
-set(CMAKE_C_STANDARD 11)#C11
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+cmake_minimum_required(VERSION 3.5)
 
-# Files
-file(GLOB_RECURSE SMOOTH_UI_TOOLKIT_SRCS
-    src/*.cpp
-)
-set(SMOOTH_UI_TOOLKIT_INCS
-    src/
-)
+set(SMOOTH_UI_TOOLKIT_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
 
-# IDF component
 if (ESP_PLATFORM)
-
-idf_component_register(
-    SRCS ${SMOOTH_UI_TOOLKIT_SRCS}
-    INCLUDE_DIRS ${SMOOTH_UI_TOOLKIT_INCS}
-)
-
+    include(${CMAKE_CURRENT_LIST_DIR}/cmake/esp_idf.cmake)
 else()
-
-#  Build library
-add_library(smooth_ui_toolkit ${SMOOTH_UI_TOOLKIT_SRCS})
-# Include
-target_include_directories(smooth_ui_toolkit PUBLIC ${SMOOTH_UI_TOOLKIT_INCS})
-
+    include(${CMAKE_CURRENT_LIST_DIR}/cmake/basic.cmake)
 endif()
