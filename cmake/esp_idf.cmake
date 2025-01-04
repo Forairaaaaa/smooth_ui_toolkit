@@ -1,0 +1,27 @@
+# Src files
+file(GLOB_RECURSE SMOOTH_UI_TOOLKIT_SRCS
+    ${SMOOTH_UI_TOOLKIT_ROOT_DIR}/src/*.c
+    ${SMOOTH_UI_TOOLKIT_ROOT_DIR}/src/*.cc
+    ${SMOOTH_UI_TOOLKIT_ROOT_DIR}/src/*.cpp
+)
+# Include
+set(SMOOTH_UI_TOOLKIT_INCS
+    ${SMOOTH_UI_TOOLKIT_ROOT_DIR}/src/
+    ${SMOOTH_UI_TOOLKIT_ROOT_DIR}/src/lvgl/
+)
+
+# Public component requirement
+set(SMOOTH_UI_TOOLKIT_REQUIRES
+)
+
+# Private component requirement
+set(SMOOTH_UI_TOOLKIT_PRIV_REQUIRES
+)
+
+# Register component
+idf_component_register(
+    SRCS ${SMOOTH_UI_TOOLKIT_SRCS}
+    INCLUDE_DIRS ${SMOOTH_UI_TOOLKIT_INCS}
+    REQUIRES ${SMOOTH_UI_TOOLKIT_REQUIRES}
+    PRIV_REQUIRES ${SMOOTH_UI_TOOLKIT_PRIV_REQUIRES}
+)

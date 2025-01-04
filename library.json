@@ -1,6 +1,6 @@
 {
     "name": "SmoothUIToolKit",
-    "version": "1.1.2",
+    "version": "2.0.0",
     "description": "带动画曲线插值的 UI 抽象工具集",
     "keywords": "ui, smooth, easing path",
     "repository": {
