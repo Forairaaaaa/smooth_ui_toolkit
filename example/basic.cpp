@@ -9,6 +9,7 @@
  *
  */
 #include <smooth_ui_toolkit.h>
+#include <iostream>
 
 int main()
 {
