@@ -11,6 +11,7 @@
 #include <smooth_ui_toolkit.h>
 #include <iostream>
 #include <animation/generators/spring/spring.h>
+#include <utils/easing/ease.h>
 
 using namespace smooth_ui_toolkit;
 
@@ -38,6 +39,10 @@ int main()
     }
 
     std::cout << "Final Value: " << anim.getState().value << std::endl;
+
+    std::cout << "Ease In: " << ease_in(0.5) << std::endl;
+    std::cout << "Ease Out: " << ease_out(0.5) << std::endl;
+    std::cout << "Ease In Out: " << ease_in_out(0.5) << std::endl;
 
     return 0;
 }

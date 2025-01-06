@@ -9,9 +9,8 @@
  *
  */
 #include "cubic_bezier.h"
-
-#include <cmath>
 #include <functional>
+#include <cmath>
 
 static const float subdivisionPrecision = 0.0000001;
 static const int subdivisionMaxIterations = 12;
