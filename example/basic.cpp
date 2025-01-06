@@ -24,6 +24,8 @@ int main()
     // anim.springOptions.damping = 20;
     // anim.springOptions.mass = 1;
 
+    // anim.setSpringOptions(800, 0.8, 1);
+
     anim.init();
 
     double t = 0.0;    // 时间

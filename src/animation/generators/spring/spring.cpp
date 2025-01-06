@@ -14,6 +14,31 @@
 
 using namespace smooth_ui_toolkit;
 
+void Spring::setSpringOptions(float duration, float bounce, float visualDuration)
+{
+    // 默认质量
+    springOptions.mass = 1.0f;
+
+    // Clamp 函数，确保 bounce 在合理范围内
+    auto clamp = [](float value, float min, float max) { return std::max(min, std::min(value, max)); };
+
+    // 确保 bounce 在 0.05 到 1 之间
+    bounce = clamp(bounce, 0.05f, 1.0f);
+
+    // 根据 visualDuration 计算 stiffness 和 damping
+    if (visualDuration > 0) {
+        float root = (2 * M_PI) / (visualDuration * 1.2f); // 可视化周期
+        springOptions.stiffness = root * root;             // 刚度
+        springOptions.damping =
+            2 * (1.0f - bounce) * std::sqrt(springOptions.stiffness * springOptions.mass); // 阻尼系数
+    } else {
+        // 如果未提供 visualDuration，使用默认的 duration 和 bounce 来推导
+        springOptions.stiffness = (36 / (duration / 1000.0f) / (duration / 1000.0f)); // 刚度
+        springOptions.damping =
+            2 * (1.0f - bounce) * std::sqrt(springOptions.stiffness * springOptions.mass); // 阻尼系数
+    }
+}
+
 void Spring::init()
 {
     _undamped_angular_freq = std::sqrt(springOptions.stiffness / springOptions.mass);

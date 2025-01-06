@@ -32,6 +32,19 @@ public:
 
     SpringOptions springOptions;
 
+    /**
+     * @brief Set spring options by duration/bounce-based options
+     *
+     * @param duration in ms
+     * @param bounce 0.05~1.0
+     * @param visualDuration in seconds
+     */
+    void setSpringOptions(float duration = 800.0f, float bounce = 0.3f, float visualDuration = 0.3f);
+    inline void setSpringOptions(const SpringOptions& options)
+    {
+        springOptions = options;
+    }
+
     virtual void init() override;
     virtual const AnimationState_t& next(const float& t) override;
 
