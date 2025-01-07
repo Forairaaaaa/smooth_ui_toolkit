@@ -41,6 +41,11 @@ void Spring::setSpringOptions(float duration, float bounce, float visualDuration
 
 void Spring::init()
 {
+    // If or duration or visualDuration is provided, set spring options by duration/bounce-based options
+    if (springOptions.duration > 0 || springOptions.visualDuration > 0) {
+        setSpringOptions(springOptions.duration, springOptions.bounce, springOptions.visualDuration);
+    }
+
     _undamped_angular_freq = std::sqrt(springOptions.stiffness / springOptions.mass);
     _damping_ratio = springOptions.damping / (2 * std::sqrt(springOptions.stiffness * springOptions.mass));
 

@@ -25,7 +25,9 @@ int main()
     anim.animationOptions.start = 50;
     anim.animationOptions.end = 600;
 
-    anim.setSpringOptions(1000, 0.3, 0.8);
+    anim.springOptions.duration = 1000;
+    anim.springOptions.bounce = 0.3;
+    anim.springOptions.visualDuration = 0.8;
 
     raylib::create_window(800, 450, "你好👋", [&]() {
         ClearBackground(BLACK);
