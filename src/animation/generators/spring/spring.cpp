@@ -49,7 +49,7 @@ void Spring::init()
     _undamped_angular_freq = std::sqrt(springOptions.stiffness / springOptions.mass);
     _damping_ratio = springOptions.damping / (2 * std::sqrt(springOptions.stiffness * springOptions.mass));
 
-    float initialDelta = animationOptions.end - animationOptions.start;
+    float initialDelta = end - start;
 
     // 根据阻尼比选择不同的公式
     if (_damping_ratio < 1) {
@@ -60,7 +60,7 @@ void Spring::init()
         _resolve_spring = [=](float t) {
             float envelope = std::exp(-_damping_ratio * _undamped_angular_freq * t);
 
-            return (animationOptions.end -
+            return (end -
                     envelope * (((springOptions.velocity + _damping_ratio * _undamped_angular_freq * initialDelta) /
                                  angularFreq) *
                                     std::sin(angularFreq * t) +
@@ -70,9 +70,8 @@ void Spring::init()
         // 临界阻尼
         // Critically damped spring
         _resolve_spring = [=](float t) {
-            return animationOptions.end -
-                   std::exp(-_undamped_angular_freq * t) *
-                       (initialDelta + (springOptions.velocity + _undamped_angular_freq * initialDelta) * t);
+            return end - std::exp(-_undamped_angular_freq * t) *
+                             (initialDelta + (springOptions.velocity + _undamped_angular_freq * initialDelta) * t);
         };
     } else {
         // 过阻尼
@@ -84,7 +83,7 @@ void Spring::init()
             // When performing sinh or cosh values can hit Infinity so we cap them here
             float freqForT = std::min(dampedAngularFreq * t, 300.0f);
 
-            return (animationOptions.end -
+            return (end -
                     (envelope * ((springOptions.velocity + _damping_ratio * _undamped_angular_freq * initialDelta) *
                                      std::sinh(freqForT) +
                                  dampedAngularFreq * initialDelta * std::cosh(freqForT))) /
@@ -93,15 +92,15 @@ void Spring::init()
     }
 }
 
-const AnimationState_t& Spring::next(const float& t)
+bool Spring::next(const float& t)
 {
-    if (_animation_state.done) {
-        return _animation_state;
+    if (done) {
+        return done;
     }
 
     // 根据当前时间计算弹簧的值
     if (_resolve_spring) {
-        _animation_state.value = _resolve_spring(t);
+        value = _resolve_spring(t);
     } else {
         init();
     }
@@ -109,11 +108,10 @@ const AnimationState_t& Spring::next(const float& t)
     // 检查是否接近静止
     float currentVelocity = calc_velocity(t);
     bool isBelowVelocityThreshold = std::abs(currentVelocity) <= springOptions.restSpeed;
-    bool isBelowDisplacementThreshold =
-        std::abs(animationOptions.end - _animation_state.value) <= springOptions.restDelta;
-    _animation_state.done = isBelowVelocityThreshold && isBelowDisplacementThreshold;
+    bool isBelowDisplacementThreshold = std::abs(end - value) <= springOptions.restDelta;
+    done = isBelowVelocityThreshold && isBelowDisplacementThreshold;
 
-    return _animation_state;
+    return done;
 }
 
 float Spring::calc_velocity(const float& t)

@@ -49,7 +49,7 @@ public:
     }
 
     virtual void init() override;
-    virtual const AnimationState_t& next(const float& t) override;
+    virtual bool next(const float& t) override;
 
 protected:
     float _damping_ratio;                        // 阻尼比

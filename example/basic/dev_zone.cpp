@@ -22,8 +22,8 @@ using namespace mooncake;
 int main()
 {
     Spring anim;
-    anim.animationOptions.start = 50;
-    anim.animationOptions.end = 600;
+    anim.start = 50;
+    anim.end = 600;
 
     anim.springOptions.duration = 1000;
     anim.springOptions.bounce = 0.3;
@@ -33,7 +33,8 @@ int main()
         ClearBackground(BLACK);
         // DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
 
-        auto value = anim.next(ui_hal::get_tick_s()).value;
+        anim.next(ui_hal::get_tick_s());
+        auto value = anim.value;
         mclog::info("{}", value);
 
         DrawCircle(value, 225, 30, LIGHTGRAY);

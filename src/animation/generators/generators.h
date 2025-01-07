@@ -12,37 +12,22 @@
 
 namespace smooth_ui_toolkit {
 
-struct AnimationOptions_t {
-    float start = 0.0f;
-    float end = 0.0f;
-};
-
-struct AnimationState_t {
-    float value = 0.0f;
-    bool done = false;
-};
-
 class KeyFrameGenerator {
 public:
     KeyFrameGenerator() {}
     virtual ~KeyFrameGenerator() {}
 
-    AnimationOptions_t animationOptions;
+    float start = 0.0f;
+    float end = 0.0f;
+    float value = 0.0f;
+    bool done = false;
 
     virtual void init() {}
 
-    virtual const AnimationState_t& next(const float& t)
+    virtual bool next(const float& t)
     {
-        return _animation_state;
+        return done;
     }
-
-    virtual const AnimationState_t& getState() const
-    {
-        return _animation_state;
-    }
-
-protected:
-    AnimationState_t _animation_state;
 };
 
 } // namespace smooth_ui_toolkit
