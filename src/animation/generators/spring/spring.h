@@ -16,7 +16,7 @@
 
 namespace smooth_ui_toolkit {
 
-struct SpringOptions {
+struct SpringOptions_t {
     float stiffness = 100.0;    // 弹性系数
     float damping = 10.0;       // 阻尼系数
     float mass = 1.0;           // 质量
@@ -33,7 +33,7 @@ public:
     Spring() {}
     ~Spring() {}
 
-    SpringOptions springOptions;
+    SpringOptions_t springOptions;
 
     /**
      * @brief Set spring options by duration/bounce-based options
@@ -43,13 +43,17 @@ public:
      * @param visualDuration in seconds
      */
     void setSpringOptions(float duration = 800.0f, float bounce = 0.3f, float visualDuration = 0.3f);
-    inline void setSpringOptions(const SpringOptions& options)
+    inline void setSpringOptions(const SpringOptions_t& options)
     {
         springOptions = options;
     }
 
     virtual void init() override;
     virtual bool next(const float& t) override;
+    virtual Type_t type() const override
+    {
+        return Type_t::Spring;
+    }
 
 protected:
     float _damping_ratio;                        // 阻尼比

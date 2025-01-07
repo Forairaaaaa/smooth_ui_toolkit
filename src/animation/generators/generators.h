@@ -28,6 +28,13 @@ public:
     {
         return done;
     }
+
+    enum Type_t {
+        Spring = 0,
+        Easing,
+    };
+
+    virtual Type_t type() const = 0;
 };
 
 } // namespace smooth_ui_toolkit

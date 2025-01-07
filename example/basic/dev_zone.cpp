@@ -14,6 +14,7 @@
 #include "raylib.h"
 #include "utils/hal/hal.h"
 #include <animation/generators/spring/spring.h>
+#include <animation/animate/animate.h>
 #include <utils/easing/ease.h>
 
 using namespace smooth_ui_toolkit;
@@ -21,23 +22,42 @@ using namespace mooncake;
 
 int main()
 {
-    Spring anim;
+    // Spring anim;
+    // anim.start = 50;
+    // anim.end = 600;
+
+    // anim.springOptions.duration = 1000;
+    // anim.springOptions.bounce = 0.3;
+    // anim.springOptions.visualDuration = 0.8;
+
+    Animate anim;
     anim.start = 50;
     anim.end = 600;
 
-    anim.springOptions.duration = 1000;
-    anim.springOptions.bounce = 0.3;
-    anim.springOptions.visualDuration = 0.8;
+    anim.springOptions().duration = 1000;
+    anim.springOptions().bounce = 0.3;
+    anim.springOptions().visualDuration = 0.8;
+
+    float shit = 0;
+    anim.onUpdate([&shit](const float& value) {
+        shit = value;
+        mclog::info("{}", shit);
+    });
+    anim.onComplete([&]() {
+        mclog::info("boom");
+        anim.cancel();
+        anim.play();
+    });
+
+    anim.init();
+    anim.play();
 
     raylib::create_window(800, 450, "你好👋", [&]() {
+        anim.update();
+
         ClearBackground(BLACK);
         // DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
-
-        anim.next(ui_hal::get_tick_s());
-        auto value = anim.value;
-        mclog::info("{}", value);
-
-        DrawCircle(value, 225, 30, LIGHTGRAY);
+        DrawCircle(shit, 225, 30, LIGHTGRAY);
     });
 
     return 0;

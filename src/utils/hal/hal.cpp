@@ -38,7 +38,7 @@ float ui_hal::get_tick_s()
     if (ms == 0) {
         return 0;
     }
-    return ms / 1000.0f;
+    return static_cast<float>(ms) / 1000.0f;
 }
 
 static void _default_on_delay(uint32_t ms)
