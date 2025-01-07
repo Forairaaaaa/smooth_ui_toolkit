@@ -123,7 +123,7 @@ void Animate::update_orchestration_state_fsm()
             if (_on_update) {
                 _on_update(value());
             }
-            // Checkout delay timeout
+            // Check delay timeout
             if (ui_hal::get_tick_s() - _start_time >= delay) {
                 _orchestration_state = animate_orchestration_state::on_playing;
                 _start_time = ui_hal::get_tick_s();
@@ -146,19 +146,12 @@ void Animate::update_orchestration_state_fsm()
 
     // Handle on repeat delay
     else {
-        // Checkout delay timeout
+        // Check repeat delay timeout
         if (ui_hal::get_tick_s() - _start_time >= repeatDelay) {
-            // Reset animation by repeat type
-            switch (repeatType) {
-                case animate_repeat_type::loop:
-                    break;
-                case animate_repeat_type::reverse:
-                    std::swap(start, end);
-                    break;
-                case animate_repeat_type::mirror:
-                    break;
+            // Reset animation
+            if (repeatType == animate_repeat_type::reverse) {
+                std::swap(start, end);
             }
-
             init();
             _playing_state = animate_playing_state::playing;
             _orchestration_state = animate_orchestration_state::on_delay;

@@ -20,7 +20,6 @@ namespace animate_repeat_type {
 enum Type_t {
     loop = 0, // Repeats the animation from the start
     reverse,  // Alternates between forward and backwards playback
-    mirror,   // Switches animation origin and target on each iteration
 };
 }
 
