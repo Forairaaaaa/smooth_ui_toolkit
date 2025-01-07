@@ -24,7 +24,7 @@ enum Type_t {
 };
 }
 
-namespace animate_state {
+namespace animate_playing_state {
 enum State_t {
     idle = 0,
     playing,
@@ -34,7 +34,7 @@ enum State_t {
 };
 }
 
-namespace animate_playing_state {
+namespace animate_orchestration_state {
 enum State_t {
     delay = 0,
     playing,
@@ -108,9 +108,12 @@ private:
     std::function<void()> _on_complete;
     std::unique_ptr<KeyFrameGenerator> _key_frame_generator;
     KeyFrameGenerator& get_key_frame_generator();
-    animate_state::State_t _state = animate_state::idle;
-    animate_playing_state::State_t _playing_state = animate_playing_state::playing;
+    animate_playing_state::State_t _playing_state = animate_playing_state::idle;
+    animate_orchestration_state::State_t _orchestration_state = animate_orchestration_state::delay;
     float _start_time = 0.0f;
+
+    void update_playing_state_fsm();
+    void update_orchestration_state_fsm();
 };
 
 } // namespace smooth_ui_toolkit

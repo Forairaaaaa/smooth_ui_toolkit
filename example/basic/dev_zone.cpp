@@ -33,6 +33,7 @@ int main()
     Animate anim;
     anim.start = 50;
     anim.end = 600;
+    anim.delay = 1.5;
 
     anim.springOptions().duration = 1000;
     anim.springOptions().bounce = 0.3;
