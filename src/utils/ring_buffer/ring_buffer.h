@@ -16,6 +16,7 @@
 // https://en.wikipedia.org/wiki/Circular_buffer
 
 namespace smooth_ui_toolkit {
+
 template <typename T, size_t Capacity>
 class ring_buffer {
 public:
@@ -160,4 +161,5 @@ private:
     };
     Data_t _data;
 };
+
 } // namespace smooth_ui_toolkit
