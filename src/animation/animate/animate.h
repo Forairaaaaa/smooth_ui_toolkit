@@ -36,9 +36,9 @@ enum State_t {
 
 namespace animate_orchestration_state {
 enum State_t {
-    delay = 0,
-    playing,
-    repeat_delay,
+    on_delay = 0,
+    on_playing,
+    on_repeat_delay,
 };
 }
 
@@ -109,8 +109,9 @@ private:
     std::unique_ptr<KeyFrameGenerator> _key_frame_generator;
     KeyFrameGenerator& get_key_frame_generator();
     animate_playing_state::State_t _playing_state = animate_playing_state::idle;
-    animate_orchestration_state::State_t _orchestration_state = animate_orchestration_state::delay;
+    animate_orchestration_state::State_t _orchestration_state = animate_orchestration_state::on_delay;
     float _start_time = 0.0f;
+    int _repeat_count = 0;
 
     void update_playing_state_fsm();
     void update_orchestration_state_fsm();

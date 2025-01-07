@@ -10,6 +10,7 @@
  */
 #include "animate.h"
 #include "utils/hal/hal.h"
+#include <functional>
 
 using namespace smooth_ui_toolkit;
 
@@ -24,8 +25,11 @@ SpringOptions_t& Animate::springOptions()
 
 void Animate::init()
 {
+    // Setup key frame generator
     get_key_frame_generator().start = start;
     get_key_frame_generator().end = end;
+    get_key_frame_generator().done = false;
+    get_key_frame_generator().value = start;
     get_key_frame_generator().init();
 }
 
@@ -34,6 +38,12 @@ void Animate::play()
     if (_playing_state == animate_playing_state::playing) {
         return;
     }
+
+    // If not paused, reset repeat count
+    if (_playing_state != animate_playing_state::paused) {
+        _repeat_count = repeat;
+    }
+
     _playing_state = animate_playing_state::playing;
     get_key_frame_generator().done = false;
     _start_time = ui_hal::get_tick_s();
@@ -106,7 +116,8 @@ void Animate::update_playing_state_fsm()
 
 void Animate::update_orchestration_state_fsm()
 {
-    if (_orchestration_state == animate_orchestration_state::delay) {
+    // Handle on delay
+    if (_orchestration_state == animate_orchestration_state::on_delay) {
         if (_playing_state == animate_playing_state::playing) {
             // Invoke callback
             if (_on_update) {
@@ -114,14 +125,45 @@ void Animate::update_orchestration_state_fsm()
             }
             // Checkout delay timeout
             if (ui_hal::get_tick_s() - _start_time >= delay) {
-                _orchestration_state = animate_orchestration_state::playing;
+                _orchestration_state = animate_orchestration_state::on_playing;
                 _start_time = ui_hal::get_tick_s();
             }
         }
     }
 
-    if (_orchestration_state == animate_orchestration_state::playing) {
+    // Handle on playing
+    else if (_orchestration_state == animate_orchestration_state::on_playing) {
         update_playing_state_fsm();
+        if (done() && _repeat_count != 0) {
+            // Decrement repeat count
+            if (_repeat_count > 0) {
+                _repeat_count--;
+            }
+            _orchestration_state = animate_orchestration_state::on_repeat_delay;
+            _start_time = ui_hal::get_tick_s();
+        }
+    }
+
+    // Handle on repeat delay
+    else {
+        // Checkout delay timeout
+        if (ui_hal::get_tick_s() - _start_time >= repeatDelay) {
+            // Reset animation by repeat type
+            switch (repeatType) {
+                case animate_repeat_type::loop:
+                    break;
+                case animate_repeat_type::reverse:
+                    std::swap(start, end);
+                    break;
+                case animate_repeat_type::mirror:
+                    break;
+            }
+
+            init();
+            _playing_state = animate_playing_state::playing;
+            _orchestration_state = animate_orchestration_state::on_delay;
+            _start_time = ui_hal::get_tick_s();
+        }
     }
 }
 

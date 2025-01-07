@@ -31,13 +31,17 @@ int main()
     // anim.springOptions.visualDuration = 0.8;
 
     Animate anim;
-    anim.start = 50;
+    anim.start = 200;
     anim.end = 600;
-    anim.delay = 1.5;
-
+    // anim.delay = 1.0;
+    anim.repeat = -1;
+    // anim.repeatDelay = 1.0;
+    // anim.repeatType = animate_repeat_type::loop;
+    anim.repeatType = animate_repeat_type::reverse;
+    // anim.repeatType = animate_repeat_type::mirror;
     anim.springOptions().duration = 1000;
     anim.springOptions().bounce = 0.3;
-    anim.springOptions().visualDuration = 0.8;
+    anim.springOptions().visualDuration = 0.6;
 
     float shit = 0;
     anim.onUpdate([&shit](const float& value) {
@@ -46,8 +50,8 @@ int main()
     });
     anim.onComplete([&]() {
         mclog::info("boom");
-        anim.cancel();
-        anim.play();
+        // anim.cancel();
+        // anim.play();
     });
 
     anim.init();
