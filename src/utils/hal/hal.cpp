@@ -34,7 +34,11 @@ uint32_t ui_hal::get_tick()
 
 float ui_hal::get_tick_s()
 {
-    return get_tick() / 1000.0f;
+    auto ms = get_tick();
+    if (ms == 0) {
+        return 0;
+    }
+    return ms / 1000.0f;
 }
 
 static void _default_on_delay(uint32_t ms)

@@ -1,16 +1,17 @@
 /**
  * @file dev_zone.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2025-01-07
- * 
+ *
  * @copyright Copyright (c) 2025
- * 
+ *
  */
 #include <smooth_ui_toolkit.h>
 #include <mooncake_log.h>
 #include "../utils/raylib_wrapper.h"
+#include "raylib.h"
 #include "utils/hal/hal.h"
 #include <animation/generators/spring/spring.h>
 #include <utils/easing/ease.h>
@@ -21,14 +22,20 @@ using namespace mooncake;
 int main()
 {
     Spring anim;
-    anim.animationOptions.start = 100;
-    anim.animationOptions.end = 200;
+    anim.animationOptions.start = 50;
+    anim.animationOptions.end = 600;
 
-    // raylib::create_window(800, 450, "你好👋", [&]() {
-    //     ClearBackground(BLACK);
-    //     DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+    anim.setSpringOptions(1000, 0.3, 0.8);
 
-    //     mclog::info("{}ms {:0.2f}s", ui_hal::get_tick_ms(), ui_hal::get_tick_s());
-    // });
+    raylib::create_window(800, 450, "你好👋", [&]() {
+        ClearBackground(BLACK);
+        // DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+
+        auto value = anim.next(ui_hal::get_tick_s()).value;
+        mclog::info("{}", value);
+
+        DrawCircle(value, 225, 30, LIGHTGRAY);
+    });
+
     return 0;
 }

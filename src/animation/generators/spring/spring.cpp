@@ -95,7 +95,11 @@ const AnimationState_t& Spring::next(const float& t)
     }
 
     // 根据当前时间计算弹簧的值
-    _animation_state.value = _resolve_spring(t);
+    if (_resolve_spring) {
+        _animation_state.value = _resolve_spring(t);
+    } else {
+        init();
+    }
 
     // 检查是否接近静止
     float currentVelocity = calc_velocity(t);
