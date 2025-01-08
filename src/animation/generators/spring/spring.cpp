@@ -97,7 +97,7 @@ void Spring::init()
 
 void Spring::retarget(const float& start, const float& end)
 {
-    springOptions.velocity = _current_velocity;
+    springOptions.velocity = -_current_velocity;
     this->start = start;
     this->end = end;
     init();

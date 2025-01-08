@@ -15,6 +15,7 @@
 #include "utils/hal/hal.h"
 #include <animation/generators/spring/spring.h>
 #include <animation/animate/animate.h>
+#include <animation/animate_value/animate_value.h>
 #include <utils/easing/ease.h>
 
 using namespace smooth_ui_toolkit;
@@ -30,52 +31,29 @@ int main()
     // anim.springOptions.bounce = 0.3;
     // anim.springOptions.visualDuration = 0.8;
 
-    Animate anim;
-    anim.start = 200;
-    anim.end = 600;
-    anim.delay = 0.8;
-    // anim.repeat = 3;
-    // anim.repeatDelay = 1.0;
-    // anim.repeatType = animate_repeat_type::loop;
-    anim.repeatType = animate_repeat_type::reverse;
-    // anim.repeatType = animate_repeat_type::mirror;
+    AnimateValue anim_val;
+    anim_val = 100;
+    mclog::info("{}", (float)anim_val);
 
-    anim.springOptions().duration = 1000;
-    anim.springOptions().bounce = 0.4;
-    anim.springOptions().visualDuration = 0.6;
+    anim_val = 600;
+    mclog::info("{}", (float)anim_val);
 
-    float shit = 0;
-    anim.onUpdate([&](const float& value) {
-        // mclog::info("{}", value);
-        shit = value;
+    anim_val.begin();
+    mclog::info("{}", (float)anim_val);
 
-        static bool retargeted = false;
-        if ((int)value == 600 && !retargeted) {
-            mclog::info("retargeted");
-            retargeted = true;
-            anim.retarget(value, 300);
-        }
-    });
-    anim.onComplete([&]() {
-        mclog::info("boom");
-        // anim.cancel();
-        // anim.play();
-    });
-
-    anim.init();
-    anim.play();
-    // anim.cancel();
-    // anim.complete();
-    // anim.pause();
-    // ui_hal::delay_s(3);
-    // anim.play();
+    anim_val = 100;
+    mclog::info("{}", (float)anim_val);
 
     raylib::create_window(800, 450, "你好👋", [&]() {
-        anim.update();
-
         ClearBackground(BLACK);
         // DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
-        DrawCircle(shit, 225, 30, LIGHTGRAY);
+        DrawCircle(anim_val, 225, 30, LIGHTGRAY);
+
+        // mclog::info("mouse {} {} {}", GetMouseX(), GetMouseY(), IsMouseButtonPressed(MOUSE_BUTTON_LEFT));
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            mclog::info("{}", GetMouseX());
+            anim_val = GetMouseX();
+        }
     });
 
     return 0;

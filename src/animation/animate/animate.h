@@ -45,7 +45,7 @@ enum State_t {
 class Animate {
 public:
     Animate() {}
-    ~Animate() {}
+    virtual ~Animate() {}
 
     // Start value
     float start = 0.0f;
@@ -139,7 +139,7 @@ public:
         return get_key_frame_generator().value;
     }
 
-private:
+protected:
     std::function<void(const float&)> _on_update;
     std::function<void()> _on_complete;
     std::unique_ptr<KeyFrameGenerator> _key_frame_generator;
