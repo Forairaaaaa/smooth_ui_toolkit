@@ -72,13 +72,41 @@ public:
         _on_complete = callback;
     }
 
+    /**
+     * @brief Init animation
+     *
+     */
     void init();
 
+    /**
+     * @brief Start playing animation, If an animation is paused, it will resume from its current time, If animation has
+     * finished, it will restart
+     *
+     */
     void play();
+
+    /**
+     * @brief Pauses the animation until resumed with play()
+     *
+     */
     void pause();
+
+    /**
+     * @brief Immediately completes the animation, running it to the end state
+     *
+     */
     void complete();
+
+    /**
+     * @brief Cancels the animation, reverting it to the initial state
+     *
+     */
     void cancel();
 
+    /**
+     * @brief Update animation, keep calling this method to update animation, callbacks will be invoked in this method
+     *
+     */
     void update();
 
     /**
