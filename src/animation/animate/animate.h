@@ -105,6 +105,14 @@ public:
     void cancel();
 
     /**
+     * @brief Reset start and end value dynamically, spring animation will animate to new value with current velocity
+     *
+     * @param start
+     * @param end
+     */
+    void retarget(const float& start, const float& end);
+
+    /**
      * @brief Update animation, keep calling this method to update animation, callbacks will be invoked in this method
      *
      */

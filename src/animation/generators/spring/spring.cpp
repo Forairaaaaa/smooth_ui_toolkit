@@ -41,6 +41,9 @@ void Spring::setSpringOptions(float duration, float bounce, float visualDuration
 
 void Spring::init()
 {
+    done = false;
+    value = start;
+
     // If or duration or visualDuration is provided, set spring options by duration/bounce-based options
     if (springOptions.duration > 0 || springOptions.visualDuration > 0) {
         setSpringOptions(springOptions.duration, springOptions.bounce, springOptions.visualDuration);
@@ -92,6 +95,14 @@ void Spring::init()
     }
 }
 
+void Spring::retarget(const float& start, const float& end)
+{
+    springOptions.velocity = _current_velocity;
+    this->start = start;
+    this->end = end;
+    init();
+}
+
 bool Spring::next(const float& t)
 {
     if (done) {
@@ -106,19 +117,19 @@ bool Spring::next(const float& t)
     }
 
     // 检查是否接近静止
-    float currentVelocity = calc_velocity(t);
-    bool isBelowVelocityThreshold = std::abs(currentVelocity) <= springOptions.restSpeed;
+    calc_velocity(t);
+    bool isBelowVelocityThreshold = std::abs(_current_velocity) <= springOptions.restSpeed;
     bool isBelowDisplacementThreshold = std::abs(end - value) <= springOptions.restDelta;
     done = isBelowVelocityThreshold && isBelowDisplacementThreshold;
 
     return done;
 }
 
-float Spring::calc_velocity(const float& t)
+void Spring::calc_velocity(const float& t)
 {
     // 简单近似速度计算
     const float dt = 1e-5; // 微小时间增量
-    return (_resolve_spring(t + dt) - _resolve_spring(t)) / dt;
+    _current_velocity = (_resolve_spring(t + dt) - _resolve_spring(t)) / dt;
 }
 
 float Spring::calc_angular_freq(float undampedFreq, float dampingRatio)

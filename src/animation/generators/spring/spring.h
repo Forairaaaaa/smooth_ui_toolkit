@@ -49,6 +49,7 @@ public:
     }
 
     virtual void init() override;
+    virtual void retarget(const float& start, const float& end) override;
     virtual bool next(const float& t) override;
     virtual Type_t type() const override
     {
@@ -58,9 +59,10 @@ public:
 protected:
     float _damping_ratio;                        // 阻尼比
     float _undamped_angular_freq;                // 未阻尼角频率
+    float _current_velocity;                     // 当前速度
     std::function<float(float)> _resolve_spring; // 动画计算公式
 
-    float calc_velocity(const float& t);
+    void calc_velocity(const float& t);
     float calc_angular_freq(float undampedFreq, float dampingRatio);
 };
 

@@ -28,8 +28,6 @@ void Animate::init()
     // Setup key frame generator
     get_key_frame_generator().start = start;
     get_key_frame_generator().end = end;
-    get_key_frame_generator().done = false;
-    get_key_frame_generator().value = start;
     get_key_frame_generator().init();
 }
 
@@ -82,6 +80,15 @@ void Animate::cancel()
     _orchestration_state = animate_orchestration_state::on_delay;
     get_key_frame_generator().done = false;
     get_key_frame_generator().value = start;
+}
+
+void Animate::retarget(const float& start, const float& end)
+{
+    get_key_frame_generator().retarget(start, end);
+    if (_playing_state != animate_playing_state::paused) {
+        _playing_state = animate_playing_state::idle;
+        play();
+    }
 }
 
 void Animate::update()
