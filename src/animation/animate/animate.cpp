@@ -39,14 +39,18 @@ void Animate::play()
         return;
     }
 
-    // If not paused, reset repeat count
-    if (_playing_state != animate_playing_state::paused) {
+    // If paused, add pause time to start time, resume animation
+    if (_playing_state == animate_playing_state::paused) {
+        _start_time += ui_hal::get_tick_s() - _pause_time;
+    }
+    // If not, reset repeat count and start time, start animation
+    else {
         _repeat_count = repeat;
+        _start_time = ui_hal::get_tick_s();
     }
 
     _playing_state = animate_playing_state::playing;
     get_key_frame_generator().done = false;
-    _start_time = ui_hal::get_tick_s();
 }
 
 void Animate::pause()
@@ -54,6 +58,7 @@ void Animate::pause()
     if (_playing_state == animate_playing_state::playing) {
         _playing_state = animate_playing_state::paused;
         _orchestration_state = animate_orchestration_state::on_delay;
+        _pause_time = ui_hal::get_tick_s();
     }
 }
 
