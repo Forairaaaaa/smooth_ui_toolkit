@@ -53,6 +53,7 @@ void Animate::pause()
 {
     if (_playing_state == animate_playing_state::playing) {
         _playing_state = animate_playing_state::paused;
+        _orchestration_state = animate_orchestration_state::on_delay;
     }
 }
 
@@ -62,6 +63,7 @@ void Animate::complete()
         return;
     }
     _playing_state = animate_playing_state::completed;
+    _orchestration_state = animate_orchestration_state::on_delay;
     get_key_frame_generator().done = false;
     get_key_frame_generator().value = end;
 }
@@ -72,6 +74,7 @@ void Animate::cancel()
         return;
     }
     _playing_state = animate_playing_state::cancelled;
+    _orchestration_state = animate_orchestration_state::on_delay;
     get_key_frame_generator().done = false;
     get_key_frame_generator().value = start;
 }
@@ -118,7 +121,7 @@ void Animate::update_orchestration_state_fsm()
 {
     // Handle on delay
     if (_orchestration_state == animate_orchestration_state::on_delay) {
-        if (_playing_state == animate_playing_state::playing) {
+        if (_playing_state != animate_playing_state::idle && _playing_state != animate_playing_state::paused) {
             // Invoke callback
             if (_on_update) {
                 _on_update(value());

@@ -34,7 +34,7 @@ int main()
     anim.start = 200;
     anim.end = 600;
     // anim.delay = 1.0;
-    anim.repeat = -1;
+    // anim.repeat = -1;
     // anim.repeatDelay = 1.0;
     // anim.repeatType = animate_repeat_type::loop;
     anim.repeatType = animate_repeat_type::reverse;
@@ -56,6 +56,8 @@ int main()
 
     anim.init();
     anim.play();
+    anim.cancel();
+    // anim.complete();
 
     raylib::create_window(800, 450, "你好👋", [&]() {
         anim.update();
