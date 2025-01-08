@@ -13,6 +13,7 @@
 #include "../generators/spring/spring.h"
 #include <functional>
 #include <memory>
+// 参数参考：https://motion.dev/docs/animate#options
 
 namespace smooth_ui_toolkit {
 
