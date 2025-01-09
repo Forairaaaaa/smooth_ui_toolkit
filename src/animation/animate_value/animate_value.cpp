@@ -66,6 +66,7 @@ void AnimateValue::stop()
         return;
     }
     _is_begin = false;
+    _default_value = value();
 }
 
 void AnimateValue::teleport(float newValue)
