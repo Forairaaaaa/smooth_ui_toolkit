@@ -24,9 +24,21 @@ using namespace mooncake;
 
 int main()
 {
-    AnimateValueSequence anim_val;
 
-    anim_val = {50, 500, 100, 600, 300};
+    AnimateValueSequence anim_val = {50, 500, 100, 600, 300};
+
+    // AnimateValueSequence anim_val;
+
+    // std::vector<int> sss = {50, 500, 100, 600, 300};
+    // AnimateValueSequence anim_val = sss;
+
+    // anim_val = {50, 500, 100, 600, 300};
+    // anim_val = sss;
+
+    // std::vector<int> sss = {50, 500, 100, 600, 300};
+    // anim_val.setSequence(sss);
+
+    // anim_val.setSequence({50, 500, 100, 600, 300});
 
     anim_val.play();
 

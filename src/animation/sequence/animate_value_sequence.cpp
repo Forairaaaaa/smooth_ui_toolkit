@@ -13,14 +13,6 @@
 
 using namespace smooth_ui_toolkit;
 
-AnimateValueSequence::AnimateValueSequence() {}
-
-AnimateValueSequence& AnimateValueSequence::operator=(const std::vector<float>& valueSequence)
-{
-    setSequence(valueSequence);
-    return *this;
-}
-
 AnimateValueSequence::operator float()
 {
     return value();
@@ -47,6 +39,22 @@ void AnimateValueSequence::pause()
     }
 }
 
+void AnimateValueSequence::complete()
+{
+    if (!_value_sequence.empty()) {
+        _current_value = _value_sequence.back();
+    }
+    _animate_value.reset();
+}
+
+void AnimateValueSequence::cancel()
+{
+    if (!_value_sequence.empty()) {
+        _current_value = _value_sequence[1];
+    }
+    _animate_value.reset();
+}
+
 void AnimateValueSequence::update()
 {
     if (_animate_value) {
@@ -61,11 +69,6 @@ void AnimateValueSequence::update()
             }
         }
     }
-}
-
-void AnimateValueSequence::setSequence(const std::vector<float>& valueSequence)
-{
-    _value_sequence = valueSequence;
 }
 
 float AnimateValueSequence::value()

@@ -17,21 +17,60 @@ namespace smooth_ui_toolkit {
 
 class AnimateValueSequence {
 public:
-    AnimateValueSequence();
+    AnimateValueSequence() {}
+
+    AnimateValueSequence(const std::initializer_list<float>& valueSequence)
+    {
+        setSequence(valueSequence);
+    }
+
+    template <typename T>
+    AnimateValueSequence(const std::vector<T>& valueSequence)
+    {
+        setSequence(valueSequence);
+    }
+
     ~AnimateValueSequence() {}
 
     // Override assignment operator
-    AnimateValueSequence& operator=(const std::vector<float>& valueSequence);
+    AnimateValueSequence& operator=(const std::initializer_list<float>& valueSequence)
+    {
+        setSequence(valueSequence);
+        return *this;
+    }
+
+    template <typename T>
+    AnimateValueSequence& operator=(const std::vector<T>& valueSequence)
+    {
+        setSequence(valueSequence);
+        return *this;
+    }
 
     // Override type conversion
     operator float();
 
+    void setSequence(const std::initializer_list<float>& valueSequence)
+    {
+        _value_sequence.reserve(valueSequence.size());
+        for (const auto& v : valueSequence) {
+            _value_sequence.push_back(v);
+        }
+    }
+
+    template <typename T>
+    void setSequence(const std::vector<T>& valueSequence)
+    {
+        _value_sequence.reserve(valueSequence.size());
+        for (const auto& v : valueSequence) {
+            _value_sequence.push_back(static_cast<float>(v));
+        }
+    }
+
     void play();
     void pause();
+    void complete();
+    void cancel();
     void update();
-
-    void setSequence(const std::vector<float>& valueSequence);
-
     float value();
 
 private:
