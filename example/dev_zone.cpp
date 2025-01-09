@@ -26,14 +26,13 @@ int main()
 {
     AnimateValueSequence anim_val;
 
-    anim_val = {50, 500, 100, 600};
+    anim_val = {50, 500, 100, 600, 300};
 
-    anim_val.begin();
+    anim_val.play();
 
     raylib::create_window(800, 450, "你好👋", [&]() {
         ClearBackground(BLACK);
         mclog::info("{}", (float)anim_val);
-        anim_val.update();
         DrawCircle(anim_val, 225, 30, LIGHTGRAY);
     });
 

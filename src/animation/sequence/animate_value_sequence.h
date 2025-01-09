@@ -26,12 +26,15 @@ public:
     // Override type conversion
     operator float();
 
-    void begin();
-    void stop();
+    void play();
+    void pause();
     void update();
 
+    void setSequence(const std::vector<float>& valueSequence);
+
+    float value();
+
 private:
-    bool _is_begin = false;
     float _current_value = 0.0f;
     int _current_index = 0;
 

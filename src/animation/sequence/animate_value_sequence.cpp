@@ -17,17 +17,22 @@ AnimateValueSequence::AnimateValueSequence() {}
 
 AnimateValueSequence& AnimateValueSequence::operator=(const std::vector<float>& valueSequence)
 {
-    _value_sequence = valueSequence;
+    setSequence(valueSequence);
     return *this;
 }
 
 AnimateValueSequence::operator float()
 {
-    return _current_value;
+    return value();
 }
 
-void AnimateValueSequence::begin()
+void AnimateValueSequence::play()
 {
+    if (_animate_value) {
+        _animate_value->play();
+        return;
+    }
+    // Reset index and create animate value
     if (!_value_sequence.empty()) {
         _current_index = 0;
         _current_value = _value_sequence[_current_index];
@@ -35,18 +40,36 @@ void AnimateValueSequence::begin()
     }
 }
 
-void AnimateValueSequence::stop() {}
+void AnimateValueSequence::pause()
+{
+    if (_animate_value) {
+        _animate_value->pause();
+    }
+}
 
 void AnimateValueSequence::update()
 {
     if (_animate_value) {
+        _current_value = _animate_value->value();
         if (_animate_value->done()) {
             int next_index = _current_index + 1;
             if (next_index < _value_sequence.size()) {
                 _current_index = next_index;
                 _animate_value->move(_value_sequence[_current_index]);
+            } else {
+                _animate_value.reset();
             }
         }
-        _current_value = _animate_value->value();
     }
+}
+
+void AnimateValueSequence::setSequence(const std::vector<float>& valueSequence)
+{
+    _value_sequence = valueSequence;
+}
+
+float AnimateValueSequence::value()
+{
+    update();
+    return _current_value;
 }
