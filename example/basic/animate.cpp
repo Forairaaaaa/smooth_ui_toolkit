@@ -38,8 +38,11 @@ int main()
     animation.play();
 
     raylib::create_window(800, 450, "你好👋", [&]() {
-        ClearBackground(BLACK);
+        // Update animation
         animation.update();
+
+        // Render
+        ClearBackground(BLACK);
         DrawCircle(animation.value(), 225, 30, LIGHTGRAY);
     });
 

@@ -9,7 +9,6 @@
  *
  */
 #include "../utils/raylib_wrapper.h"
-#include "raylib.h"
 #include <smooth_ui_toolkit.h>
 #include <animation/animate_value/animate_value.h>
 #include <mooncake_log.h>
@@ -19,28 +18,26 @@ using namespace mooncake;
 
 int main()
 {
-    AnimateValue anim_x;
-    AnimateValue anim_y;
-
     // Default value
-    anim_x = 100;
-    anim_y = 225;
+    AnimateValue x = 100;
+    AnimateValue y = 225;
 
     // Begin value animation
-    anim_x.begin();
-    anim_y.begin();
+    x.begin();
+    y.begin();
 
     raylib::create_window(800, 450, "你好👋", [&]() {
-        ClearBackground(BLACK);
-        DrawText("Click To Move The Ball", 280, 200, 20, DARKGRAY);
-        DrawCircle(anim_x, anim_y, 30, LIGHTGRAY);
-
-        // Update new position when click
+        // Update new position on mouse click
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             mclog::info("new postion ({}, {})", GetMouseX(), GetMouseY());
-            anim_x = GetMouseX();
-            anim_y = GetMouseY();
+            x = GetMouseX();
+            y = GetMouseY();
         }
+
+        // Render
+        ClearBackground(BLACK);
+        DrawText("Click To Move The Ball", 280, 200, 20, DARKGRAY);
+        DrawCircle(x, y, 30, LIGHTGRAY);
     });
 
     return 0;
