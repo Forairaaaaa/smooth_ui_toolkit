@@ -7,4 +7,4 @@ todo:
 - [ ] https://motion.dev/docs/react-animation demo
 - [ ] easing key frame generator
 - [ ] sequence
-- [ ] baker?
+- [ ] baker? or fix point easing generator

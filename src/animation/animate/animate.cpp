@@ -179,7 +179,7 @@ void Animate::update_orchestration_state_fsm()
 KeyFrameGenerator& Animate::get_key_frame_generator()
 {
     if (!_key_frame_generator) {
-        _key_frame_generator = std::make_unique<Spring>();
+        _key_frame_generator = std::make_shared<Spring>();
     }
     return *_key_frame_generator;
 }

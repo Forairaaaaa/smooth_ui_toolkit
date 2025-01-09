@@ -142,7 +142,7 @@ public:
 protected:
     std::function<void(const float&)> _on_update;
     std::function<void()> _on_complete;
-    std::unique_ptr<KeyFrameGenerator> _key_frame_generator;
+    std::shared_ptr<KeyFrameGenerator> _key_frame_generator;
     KeyFrameGenerator& get_key_frame_generator();
     animate_playing_state::State_t _playing_state = animate_playing_state::idle;
     animate_orchestration_state::State_t _orchestration_state = animate_orchestration_state::on_delay;
