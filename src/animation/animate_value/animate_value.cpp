@@ -12,19 +12,20 @@
 
 using namespace smooth_ui_toolkit;
 
-void AnimateValue::begin()
+AnimateValue::AnimateValue()
 {
-    start = _default_value;
-    end = _default_value;
-    get_key_frame_generator().value = _default_value;
-    init();
-    play();
+    begin();
+}
+
+AnimateValue::AnimateValue(float defaultValue) : _default_value(defaultValue)
+{
+    begin();
 }
 
 AnimateValue& AnimateValue::operator=(float newValue)
 {
     // If not begin yet, set to default value
-    if (_playing_state == animate_playing_state::idle) {
+    if (!_is_begin) {
         _default_value = newValue;
         return *this;
     }
@@ -39,9 +40,40 @@ AnimateValue& AnimateValue::operator=(float newValue)
 
 AnimateValue::operator float()
 {
-    if (_playing_state == animate_playing_state::idle) {
+    if (!_is_begin) {
         return _default_value;
     }
     update();
     return value();
+}
+
+void AnimateValue::begin()
+{
+    if (_is_begin) {
+        return;
+    }
+    _is_begin = true;
+    start = _default_value;
+    end = _default_value;
+    get_key_frame_generator().value = _default_value;
+    init();
+    play();
+}
+
+void AnimateValue::stop()
+{
+    if (!_is_begin) {
+        return;
+    }
+    _is_begin = false;
+}
+
+void AnimateValue::teleport(float newValue)
+{
+    bool is_begin = _is_begin;
+    stop();
+    _default_value = newValue;
+    if (is_begin) {
+        begin();
+    }
 }

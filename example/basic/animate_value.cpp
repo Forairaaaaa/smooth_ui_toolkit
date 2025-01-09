@@ -22,10 +22,6 @@ int main()
     AnimateValue x = 100;
     AnimateValue y = 225;
 
-    // Begin value animation
-    x.begin();
-    y.begin();
-
     raylib::create_window(800, 450, "你好👋", [&]() {
         // Update new position on mouse click
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {

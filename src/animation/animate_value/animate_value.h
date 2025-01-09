@@ -15,15 +15,9 @@ namespace smooth_ui_toolkit {
 
 class AnimateValue : public Animate {
 public:
-    AnimateValue() {}
-    AnimateValue(float defaultValue) : _default_value(defaultValue) {}
+    AnimateValue();
+    AnimateValue(float defaultValue);
     ~AnimateValue() {}
-
-    /**
-     * @brief Begin value animation
-     *
-     */
-    void begin();
 
     // Override assignment operator
     AnimateValue& operator=(float newValue);
@@ -31,7 +25,26 @@ public:
     // Override type conversion
     operator float();
 
+    /**
+     * @brief Begin value animation
+     *
+     */
+    void begin();
+
+    /**
+     * @brief Stop value animation
+     *
+     */
+    void stop();
+
+    /**
+     * @brief Set to a new value immediately
+     *
+     */
+    void teleport(float newValue);
+
 private:
+    bool _is_begin = false;
     float _default_value = 0.0f;
 };
 
