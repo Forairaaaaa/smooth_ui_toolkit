@@ -43,6 +43,20 @@ public:
      */
     void teleport(float newValue);
 
+    /**
+     * @brief Move to a new value
+     *
+     * @param newValue
+     */
+    void move(float newValue);
+
+    /**
+     * @brief Current value
+     *
+     * @return float
+     */
+    float value();
+
 private:
     bool _is_begin = false;
     float _default_value = 0.0f;
