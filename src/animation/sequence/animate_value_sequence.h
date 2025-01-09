@@ -9,6 +9,7 @@
  *
  */
 #pragma once
+#include "../animate/animate.h"
 #include "../animate_value/animate_value.h"
 #include <memory>
 #include <vector>
@@ -66,6 +67,9 @@ public:
         }
     }
 
+    int repeat = 0;
+    animate_repeat_type::Type_t repeatType = animate_repeat_type::loop;
+
     void play();
     void pause();
     void complete();
@@ -76,6 +80,7 @@ public:
 private:
     float _current_value = 0.0f;
     int _current_index = 0;
+    int _repeat_count = 0;
 
     std::vector<float> _value_sequence;
     std::shared_ptr<AnimateValue> _animate_value;

@@ -29,6 +29,7 @@ void AnimateValueSequence::play()
         _current_index = 0;
         _current_value = _value_sequence[_current_index];
         _animate_value = std::make_shared<AnimateValue>(_current_value);
+        _repeat_count = repeat;
     }
 }
 
@@ -57,15 +58,29 @@ void AnimateValueSequence::cancel()
 
 void AnimateValueSequence::update()
 {
+    // If animate value instance exists
     if (_animate_value) {
         _current_value = _animate_value->value();
+        // If animation is done, retarget to next value
         if (_animate_value->done()) {
             int next_index = _current_index + 1;
             if (next_index < _value_sequence.size()) {
                 _current_index = next_index;
                 _animate_value->move(_value_sequence[_current_index]);
-            } else {
-                _animate_value.reset();
+            }
+            // If reached the end of the sequence
+            else {
+                // If repeat is set, repeat the sequence
+                if (_repeat_count > 0) {
+                    _repeat_count--;
+                    // Reset animation
+                    if (repeatType == animate_repeat_type::reverse) {
+                        std::reverse(_value_sequence.begin(), _value_sequence.end());
+                    }
+                    _current_index = 0;
+                    _current_value = _value_sequence[_current_index];
+                    _animate_value->teleport(_current_value);
+                }
             }
         }
     }

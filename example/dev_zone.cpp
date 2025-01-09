@@ -25,7 +25,10 @@ using namespace mooncake;
 int main()
 {
 
-    AnimateValueSequence anim_val = {50, 500, 100, 600, 300};
+    AnimateValueSequence anim_val = {50, 300, 600};
+
+    anim_val.repeat = 1;
+    anim_val.repeatType = animate_repeat_type::reverse;
 
     // AnimateValueSequence anim_val;
 
