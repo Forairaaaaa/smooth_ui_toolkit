@@ -26,3 +26,6 @@ target_link_libraries(animate_value ${PROJECT_NAME} raylib mooncake_log)
 
 add_executable(animate_value_options ./basic/animate_value_options.cpp)
 target_link_libraries(animate_value_options ${PROJECT_NAME} raylib mooncake_log)
+
+add_executable(basic_animations ./basic/basic_animations.cpp)
+target_link_libraries(basic_animations ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})
