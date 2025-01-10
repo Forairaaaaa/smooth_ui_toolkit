@@ -26,26 +26,58 @@
 #include <utils/easing/ease.h>
 #include <lvgl.h>
 #include <thread>
+#include <vector>
 
 using namespace smooth_ui_toolkit;
 using namespace mooncake;
 
+struct Bubble {
+    AnimateValue x;
+    AnimateValue y;
+    int radius;
+    Color color;
+};
+
 int main()
 {
-    lvgl::create_window(800, 450);
+    std::vector<Bubble> cursors;
 
-    auto shit = lv_obj_create(lv_screen_active());
-    lv_obj_set_align(shit, LV_ALIGN_CENTER);
-    lv_obj_set_size(shit, 140, 140);
-    lv_obj_set_style_transform_pivot_x(shit, 140 / 2, LV_PART_MAIN);
-    lv_obj_set_style_transform_pivot_y(shit, 140 / 2, LV_PART_MAIN);
+    raylib::create_window(
+        800, 450, "你好",
+        [&]() {
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+                for (auto& cursor : cursors) {
+                    cursor.x = GetMouseX();
+                    cursor.y = GetMouseY();
+                }
+            } else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+                for (auto& cursor : cursors) {
+                    cursor.x = GetRandomValue(0, GetScreenWidth());
+                    cursor.y = GetRandomValue(0, GetScreenHeight());
+                }
+            }
 
-    int i = 0;
-    while (1) {
-        lv_obj_set_style_transform_rotation(shit, i += 5, LV_PART_MAIN);
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        lvgl::update_window();
-    }
+            // Render
+            ClearBackground(GetColor(0x181B1F));
+            for (int i = 0; i < cursors.size(); i++) {
+                DrawCircle(cursors[i].x, cursors[i].y, cursors[i].radius, cursors[i].color);
+            }
+        },
+        [&]() {
+            for (int i = 0; i < 1145; i++) {
+                cursors.push_back({
+                    (int)(GetScreenWidth() / 2),
+                    (int)(GetScreenHeight() / 2),
+                    GetRandomValue(3, 6),
+                    GetRandomColor(),
+                });
+                cursors.back().x.springOptions().stiffness = GetRandomValue(50, 150);
+                cursors.back().x.springOptions().damping = GetRandomValue(5, 15);
+                cursors.back().y.springOptions() = cursors.back().x.springOptions();
+                cursors.back().x = GetRandomValue(0, GetScreenWidth());
+                cursors.back().y = GetRandomValue(0, GetScreenHeight());
+            }
+        });
 
     return 0;
 }

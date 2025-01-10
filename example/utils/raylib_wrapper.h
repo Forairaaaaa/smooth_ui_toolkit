@@ -39,3 +39,13 @@ inline void create_window(int width,
 }
 
 } // namespace raylib
+
+inline Color GetRandomColor()
+{
+    Color ret;
+    ret.r = GetRandomValue(0, 255);
+    ret.g = GetRandomValue(0, 255);
+    ret.b = GetRandomValue(0, 255);
+    ret.a = GetRandomValue(10, 255);
+    return ret;
+}
