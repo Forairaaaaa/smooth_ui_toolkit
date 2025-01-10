@@ -14,3 +14,6 @@ target_link_libraries(animate ${PROJECT_NAME} raylib mooncake_log)
 
 add_executable(animate_value ./basic/animate_value.cpp)
 target_link_libraries(animate_value ${PROJECT_NAME} raylib mooncake_log)
+
+add_executable(animate_value_options ./basic/animate_value_options.cpp)
+target_link_libraries(animate_value_options ${PROJECT_NAME} raylib mooncake_log)
