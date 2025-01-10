@@ -116,11 +116,65 @@ public:
             LV_EVENT_VALUE_CHANGED, this);
     }
 
+    int value()
+    {
+        return lv_slider_get_value(_slider);
+    }
+
+    void setValue(int value)
+    {
+        lv_slider_set_value(_slider, value, LV_ANIM_ON);
+        lv_label_set_text_fmt(_value_label, "%d", value);
+    }
+
 private:
     std::function<void(int)> _on_value_changed;
     lv_obj_t* _slider;
     lv_obj_t* _name_label;
     lv_obj_t* _value_label;
+};
+
+class Button {
+public:
+    Button(const char* label = "")
+    {
+        _button = lv_button_create(lv_screen_active());
+        lv_obj_center(_button);
+        _label = lv_label_create(_button);
+        lv_obj_center(_label);
+        lv_label_set_text(_label, label);
+    }
+
+    void move(int x, int y)
+    {
+        lv_obj_set_x(_button, x);
+        lv_obj_set_y(_button, y);
+    }
+
+    void label(const char* label)
+    {
+        lv_label_set_text(_label, label);
+    }
+
+    void onClick(std::function<void(void)> callback)
+    {
+        _on_click = callback;
+        lv_obj_add_event_cb(
+            _button,
+            [](lv_event_t* e) {
+                lv_obj_t* button = (lv_obj_t*)lv_event_get_target(e);
+                auto this_class = (Button*)lv_event_get_user_data(e);
+                if (this_class->_on_click) {
+                    this_class->_on_click();
+                }
+            },
+            LV_EVENT_CLICKED, this);
+    }
+
+private:
+    std::function<void(void)> _on_click;
+    lv_obj_t* _button;
+    lv_obj_t* _label;
 };
 
 } // namespace lvgl

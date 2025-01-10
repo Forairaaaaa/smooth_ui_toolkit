@@ -12,6 +12,9 @@
 #include <mooncake_log.h>
 #include <smooth_ui_toolkit.h>
 #include <animation/animate_value/animate_value.h>
+#include <src/core/lv_obj_private.h>
+#include <src/display/lv_display.h>
+#include <src/widgets/button/lv_button.h>
 
 using namespace mooncake;
 using namespace smooth_ui_toolkit;
@@ -24,13 +27,13 @@ struct Position {
 
 int main()
 {
-    lvgl::create_window(800, 450);
+    lvgl::create_window(800, 520);
 
     // Create a box
     lvgl::Box box(250, 250);
 
     // Set the box default position
-    const int box_default_x = -230;
+    const int box_default_x = -220;
     const int box_default_y = 0;
     const int box_default_rotate = 0;
 
@@ -57,6 +60,19 @@ int main()
     slider_rotate.onValueChanged([&](int value) {
         box_position.rotate = box_default_rotate + value;
         mclog::info("move box rotate to {}", value);
+    });
+
+    // Create reset button
+    lvgl::Button button("reset");
+    button.move(300, -200);
+    button.onClick([&]() {
+        box_position.x = box_default_x;
+        box_position.y = box_default_y;
+        box_position.rotate = box_default_rotate;
+        slider_x.setValue(0);
+        slider_y.setValue(0);
+        slider_rotate.setValue(0);
+        mclog::info("reset box position");
     });
 
     // Lvgl loop
