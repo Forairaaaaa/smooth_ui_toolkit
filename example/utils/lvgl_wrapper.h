@@ -10,12 +10,11 @@
  */
 #pragma once
 #include <functional>
-#include <thread>
 #include <lvgl.h>
 
 namespace lvgl {
 
-void create_window(int width, int height)
+inline void create_window(int width, int height)
 {
     lv_init();
 
@@ -39,7 +38,7 @@ void create_window(int width, int height)
     lv_obj_set_scroll_dir(lv_screen_active(), LV_DIR_NONE);
 }
 
-void update_window()
+inline void update_window()
 {
     lv_timer_handler();
 }
@@ -54,6 +53,7 @@ public:
         lv_obj_set_style_transform_pivot_x(_box, width / 2, LV_PART_MAIN);
         lv_obj_set_style_transform_pivot_y(_box, height / 2, LV_PART_MAIN);
         lv_obj_set_style_radius(_box, (width + height) / 12, LV_PART_MAIN);
+        lv_obj_set_style_border_color(_box, lv_theme_get_color_primary(lv_screen_active()), LV_PART_MAIN);
     }
 
     void move(const int& x, const int& y, const int& rotate)
