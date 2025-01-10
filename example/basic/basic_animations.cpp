@@ -35,12 +35,11 @@ public:
         lv_obj_set_style_radius(_lv_obj, (width + height) / 12, LV_PART_MAIN);
     }
 
-    void move(const Position& newPosition)
+    void move(const int& x, const int& y, const int& rotate)
     {
-        mclog::info("box move to {} {} {}", (int)newPosition.x, (int)newPosition.y, (int)newPosition.rotate);
-        lv_obj_set_x(_lv_obj, newPosition.x);
-        lv_obj_set_y(_lv_obj, newPosition.y);
-        lv_obj_set_style_transform_rotation(_lv_obj, newPosition.rotate * 10, LV_PART_MAIN);
+        lv_obj_set_x(_lv_obj, x);
+        lv_obj_set_y(_lv_obj, y);
+        lv_obj_set_style_transform_rotation(_lv_obj, rotate * 10, LV_PART_MAIN);
     }
 
 private:
@@ -103,7 +102,7 @@ int main()
     const int box_default_y = 0;
     const int box_default_rotate = 0;
     Box box(250, 250);
-    box.move({box_default_x, box_default_y, box_default_rotate});
+    box.move(box_default_x, box_default_y, box_default_rotate);
 
     // Create box new postion buffer
     Position box_position = {box_default_x, box_default_y, box_default_rotate};
@@ -113,25 +112,27 @@ int main()
     slider_x.move(180, -100);
     slider_x.onValueChanged([&](int value) {
         box_position.x = box_default_x + value;
-        box.move(box_position);
+        mclog::info("move box x to {}", value);
     });
 
     Slider slider_y("y", -200, 200);
     slider_y.move(180, 0);
     slider_y.onValueChanged([&](int value) {
         box_position.y = box_default_y + value;
-        box.move(box_position);
+        mclog::info("move box y to {}", value);
     });
 
     Slider slider_rotate("rotate", -180, 180);
     slider_rotate.move(180, 100);
     slider_rotate.onValueChanged([&](int value) {
         box_position.rotate = box_default_rotate + value;
-        box.move(box_position);
+        mclog::info("move box rotate to {}", value);
     });
 
     // Lvgl loop
     while (1) {
+        // Keep moving the box to the new position
+        box.move(box_position.x, box_position.y, box_position.rotate);
         lvgl::update_window();
     }
 
