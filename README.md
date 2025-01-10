@@ -2,6 +2,8 @@ git clone -b 5.5 https://github.com/raysan5/raylib.git
 
 git clone https://github.com/Forairaaaaa/mooncake_log.git
 
+git clone -b v9.2.2 https://github.com/lvgl/lvgl.git
+
 todo:
 - [x] animate value default value by constructor
 - [ ] https://motion.dev/docs/react-animation demo

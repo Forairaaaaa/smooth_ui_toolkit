@@ -13,43 +13,39 @@
 #include "utils/raylib_wrapper.h"
 #include "raylib.h"
 #include "utils/hal/hal.h"
+#include "utils/lvgl_wrapper.h"
 #include <animation/generators/spring/spring.h>
 #include <animation/animate/animate.h>
 #include <animation/animate_value/animate_value.h>
 #include <animation/sequence/animate_value_sequence.h>
+#include <src/core/lv_obj.h>
+#include <src/core/lv_obj_pos.h>
+#include <src/core/lv_obj_style_gen.h>
+#include <src/display/lv_display.h>
+#include <src/misc/lv_area.h>
 #include <utils/easing/ease.h>
+#include <lvgl.h>
+#include <thread>
 
 using namespace smooth_ui_toolkit;
 using namespace mooncake;
 
 int main()
 {
+    lvgl::create_window(800, 450);
 
-    AnimateValueSequence anim_val = {50, 300, 600};
+    auto shit = lv_obj_create(lv_screen_active());
+    lv_obj_set_align(shit, LV_ALIGN_CENTER);
+    lv_obj_set_size(shit, 140, 140);
+    lv_obj_set_style_transform_pivot_x(shit, 140 / 2, LV_PART_MAIN);
+    lv_obj_set_style_transform_pivot_y(shit, 140 / 2, LV_PART_MAIN);
 
-    anim_val.repeat = 1;
-    anim_val.repeatType = animate_repeat_type::reverse;
-
-    // AnimateValueSequence anim_val;
-
-    // std::vector<int> sss = {50, 500, 100, 600, 300};
-    // AnimateValueSequence anim_val = sss;
-
-    // anim_val = {50, 500, 100, 600, 300};
-    // anim_val = sss;
-
-    // std::vector<int> sss = {50, 500, 100, 600, 300};
-    // anim_val.setSequence(sss);
-
-    // anim_val.setSequence({50, 500, 100, 600, 300});
-
-    anim_val.play();
-
-    raylib::create_window(800, 450, "你好👋", [&]() {
-        ClearBackground(BLACK);
-        mclog::info("{}", (float)anim_val);
-        DrawCircle(anim_val, 225, 30, LIGHTGRAY);
-    });
+    int i = 0;
+    while (1) {
+        lv_obj_set_style_transform_rotation(shit, i += 5, LV_PART_MAIN);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        lvgl::update_window();
+    }
 
     return 0;
 }

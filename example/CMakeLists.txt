@@ -1,10 +1,19 @@
 # Dependencies
 add_subdirectory(dependencies/raylib)
+
 set(MOONCAKE_LOG_BUILD_EXAMPLE OFF)
 add_subdirectory(dependencies/mooncake_log)
 
+set(LV_CONF_INCLUDE_SIMPLE OFF)
+set(LV_CONF_PATH ../../utils/lv_conf.h)
+add_subdirectory(dependencies/lvgl)
+
+find_package(SDL2 REQUIRED SDL2)
+include_directories(PUBLIC ${SDL2_INCLUDE_DIRS})
+target_include_directories(lvgl PUBLIC ${SDL2_INCLUDE_DIRS})
+
 add_executable(dev_zone ./dev_zone.cpp)
-target_link_libraries(dev_zone ${PROJECT_NAME} raylib mooncake_log)
+target_link_libraries(dev_zone ${PROJECT_NAME} raylib mooncake_log lvgl lvgl_examples lvgl_demos ${SDL2_LIBRARIES})
 
 add_executable(ui_hal ./basic/ui_hal.cpp)
 target_link_libraries(ui_hal ${PROJECT_NAME} raylib mooncake_log)
