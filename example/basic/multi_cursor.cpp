@@ -56,9 +56,16 @@ int main()
     }
 
     raylib::create_window(
-        800, 450, "你好👋",
+        800, 450, "你好",
         [&]() {
-            update_cursors(GetMouseX(), GetMouseY(), cursors);
+            // If mouse inside of window, move to mouse position
+            if (CheckCollisionPointRec(GetMousePosition(), (Rectangle){0, 0, 800, 450})) {
+                update_cursors(GetMouseX(), GetMouseY(), cursors);
+            }
+            // If not, move back to center
+            else {
+                update_cursors(GetScreenWidth() / 2, GetScreenHeight() / 2, cursors);
+            }
 
             // Render
             ClearBackground(GetColor(0x181B1F));

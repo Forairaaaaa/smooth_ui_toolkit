@@ -22,7 +22,7 @@ int main()
     AnimateValue x = 100;
     AnimateValue y = 225;
 
-    raylib::create_window(800, 450, "你好👋", [&]() {
+    raylib::create_window(800, 450, "你好", [&]() {
         // Update new position on mouse click
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             mclog::info("new postion ({}, {})", GetMouseX(), GetMouseY());

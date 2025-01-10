@@ -37,7 +37,7 @@ int main()
     animation.init();
     animation.play();
 
-    raylib::create_window(800, 450, "你好👋", [&]() {
+    raylib::create_window(800, 450, "你好", [&]() {
         // Update animation
         animation.update();
 
