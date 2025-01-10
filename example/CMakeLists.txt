@@ -29,3 +29,6 @@ target_link_libraries(animate_value_options ${PROJECT_NAME} raylib mooncake_log)
 
 add_executable(basic_animations ./basic/basic_animations.cpp)
 target_link_libraries(basic_animations ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})
+
+add_executable(multi_cursor ./basic/multi_cursor.cpp)
+target_link_libraries(multi_cursor ${PROJECT_NAME} raylib mooncake_log)

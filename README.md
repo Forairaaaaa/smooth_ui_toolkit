@@ -6,7 +6,8 @@ git clone -b v9.2.2 https://github.com/lvgl/lvgl.git
 
 todo:
 - [x] animate value default value by constructor
-- [ ] https://motion.dev/docs/react-animation demo
+- [x] https://motion.dev/docs/react-animation demo
+- [x] https://motion.dev/docs/react-animation motion+ Multicursor demo
 - [ ] easing key frame generator
 - [ ] sequence
 - [ ] baker? or fix point easing generator

@@ -15,9 +15,17 @@
 
 namespace raylib {
 
-inline void create_window(int width, int height, const char* title, std::function<void()> onDraw)
+inline void create_window(int width,
+                          int height,
+                          const char* title,
+                          std::function<void()> onDraw,
+                          std::function<void()> onSetup = nullptr)
 {
     InitWindow(width, height, title);
+
+    if (onSetup) {
+        onSetup();
+    }
 
     while (!WindowShouldClose()) {
         BeginDrawing();
