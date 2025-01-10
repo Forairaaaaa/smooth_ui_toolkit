@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2025
  *
  */
+// Refs: https://motion.dev/docs/react-animation#basic-animations
 #include "../utils/lvgl_wrapper.h"
 #include <mooncake_log.h>
 #include <smooth_ui_toolkit.h>
