@@ -45,7 +45,7 @@ int main()
             }
 
             // Render
-            ClearBackground(GetColor(0x181B1F));
+            ClearBackground(BLACK);
             for (int i = 0; i < bubbles.size(); i++) {
                 DrawCircle(bubbles[i].x, bubbles[i].y, bubbles[i].radius, bubbles[i].color);
             }
