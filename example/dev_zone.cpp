@@ -27,57 +27,28 @@
 #include <lvgl.h>
 #include <thread>
 #include <vector>
+#include <lvgl/lvgl_cpp/obj.hpp>
 
 using namespace smooth_ui_toolkit;
 using namespace mooncake;
 
-struct Bubble {
-    AnimateValue x;
-    AnimateValue y;
-    int radius;
-    Color color;
-};
-
 int main()
 {
-    std::vector<Bubble> cursors;
+    lvgl::create_window(800, 480);
 
-    raylib::create_window(
-        800, 450, "你好",
-        [&]() {
-            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-                for (auto& cursor : cursors) {
-                    cursor.x = GetMouseX();
-                    cursor.y = GetMouseY();
-                }
-            } else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-                for (auto& cursor : cursors) {
-                    cursor.x = GetRandomValue(0, GetScreenWidth());
-                    cursor.y = GetRandomValue(0, GetScreenHeight());
-                }
-            }
+    lvgl_cpp::LvObject obj;
+    obj.setPos(100, 100);
+    obj.setSize(200, 200);
+    obj.setBgColor(lv_color_make(0x00, 0x00, 0xFF));
+    obj.setRadius(20);
+    obj.setBorderWidth(5);
+    obj.setBorderColor(lv_color_make(0xFF, 0x00, 0x00));
+    obj.setRotation(45);
+    obj.setScrollbarMode(LV_SCROLLBAR_MODE_OFF);
 
-            // Render
-            ClearBackground(GetColor(0x181B1F));
-            for (int i = 0; i < cursors.size(); i++) {
-                DrawCircle(cursors[i].x, cursors[i].y, cursors[i].radius, cursors[i].color);
-            }
-        },
-        [&]() {
-            for (int i = 0; i < 1145; i++) {
-                cursors.push_back({
-                    (int)(GetScreenWidth() / 2),
-                    (int)(GetScreenHeight() / 2),
-                    GetRandomValue(3, 6),
-                    GetRandomColor(),
-                });
-                cursors.back().x.springOptions().stiffness = GetRandomValue(50, 150);
-                cursors.back().x.springOptions().damping = GetRandomValue(5, 15);
-                cursors.back().y.springOptions() = cursors.back().x.springOptions();
-                cursors.back().x = GetRandomValue(0, GetScreenWidth());
-                cursors.back().y = GetRandomValue(0, GetScreenHeight());
-            }
-        });
+    while (1) {
+        lvgl::update_window();
+    }
 
     return 0;
 }
