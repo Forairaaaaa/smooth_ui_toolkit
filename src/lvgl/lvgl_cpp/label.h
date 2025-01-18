@@ -11,6 +11,7 @@
 #pragma once
 #include "obj.h"
 #include <lvgl.h>
+#include <string>
 
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
@@ -23,11 +24,16 @@ public:
         lv_obj_null_on_delete(&_lv_obj);
     }
 
-    virtual ~LvLabel(){};
+    virtual ~LvLabel() {};
 
     void setText(const char* text)
     {
         lv_label_set_text(_lv_obj, text);
+    }
+
+    void setText(const std::string& text)
+    {
+        lv_label_set_text(_lv_obj, text.c_str());
     }
 
     void setTextColor(lv_color_t color, lv_style_selector_t selector = LV_PART_MAIN)
