@@ -58,6 +58,10 @@ int main()
 
     lvgl_cpp::LvButton button(lv_screen_active());
     button.label().setText("shabi!");
+    button.setAlign(LV_ALIGN_CENTER);
+    button.onPressed([](lv_event_t* e) { mclog::info("fucking pressed!"); });
+    button.onRelease([](lv_event_t* e) { mclog::info("fucking released!"); });
+    button.onClick([](lv_event_t* e) { mclog::info("fucking clicked!"); });
 
     while (1) {
         lvgl::update_window();

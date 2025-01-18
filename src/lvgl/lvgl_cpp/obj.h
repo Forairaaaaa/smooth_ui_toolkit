@@ -1,12 +1,12 @@
 /**
  * @file obj.h
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2025-01-18
- * 
+ *
  * @copyright Copyright (c) 2025
- * 
+ *
  */
 #pragma once
 #include <lvgl.h>
@@ -160,6 +160,26 @@ public:
     {
         lv_obj_update_layout(_lv_obj);
         return lv_obj_get_height(_lv_obj);
+    }
+
+    void addEventCb(lv_event_cb_t event_cb, lv_event_code_t filter, void* user_data = nullptr)
+    {
+        lv_obj_add_event_cb(_lv_obj, event_cb, filter, user_data);
+    }
+
+    void onPressed(lv_event_cb_t event_cb, void* user_data = nullptr)
+    {
+        addEventCb(event_cb, LV_EVENT_PRESSED, user_data);
+    }
+
+    void onRelease(lv_event_cb_t event_cb, void* user_data = nullptr)
+    {
+        addEventCb(event_cb, LV_EVENT_RELEASED, user_data);
+    }
+
+    void onClick(lv_event_cb_t event_cb, void* user_data = nullptr)
+    {
+        addEventCb(event_cb, LV_EVENT_CLICKED, user_data);
     }
 
 protected:

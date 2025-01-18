@@ -11,6 +11,7 @@
 #pragma once
 #include "obj.h"
 #include "label.h"
+#include <memory>
 
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
@@ -23,7 +24,7 @@ public:
         lv_obj_null_on_delete(&_lv_obj);
     }
 
-    virtual ~LvButton(){};
+    virtual ~LvButton() {};
 
     LvLabel& label()
     {
