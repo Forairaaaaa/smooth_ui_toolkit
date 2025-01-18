@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2025
  *
  */
+#include <memory>
 #include <smooth_ui_toolkit.h>
 #include <mooncake_log.h>
 #include "utils/raylib_wrapper.h"
@@ -30,6 +31,7 @@
 #include <vector>
 #include <lvgl/lvgl_cpp/obj.h>
 #include <lvgl/lvgl_cpp/label.h>
+#include <lvgl/lvgl_cpp/button.h>
 
 using namespace smooth_ui_toolkit;
 using namespace mooncake;
@@ -48,11 +50,14 @@ int main()
     // obj.setRotation(45);
     // obj.setScrollbarMode(LV_SCROLLBAR_MODE_OFF);
 
-    lvgl_cpp::LvLabel label(lv_screen_active());
-    label.setPos(100, 100);
-    label.setRotation(45);
-    label.setTextColor(lv_color_hex(0x666666));
-    label.setText("Hello, world!");
+    // lvgl_cpp::LvLabel label(lv_screen_active());
+    // label.setPos(100, 100);
+    // label.setRotation(45);
+    // label.setTextColor(lv_color_hex(0x666666));
+    // label.setText("Hello, world!");
+
+    lvgl_cpp::LvButton button(lv_screen_active());
+    button.label().setText("shabi!");
 
     while (1) {
         lvgl::update_window();
