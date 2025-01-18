@@ -1,12 +1,12 @@
 /**
- * @file obj.hpp
+ * @file obj.h
  * @author Forairaaaaa
- * @brief
+ * @brief 
  * @version 0.1
  * @date 2025-01-18
- *
+ * 
  * @copyright Copyright (c) 2025
- *
+ * 
  */
 #pragma once
 #include <lvgl.h>
@@ -16,13 +16,10 @@ namespace lvgl_cpp {
 
 class LvObject {
 public:
-    LvObject(lv_obj_t* parent = nullptr)
+    LvObject() = default;
+    LvObject(lv_obj_t* parent)
     {
-        if (parent) {
-            _lv_obj = lv_obj_create(parent);
-        } else {
-            _lv_obj = lv_obj_create(lv_screen_active());
-        }
+        _lv_obj = lv_obj_create(parent);
         lv_obj_null_on_delete(&_lv_obj);
     }
 
@@ -31,6 +28,11 @@ public:
         if (_lv_obj != NULL) {
             lv_obj_delete(_lv_obj);
         }
+    }
+
+    void set(lv_obj_t* obj)
+    {
+        _lv_obj = obj;
     }
 
     lv_obj_t* get()
@@ -160,7 +162,7 @@ public:
         return lv_obj_get_height(_lv_obj);
     }
 
-private:
+protected:
     lv_obj_t* _lv_obj = nullptr;
 };
 

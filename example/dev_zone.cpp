@@ -23,11 +23,13 @@
 #include <src/core/lv_obj_style_gen.h>
 #include <src/display/lv_display.h>
 #include <src/misc/lv_area.h>
+#include <src/misc/lv_color.h>
 #include <utils/easing/ease.h>
 #include <lvgl.h>
 #include <thread>
 #include <vector>
-#include <lvgl/lvgl_cpp/obj.hpp>
+#include <lvgl/lvgl_cpp/obj.h>
+#include <lvgl/lvgl_cpp/label.h>
 
 using namespace smooth_ui_toolkit;
 using namespace mooncake;
@@ -36,15 +38,21 @@ int main()
 {
     lvgl::create_window(800, 480);
 
-    lvgl_cpp::LvObject obj;
-    obj.setPos(100, 100);
-    obj.setSize(200, 200);
-    obj.setBgColor(lv_color_make(0x00, 0x00, 0xFF));
-    obj.setRadius(20);
-    obj.setBorderWidth(5);
-    obj.setBorderColor(lv_color_make(0xFF, 0x00, 0x00));
-    obj.setRotation(45);
-    obj.setScrollbarMode(LV_SCROLLBAR_MODE_OFF);
+    // lvgl_cpp::LvObject obj(lv_screen_active());
+    // obj.setPos(100, 100);
+    // obj.setSize(200, 200);
+    // obj.setBgColor(lv_color_make(0x00, 0x00, 0xFF));
+    // obj.setRadius(20);
+    // obj.setBorderWidth(5);
+    // obj.setBorderColor(lv_color_make(0xFF, 0x00, 0x00));
+    // obj.setRotation(45);
+    // obj.setScrollbarMode(LV_SCROLLBAR_MODE_OFF);
+
+    lvgl_cpp::LvLabel label(lv_screen_active());
+    label.setPos(100, 100);
+    label.setRotation(45);
+    label.setTextColor(lv_color_hex(0x666666));
+    label.setText("Hello, world!");
 
     while (1) {
         lvgl::update_window();
