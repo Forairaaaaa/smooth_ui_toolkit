@@ -25,7 +25,7 @@ public:
         lv_obj_null_on_delete(&_lv_obj);
     }
 
-    virtual ~LvSlider(){};
+    virtual ~LvSlider() {};
 
     void setRange(int min, int max)
     {
@@ -43,6 +43,16 @@ public:
         lv_slider_set_value(_lv_obj, value, LV_ANIM_ON);
     }
 
+    void onValueChanged(lv_event_cb_t event_cb, void* user_data = nullptr)
+    {
+        addEventCb(event_cb, LV_EVENT_VALUE_CHANGED, user_data);
+    }
+
+    /**
+     * @brief On value changed signal
+     *
+     * @return Signal<int32_t>&
+     */
     Signal<int32_t>& onValueChanged(void)
     {
         if (!_on_value_changed) {

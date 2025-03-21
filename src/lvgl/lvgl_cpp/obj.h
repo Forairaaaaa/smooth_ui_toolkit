@@ -120,10 +120,20 @@ public:
     void hidden(bool hidden)
     {
         if (hidden) {
-            lv_obj_add_flag(_lv_obj, LV_OBJ_FLAG_HIDDEN);
+            addFlag(LV_OBJ_FLAG_HIDDEN);
         } else {
-            lv_obj_remove_flag(_lv_obj, LV_OBJ_FLAG_HIDDEN);
+            removeFlag(LV_OBJ_FLAG_HIDDEN);
         }
+    }
+
+    void addFlag(lv_obj_flag_t flag)
+    {
+        lv_obj_add_flag(_lv_obj, flag);
+    }
+
+    void removeFlag(lv_obj_flag_t flag)
+    {
+        lv_obj_remove_flag(_lv_obj, flag);
     }
 
     int32_t getX()

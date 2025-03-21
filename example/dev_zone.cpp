@@ -8,71 +8,84 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include <memory>
 #include <smooth_ui_toolkit.h>
 #include <mooncake_log.h>
+#include "animation/animate_value/animate_value.h"
+#include "lvgl/lvgl_cpp/obj.h"
 #include "utils/raylib_wrapper.h"
-#include "raylib.h"
-#include "utils/hal/hal.h"
 #include "utils/lvgl_wrapper.h"
-#include <animation/generators/spring/spring.h>
-#include <animation/animate/animate.h>
-#include <animation/animate_value/animate_value.h>
-#include <animation/sequence/animate_value_sequence.h>
-#include <src/core/lv_obj.h>
-#include <src/core/lv_obj_pos.h>
-#include <src/core/lv_obj_style_gen.h>
-#include <src/display/lv_display.h>
-#include <src/misc/lv_area.h>
-#include <src/misc/lv_color.h>
-#include <src/misc/lv_event.h>
-#include <src/widgets/slider/lv_slider.h>
-#include <utils/easing/ease.h>
-#include <lvgl.h>
-#include <thread>
-#include <vector>
-#include <lvgl/lvgl_cpp/obj.h>
 #include <lvgl/lvgl_cpp/label.h>
+#include <src/core/lv_obj.h>
+#include <src/core/lv_obj_scroll.h>
+#include <src/display/lv_display.h>
 #include <lvgl/lvgl_cpp/button.h>
-#include <lvgl/lvgl_cpp/slider.h>
+#include <vector>
 
 using namespace smooth_ui_toolkit;
+using namespace lvgl_cpp;
 
 int main()
 {
-    lvgl::create_window(800, 480);
+    lvgl::create_window(800, 520);
 
-    // lvgl_cpp::LvObject obj(lv_screen_active());
-    // obj.setPos(100, 100);
-    // obj.setSize(200, 200);
-    // obj.setBgColor(lv_color_make(0x00, 0x00, 0xFF));
-    // obj.setRadius(20);
-    // obj.setBorderWidth(5);
-    // obj.setBorderColor(lv_color_make(0xFF, 0x00, 0x00));
-    // obj.setRotation(45);
-    // obj.setScrollbarMode(LV_SCROLLBAR_MODE_OFF);
+    std::vector<int> number_list = {9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
+    int current_number_index = 1;
+    AnimateValue y_offset = 0;
+    y_offset.springOptions().visualDuration = 0.6;
+    y_offset.springOptions().bounce = 0.2;
+    y_offset = current_number_index * 20;
 
-    // lvgl_cpp::LvLabel label(lv_screen_active());
-    // label.setPos(100, 100);
-    // label.setRotation(45);
-    // label.setTextColor(lv_color_hex(0x666666));
-    // label.setText("Hello, world!");
+    auto btn_next = new LvButton(lv_screen_active());
+    btn_next->setPos(100, 100);
+    btn_next->label().setText("next");
+    btn_next->onClick().connect([&]() {
+        if (current_number_index >= 10) {
+            current_number_index = 1;
+            y_offset.retarget(0 * 20, 1 * 20);
+        } else {
+            current_number_index++;
+            y_offset = current_number_index * 20;
+        }
+    });
 
-    lvgl_cpp::LvButton button(lv_screen_active());
-    button.label().setText("shabi!");
-    button.setAlign(LV_ALIGN_CENTER);
-    button.onPressed([](lv_event_t* e) { mclog::info("fucking pressed!"); });
-    button.onRelease([](lv_event_t* e) { mclog::info("fucking released!"); });
-    button.onClick([](lv_event_t* e) { mclog::info("fucking clicked!"); });
+    auto btn_last = new LvButton(lv_screen_active());
+    btn_last->setPos(100, 200);
+    btn_last->label().setText("last");
+    btn_last->onClick().connect([&]() {
+        if (current_number_index <= 1) {
+            current_number_index = 10;
+            y_offset.retarget(11 * 20, 10 * 20);
+        } else {
+            current_number_index--;
+            y_offset = current_number_index * 20;
+        }
+    });
 
-    button.onClick().connect([]() { mclog::info("asdasdas"); });
+    auto number_mask = new LvObject(lv_screen_active());
+    number_mask->setPos(500, 100);
+    number_mask->setPadding(0, 0, 0, 0);
+    number_mask->setOutlineWidth(0);
+    number_mask->setRadius(0);
+    number_mask->setBorderWidth(0);
+    number_mask->setSize(100, 20);
+    number_mask->removeFlag(LV_OBJ_FLAG_SCROLLABLE);
 
-    lvgl_cpp::LvSlider slider(lv_screen_active());
-    slider.setPos(100, 100);
-    slider.setRange(0, 1024);
-    slider.onValueChanged().connect([](int32_t value) { mclog::info("value: {}", value); });
+    std::vector<LvLabel*> number_labels;
+    for (int i = 0; i < number_list.size(); i++) {
+        auto label = new LvLabel(number_mask->get());
+        label->setText(std::to_string(number_list[i]));
+        label->setAlign(LV_ALIGN_CENTER);
+        number_labels.push_back(label);
+    }
 
     while (1) {
+
+        for (int i = 0; i < number_labels.size(); i++) {
+            number_labels[i]->setPos(0, i * 20 - y_offset);
+        }
+
+        mclog::info("{} {}", current_number_index, y_offset.value());
+
         lvgl::update_window();
     }
 
