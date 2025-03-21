@@ -12,7 +12,6 @@
 #include "../utils/lvgl_wrapper.h"
 #include <mooncake_log.h>
 #include <smooth_ui_toolkit.h>
-#include <animation/animate_value/animate_value.h>
 
 using namespace smooth_ui_toolkit;
 

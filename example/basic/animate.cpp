@@ -10,7 +10,6 @@
  */
 #include "../utils/raylib_wrapper.h"
 #include <smooth_ui_toolkit.h>
-#include <animation/animate/animate.h>
 #include <mooncake_log.h>
 
 using namespace smooth_ui_toolkit;

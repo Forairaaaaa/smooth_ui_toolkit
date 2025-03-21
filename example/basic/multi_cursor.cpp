@@ -13,7 +13,6 @@
 #include "raylib.h"
 #include <mooncake_log.h>
 #include <smooth_ui_toolkit.h>
-#include <animation/animate_value/animate_value.h>
 #include <vector>
 
 using namespace smooth_ui_toolkit;

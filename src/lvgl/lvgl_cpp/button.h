@@ -24,7 +24,7 @@ public:
         lv_obj_null_on_delete(&_lv_obj);
     }
 
-    virtual ~LvButton() {};
+    virtual ~LvButton(){};
 
     LvLabel& label()
     {

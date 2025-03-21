@@ -35,3 +35,9 @@ target_link_libraries(multi_cursor ${PROJECT_NAME} raylib mooncake_log)
 
 add_executable(bubbles ./basic/bubbles.cpp)
 target_link_libraries(bubbles ${PROJECT_NAME} raylib mooncake_log)
+
+add_executable(event_queue ./event/event_queue.cpp)
+target_link_libraries(event_queue ${PROJECT_NAME} pthread)
+
+add_executable(signal ./event/signal.cpp)
+target_link_libraries(signal ${PROJECT_NAME} pthread)

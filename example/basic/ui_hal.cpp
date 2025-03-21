@@ -10,7 +10,6 @@
  */
 #include <smooth_ui_toolkit.h>
 #include <mooncake_log.h>
-#include "utils/hal/hal.h"
 
 using namespace smooth_ui_toolkit;
 
