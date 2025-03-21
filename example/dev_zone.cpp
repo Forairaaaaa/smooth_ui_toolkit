@@ -62,6 +62,8 @@ int main()
     button.onRelease([](lv_event_t* e) { mclog::info("fucking released!"); });
     button.onClick([](lv_event_t* e) { mclog::info("fucking clicked!"); });
 
+    button.onClick().connect([]() { mclog::info("asdasdas"); });
+
     while (1) {
         lvgl::update_window();
     }
