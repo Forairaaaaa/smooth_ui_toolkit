@@ -25,6 +25,8 @@
 #include <src/display/lv_display.h>
 #include <src/misc/lv_area.h>
 #include <src/misc/lv_color.h>
+#include <src/misc/lv_event.h>
+#include <src/widgets/slider/lv_slider.h>
 #include <utils/easing/ease.h>
 #include <lvgl.h>
 #include <thread>
@@ -32,6 +34,7 @@
 #include <lvgl/lvgl_cpp/obj.h>
 #include <lvgl/lvgl_cpp/label.h>
 #include <lvgl/lvgl_cpp/button.h>
+#include <lvgl/lvgl_cpp/slider.h>
 
 using namespace smooth_ui_toolkit;
 
@@ -63,6 +66,11 @@ int main()
     button.onClick([](lv_event_t* e) { mclog::info("fucking clicked!"); });
 
     button.onClick().connect([]() { mclog::info("asdasdas"); });
+
+    lvgl_cpp::LvSlider slider(lv_screen_active());
+    slider.setPos(100, 100);
+    slider.setRange(0, 1024);
+    slider.onValueChanged().connect([](int32_t value) { mclog::info("value: {}", value); });
 
     while (1) {
         lvgl::update_window();

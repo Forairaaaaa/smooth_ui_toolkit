@@ -40,6 +40,11 @@ public:
         LvObject::onClick(event_cb, user_data);
     }
 
+    /**
+     * @brief On click signal
+     *
+     * @return Signal<void>&
+     */
     Signal<void>& onClick(void)
     {
         if (!_on_click) {
