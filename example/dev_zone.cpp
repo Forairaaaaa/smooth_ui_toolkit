@@ -16,6 +16,7 @@
 #include "utils/lvgl_wrapper.h"
 #include <lvgl/lvgl_cpp/label.h>
 #include <src/core/lv_obj.h>
+#include <src/core/lv_obj_pos.h>
 #include <src/core/lv_obj_scroll.h>
 #include <src/display/lv_display.h>
 #include <lvgl/lvgl_cpp/button.h>
@@ -67,7 +68,10 @@ int main()
     number_mask->setOutlineWidth(0);
     number_mask->setRadius(0);
     number_mask->setBorderWidth(0);
-    number_mask->setSize(100, 20);
+    // number_mask->setSize(100, 20);
+    lv_obj_set_height(number_mask->get(), 20);
+    lv_obj_set_width(number_mask->get(), LV_SIZE_CONTENT);
+
     number_mask->removeFlag(LV_OBJ_FLAG_SCROLLABLE);
 
     std::vector<LvLabel*> number_labels;
