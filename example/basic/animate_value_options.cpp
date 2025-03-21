@@ -14,7 +14,6 @@
 #include <mooncake_log.h>
 
 using namespace smooth_ui_toolkit;
-using namespace mooncake;
 
 int main()
 {

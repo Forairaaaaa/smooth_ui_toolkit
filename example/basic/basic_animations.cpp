@@ -14,7 +14,6 @@
 #include <smooth_ui_toolkit.h>
 #include <animation/animate_value/animate_value.h>
 
-using namespace mooncake;
 using namespace smooth_ui_toolkit;
 
 struct Position {

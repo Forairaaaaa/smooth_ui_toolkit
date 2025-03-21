@@ -15,7 +15,6 @@
 #include <vector>
 
 using namespace smooth_ui_toolkit;
-using namespace mooncake;
 
 struct Bubble {
     AnimateValue x;

@@ -13,7 +13,6 @@
 #include "utils/hal/hal.h"
 
 using namespace smooth_ui_toolkit;
-using namespace mooncake;
 
 int main()
 {

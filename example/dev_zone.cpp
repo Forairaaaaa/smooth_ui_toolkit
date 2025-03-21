@@ -34,7 +34,6 @@
 #include <lvgl/lvgl_cpp/button.h>
 
 using namespace smooth_ui_toolkit;
-using namespace mooncake;
 
 int main()
 {

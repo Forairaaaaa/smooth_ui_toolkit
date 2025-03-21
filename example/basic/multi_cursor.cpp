@@ -17,7 +17,6 @@
 #include <vector>
 
 using namespace smooth_ui_toolkit;
-using namespace mooncake;
 
 struct MyVector2D {
     AnimateValue x;
