@@ -65,6 +65,16 @@ public:
         lv_obj_set_pos(_lv_obj, x, y);
     }
 
+    void setX(int32_t x)
+    {
+        lv_obj_set_x(_lv_obj, x);
+    }
+
+    void setY(int32_t y)
+    {
+        lv_obj_set_y(_lv_obj, y);
+    }
+
     void setSize(int32_t w, int32_t h)
     {
         lv_obj_set_size(_lv_obj, w, h);
@@ -185,6 +195,11 @@ public:
     void setTextColor(lv_color_t color, lv_style_selector_t selector = LV_PART_MAIN)
     {
         lv_obj_set_style_text_color(_lv_obj, color, selector);
+    }
+
+    lv_color_t getTextColor(lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        return lv_obj_get_style_text_color(_lv_obj, selector);
     }
 
     void setTextFont(const lv_font_t* font, lv_style_selector_t selector = LV_PART_MAIN)

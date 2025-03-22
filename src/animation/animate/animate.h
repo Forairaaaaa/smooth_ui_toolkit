@@ -139,6 +139,11 @@ public:
         return get_key_frame_generator().value;
     }
 
+    inline animate_playing_state::State_t currentPlayingState()
+    {
+        return _playing_state;
+    }
+
 protected:
     std::function<void(const float&)> _on_update;
     std::function<void()> _on_complete;

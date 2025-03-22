@@ -14,6 +14,7 @@
 #include <mutex>
 #include <smooth_ui_toolkit.h>
 #include <mooncake_log.h>
+#include "animation/animate/animate.h"
 #include "animation/animate_value/animate_value.h"
 #include "lvgl/lvgl_cpp/obj.h"
 #include "utils/raylib_wrapper.h"
@@ -23,9 +24,14 @@
 #include <src/core/lv_obj.h>
 #include <src/core/lv_obj_pos.h>
 #include <src/core/lv_obj_scroll.h>
+#include <src/core/lv_obj_style.h>
 #include <src/core/lv_obj_style_gen.h>
 #include <src/display/lv_display.h>
 #include <lvgl/lvgl_cpp/button.h>
+#include <src/font/lv_font.h>
+#include <src/misc/lv_area.h>
+#include <src/misc/lv_color.h>
+#include <src/misc/lv_style.h>
 #include <string>
 #include <vector>
 #include <array>
@@ -57,13 +63,15 @@ public:
         _digit_labels.clear();
         _digit_labels.resize(12);
         for (int i = 0; i < 12; i++) {
-            _digit_labels[i] = std::make_unique<LvLabel>(_lv_obj);
+            _digit_labels[i] = std::make_shared<LvLabel>(_lv_obj);
             _digit_labels[i]->setText(std::to_string(_digit_list[i]));
             _digit_labels[i]->setAlign(LV_ALIGN_CENTER);
         }
 
         // Font height
         _font_height = lv_font_get_line_height(getTextFont());
+        _digit_y_offset.springOptions().visualDuration = 0.6;
+        _digit_y_offset.springOptions().bounce = 0.1;
         _digit_y_offset = _current_digit_index * _font_height;
         setSize(LV_SIZE_CONTENT, _font_height);
     }
@@ -72,6 +80,14 @@ public:
     {
         LvObject::setTextFont(font, selector);
         init();
+    }
+
+    inline void setTextColor(lv_color_t color)
+    {
+        LvObject::setTextColor(color);
+        for (auto& digit : _digit_labels) {
+            digit->setTextColor(color);
+        }
     }
 
     inline void update()
@@ -140,43 +156,224 @@ protected:
     int32_t _font_height = 0;
     AnimateValue _digit_y_offset;
     size_t _current_digit_index = 1;
-    std::vector<std::unique_ptr<LvLabel>> _digit_labels;
+    std::vector<std::shared_ptr<LvLabel>> _digit_labels;
+};
+
+class NumberFlow : public LvObject {
+public:
+    struct Digit_t {
+        std::unique_ptr<DigitFlow> digitFlow;
+        AnimateValue positionX;
+        AnimateValue opacity;
+        bool isGoingDestroy = false;
+    };
+
+    NumberFlow(lv_obj_t* parent = nullptr)
+    {
+        _lv_obj = lv_obj_create(parent);
+        lv_obj_null_on_delete(&_lv_obj);
+    }
+
+    virtual ~NumberFlow() {};
+
+    bool transparentBg = true;
+
+    inline void init()
+    {
+        // Mask basic
+        setPadding(0, 0, 0, 0);
+        removeFlag(LV_OBJ_FLAG_SCROLLABLE);
+        if (transparentBg) {
+            setOutlineWidth(0);
+            setBorderWidth(0);
+            setBgOpa(LV_OPA_TRANSP);
+        }
+
+        // Font height
+        _font_height = lv_font_get_line_height(getTextFont());
+        _font_width = lv_font_get_glyph_width(getTextFont(), '0', '0');
+        setSize(LV_SIZE_CONTENT, _font_height);
+
+        setValue(_current_number);
+    }
+
+    inline void update()
+    {
+        if (_digits.empty()) {
+            init();
+        }
+
+        handle_digit_destroy();
+
+        for (auto& digit : _digits) {
+            digit.digitFlow->update();
+            digit.digitFlow->setPos(digit.positionX, 0);
+            int opa = digit.opacity;
+            if (opa > 255) {
+                opa = 255;
+            } else if (opa < 0) {
+                opa = 0;
+            }
+            digit.digitFlow->setOpa(opa);
+        }
+    }
+
+    inline int value()
+    {
+        return _current_number;
+    }
+
+    inline void setValue(int targetValue)
+    {
+        _current_number = targetValue;
+        handle_digit_changed();
+        handle_digit_number();
+    }
+
+protected:
+    int32_t _font_height = 0;
+    int32_t _font_width = 0;
+    int _last_number = 0;
+    int _current_number = 0;
+    int _current_number_of_digits = 1;
+    std::vector<Digit_t> _digits;
+
+    int get_number_of_digits(int num)
+    {
+        if (num == 0) {
+            return 1;
+        }
+        int count = 0;
+        while (num != 0) {
+            num /= 10;
+            count++;
+        }
+        return count;
+    }
+
+    inline void handle_digit_changed()
+    {
+        auto new_number_of_digits = get_number_of_digits(_current_number);
+        int digit_list_size = _digits.size();
+
+        // Add digits
+        if (new_number_of_digits > digit_list_size) {
+            // mclog::info("add digits");
+            while (new_number_of_digits > digit_list_size) {
+                _digits.push_back(Digit_t());
+                _digits.back().digitFlow = std::make_unique<DigitFlow>(_lv_obj);
+                _digits.back().digitFlow->init();
+                _digits.back().digitFlow->setTextColor(getTextColor());
+                _digits.back().positionX.springOptions().visualDuration = 0.6;
+                _digits.back().positionX.springOptions().bounce = 0.1;
+                _digits.back().positionX.move(digit_list_size * _font_width);
+                _digits.back().opacity.springOptions().visualDuration = 0.3;
+                _digits.back().opacity.springOptions().bounce = 0.1;
+                _digits.back().opacity.delay = 0.3;
+                _digits.back().opacity.move(255);
+                digit_list_size++;
+            }
+        }
+
+        // Remove digits
+        else if ((new_number_of_digits < digit_list_size) && (new_number_of_digits < _current_number_of_digits)) {
+            // mclog::info("remove digits");
+            if (_current_number_of_digits > new_number_of_digits) {
+                // move extra digits back to 0, and mark destroy
+                for (int i = new_number_of_digits; i < digit_list_size; i++) {
+                    _digits[i].positionX.delay = 0.2;
+                    _digits[i].positionX.move(0);
+                    _digits[i].opacity = 0;
+                    _digits[i].opacity.move(0);
+                    _digits[i].isGoingDestroy = true;
+                }
+            }
+        }
+
+        // Reorder digits
+        for (int i = 0; i < new_number_of_digits; i++) {
+            _digits[i].positionX.delay = 0;
+            _digits[i].positionX.move(i * _font_width);
+            _digits[i].opacity.move(255);
+            _digits[i].isGoingDestroy = false;
+        }
+
+        _current_number_of_digits = new_number_of_digits;
+    }
+
+    inline void handle_digit_destroy()
+    {
+        for (int i = 0; i < _digits.size(); i++) {
+            if (_digits[i].isGoingDestroy && _digits[i].positionX.done() && _digits[i].opacity.done()) {
+                _digits.erase(_digits.begin() + i);
+            }
+        }
+    }
+
+    inline void handle_digit_number()
+    {
+        // Iterate through each digit
+        int number = _current_number;
+        int divisor = std::pow(10, _current_number_of_digits - 1);
+        for (int i = 0; i < _current_number_of_digits; ++i) {
+            int digit = number / divisor;
+            // mclog::info("{}", digit);
+            if (_digits[i].digitFlow->value() != digit) {
+                if (_last_number < _current_number) {
+                    _digits[i].digitFlow->increaseTo(digit);
+                } else {
+                    _digits[i].digitFlow->decreaseTo(digit);
+                }
+            }
+            number %= divisor;
+            divisor /= 10;
+        }
+        _last_number = _current_number;
+    }
 };
 
 int main()
 {
     lvgl::create_window(800, 520);
 
-    auto digit_flow = new DigitFlow(lv_screen_active());
-    digit_flow->setPos(500, 100);
-    // digit_flow->setPos(0, 0);
-    digit_flow->setTextFont(&lv_font_montserrat_48);
+    auto number_flow = new NumberFlow(lv_screen_active());
+    number_flow->setAlign(LV_ALIGN_CENTER);
+    number_flow->setPos(0, -100);
+    number_flow->setTextFont(&lv_font_montserrat_48);
+    // number_flow->transparentBg = false;
+    // number_flow->setTextColor(lv_color_hex(0x0D4715));
 
     auto btn_next = new LvButton(lv_screen_active());
-    btn_next->setPos(100, 100);
+    btn_next->setPos(50, 100);
     btn_next->label().setText("-1");
-    btn_next->onClick().connect([&]() { digit_flow->decrease(); });
+    btn_next->onClick().connect([&]() { number_flow->setValue(number_flow->value() - 1); });
 
     auto btn_last = new LvButton(lv_screen_active());
-    btn_last->setPos(100, 200);
+    btn_last->setPos(50, 200);
     btn_last->label().setText("+1");
-    btn_last->onClick().connect([&]() { digit_flow->increase(); });
+    btn_last->onClick().connect([&]() { number_flow->setValue(number_flow->value() + 1); });
+
+    auto btn_random = new LvButton(lv_screen_active());
+    btn_random->setPos(50, 300);
+    btn_random->label().setText("random");
+    btn_random->onClick().connect([&]() { number_flow->setValue(rand()); });
 
     int target_value = 0;
     auto slider = new LvSlider(lv_screen_active());
-    slider->setPos(100, 300);
-    slider->setRange(-100, 100);
+    slider->setPos(50, 400);
+    slider->setRange(1, 9);
     slider->onValueChanged().connect([&](int value) {
-        if (value > target_value) {
-            digit_flow->increaseTo(value);
-        } else {
-            digit_flow->decreaseTo(value);
+        int target_value = 0;
+        for (int i = 1; i <= value; ++i) {
+            target_value = target_value * 10 + i;
         }
-        target_value = value;
+        mclog::info("{}", target_value);
+        number_flow->setValue(target_value);
     });
 
     while (1) {
-        digit_flow->update();
+        number_flow->update();
+        mclog::info("{}", number_flow->value());
         lvgl::update_window();
     }
 
