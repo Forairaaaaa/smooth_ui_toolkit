@@ -266,10 +266,12 @@ protected:
                 _digits.back().digitFlow->setTextColor(getTextColor());
                 _digits.back().positionX.springOptions().visualDuration = 0.6;
                 _digits.back().positionX.springOptions().bounce = 0.1;
+                if (digit_list_size != 0) {
+                    _digits.back().positionX.teleport((digit_list_size - 1) * _font_width);
+                }
                 _digits.back().positionX.move(digit_list_size * _font_width);
                 _digits.back().opacity.springOptions().visualDuration = 0.3;
                 _digits.back().opacity.springOptions().bounce = 0.1;
-                _digits.back().opacity.delay = 0.3;
                 _digits.back().opacity.move(255);
                 digit_list_size++;
             }
@@ -281,8 +283,7 @@ protected:
             if (_current_number_of_digits > new_number_of_digits) {
                 // move extra digits back to 0, and mark destroy
                 for (int i = new_number_of_digits; i < digit_list_size; i++) {
-                    _digits[i].positionX.delay = 0.2;
-                    _digits[i].positionX.move(0);
+                    _digits[i].positionX.move((new_number_of_digits - 1) * _font_width);
                     _digits[i].opacity = 0;
                     _digits[i].opacity.move(0);
                     _digits[i].isGoingDestroy = true;
@@ -292,7 +293,6 @@ protected:
 
         // Reorder digits
         for (int i = 0; i < new_number_of_digits; i++) {
-            _digits[i].positionX.delay = 0;
             _digits[i].positionX.move(i * _font_width);
             _digits[i].opacity.move(255);
             _digits[i].isGoingDestroy = false;
@@ -373,7 +373,6 @@ int main()
 
     while (1) {
         number_flow->update();
-        mclog::info("{}", number_flow->value());
         lvgl::update_window();
     }
 
