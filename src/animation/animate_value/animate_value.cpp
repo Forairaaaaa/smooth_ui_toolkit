@@ -89,3 +89,11 @@ float AnimateValue::value()
     update();
     return get_key_frame_generator().value;
 }
+
+float AnimateValue::directValue()
+{
+    if (!_is_begin) {
+        return _default_value;
+    }
+    return get_key_frame_generator().value;
+}

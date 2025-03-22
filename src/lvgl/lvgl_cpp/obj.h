@@ -45,6 +45,11 @@ public:
         lv_obj_set_align(_lv_obj, alignment);
     }
 
+    void setOpa(lv_opa_t opa, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_opa(_lv_obj, opa, selector);
+    }
+
     void setBgColor(lv_color_t color, lv_style_selector_t selector = LV_PART_MAIN)
     {
         lv_obj_set_style_bg_color(_lv_obj, color, selector);

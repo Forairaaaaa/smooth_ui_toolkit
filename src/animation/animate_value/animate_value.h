@@ -57,6 +57,13 @@ public:
      */
     float value();
 
+    /**
+     * @brief Get current value without trigger auto update
+     *
+     * @return float
+     */
+    float directValue();
+
 private:
     bool _is_begin = false;
     float _default_value = 0.0f;
