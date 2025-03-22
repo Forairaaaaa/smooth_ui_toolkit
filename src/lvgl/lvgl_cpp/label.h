@@ -35,16 +35,6 @@ public:
     {
         lv_label_set_text(_lv_obj, text.c_str());
     }
-
-    void setTextColor(lv_color_t color, lv_style_selector_t selector = LV_PART_MAIN)
-    {
-        lv_obj_set_style_text_color(_lv_obj, color, selector);
-    }
-
-    void setFont(const lv_font_t* font, lv_style_selector_t selector = LV_PART_MAIN)
-    {
-        lv_obj_set_style_text_font(_lv_obj, font, selector);
-    }
 };
 
 } // namespace lvgl_cpp

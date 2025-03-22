@@ -50,6 +50,11 @@ public:
         lv_obj_set_style_bg_color(_lv_obj, color, selector);
     }
 
+    void setBgOpa(lv_opa_t opa, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_bg_opa(_lv_obj, opa, selector);
+    }
+
     void setPos(int32_t x, int32_t y)
     {
         lv_obj_set_pos(_lv_obj, x, y);
@@ -170,6 +175,21 @@ public:
     {
         lv_obj_update_layout(_lv_obj);
         return lv_obj_get_height(_lv_obj);
+    }
+
+    void setTextColor(lv_color_t color, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_text_color(_lv_obj, color, selector);
+    }
+
+    void setTextFont(const lv_font_t* font, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_text_font(_lv_obj, font, selector);
+    }
+
+    const lv_font_t* getTextFont(lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        return lv_obj_get_style_text_font(_lv_obj, selector);
     }
 
     void addEventCb(lv_event_cb_t event_cb, lv_event_code_t filter, void* user_data = nullptr)
