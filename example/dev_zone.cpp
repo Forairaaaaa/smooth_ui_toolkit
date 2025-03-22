@@ -32,6 +32,7 @@
 #include <src/misc/lv_area.h>
 #include <src/misc/lv_color.h>
 #include <src/misc/lv_style.h>
+#include <src/misc/lv_types.h>
 #include <string>
 #include <vector>
 #include <array>
@@ -71,7 +72,7 @@ public:
         // Font height
         _font_height = lv_font_get_line_height(getTextFont());
         _digit_y_offset.springOptions().visualDuration = 0.6;
-        _digit_y_offset.springOptions().bounce = 0.1;
+        _digit_y_offset.springOptions().bounce = 0.05;
         _digit_y_offset = _current_digit_index * _font_height;
         setSize(LV_SIZE_CONTENT, _font_height);
     }
@@ -265,13 +266,13 @@ protected:
                 _digits.back().digitFlow->init();
                 _digits.back().digitFlow->setTextColor(getTextColor());
                 _digits.back().positionX.springOptions().visualDuration = 0.6;
-                _digits.back().positionX.springOptions().bounce = 0.1;
+                _digits.back().positionX.springOptions().bounce = 0.05;
                 if (digit_list_size != 0) {
-                    _digits.back().positionX.teleport((digit_list_size - 1) * _font_width);
+                    _digits.back().positionX.teleport((_current_number_of_digits - 1) * _font_width);
                 }
                 _digits.back().positionX.move(digit_list_size * _font_width);
                 _digits.back().opacity.springOptions().visualDuration = 0.3;
-                _digits.back().opacity.springOptions().bounce = 0.1;
+                _digits.back().opacity.springOptions().bounce = 0.05;
                 _digits.back().opacity.move(255);
                 digit_list_size++;
             }
@@ -338,36 +339,46 @@ int main()
 
     auto number_flow = new NumberFlow(lv_screen_active());
     number_flow->setAlign(LV_ALIGN_CENTER);
-    number_flow->setPos(0, -100);
+    number_flow->setPos(0, -110);
     number_flow->setTextFont(&lv_font_montserrat_48);
+    // number_flow->setTextFont(&ui_font_RajdhaniBold72);
+    // number_flow->setTextFont(&ui_font_RajdhaniBold144);
     // number_flow->transparentBg = false;
-    // number_flow->setTextColor(lv_color_hex(0x0D4715));
+    number_flow->setTextColor(lv_color_hex(0x0A0A0A));
 
-    auto btn_next = new LvButton(lv_screen_active());
-    btn_next->setPos(50, 100);
+    // flex layout
+    auto flex_layout = new LvObject(lv_screen_active());
+    flex_layout->setBorderWidth(0);
+    flex_layout->setBgOpa(0);
+    flex_layout->setFlexFlow(LV_FLEX_FLOW_ROW);
+    flex_layout->setFlexAlign(LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START);
+    flex_layout->setSize(LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    flex_layout->setAlign(LV_ALIGN_CENTER);
+    flex_layout->setPos(0, 150);
+    flex_layout->setPadColumn(50);
+
+    auto btn_next = new LvButton(flex_layout->get());
     btn_next->label().setText("-1");
     btn_next->onClick().connect([&]() { number_flow->setValue(number_flow->value() - 1); });
 
-    auto btn_last = new LvButton(lv_screen_active());
-    btn_last->setPos(50, 200);
+    auto btn_last = new LvButton(flex_layout->get());
     btn_last->label().setText("+1");
     btn_last->onClick().connect([&]() { number_flow->setValue(number_flow->value() + 1); });
 
-    auto btn_random = new LvButton(lv_screen_active());
-    btn_random->setPos(50, 300);
+    auto btn_random = new LvButton(flex_layout->get());
     btn_random->label().setText("random");
     btn_random->onClick().connect([&]() { number_flow->setValue(rand()); });
 
     int target_value = 0;
-    auto slider = new LvSlider(lv_screen_active());
-    slider->setPos(50, 400);
+    auto slider = new LvSlider(flex_layout->get());
     slider->setRange(1, 9);
+    slider->setValue(1);
     slider->onValueChanged().connect([&](int value) {
         int target_value = 0;
         for (int i = 1; i <= value; ++i) {
             target_value = target_value * 10 + i;
         }
-        mclog::info("{}", target_value);
+        // mclog::info("{}", target_value);
         number_flow->setValue(target_value);
     });
 

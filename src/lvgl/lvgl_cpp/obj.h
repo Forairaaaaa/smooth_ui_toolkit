@@ -212,6 +212,26 @@ public:
         return lv_obj_get_style_text_font(_lv_obj, selector);
     }
 
+    void setFlexFlow(lv_flex_flow_t flow)
+    {
+        lv_obj_set_flex_flow(_lv_obj, flow);
+    }
+
+    void setFlexAlign(lv_flex_align_t main_place, lv_flex_align_t cross_place, lv_flex_align_t track_cross_place)
+    {
+        lv_obj_set_flex_align(_lv_obj, main_place, cross_place, track_cross_place);
+    }
+
+    void setPadRow(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_pad_row(_lv_obj, value, selector);
+    }
+
+    void setPadColumn(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_pad_column(_lv_obj, value, selector);
+    }
+
     void addEventCb(lv_event_cb_t event_cb, lv_event_code_t filter, void* user_data = nullptr)
     {
         lv_obj_add_event_cb(_lv_obj, event_cb, filter, user_data);
