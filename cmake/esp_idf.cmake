@@ -7,6 +7,7 @@ file(GLOB_RECURSE SMOOTH_UI_TOOLKIT_SRCS
 # Include
 set(SMOOTH_UI_TOOLKIT_INCS
     ${SMOOTH_UI_TOOLKIT_ROOT_DIR}/src/
+    ${SMOOTH_UI_TOOLKIT_ROOT_DIR}/src/lvgl/
 )
 
 # Public component requirement
