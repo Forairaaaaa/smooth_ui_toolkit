@@ -16,7 +16,7 @@ namespace lvgl_cpp {
 
 class LvObject {
 public:
-    LvObject() = default;
+    LvObject() {};
     LvObject(lv_obj_t* parent)
     {
         _lv_obj = lv_obj_create(parent);
@@ -24,6 +24,19 @@ public:
     }
 
     virtual ~LvObject()
+    {
+        if (_lv_obj != NULL) {
+            lv_obj_delete(_lv_obj);
+        }
+    }
+
+    void create(lv_obj_t* parent)
+    {
+        _lv_obj = lv_obj_create(parent);
+        lv_obj_null_on_delete(&_lv_obj);
+    }
+
+    void destroy()
     {
         if (_lv_obj != NULL) {
             lv_obj_delete(_lv_obj);

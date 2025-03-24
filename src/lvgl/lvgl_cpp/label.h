@@ -18,7 +18,8 @@ namespace lvgl_cpp {
 
 class LvLabel : public LvObject {
 public:
-    LvLabel(lv_obj_t* parent = nullptr)
+    LvLabel() {};
+    LvLabel(lv_obj_t* parent)
     {
         _lv_obj = lv_label_create(parent);
         lv_obj_null_on_delete(&_lv_obj);
@@ -34,6 +35,11 @@ public:
     void setText(const std::string& text)
     {
         lv_label_set_text(_lv_obj, text.c_str());
+    }
+
+    std::string getText()
+    {
+        return lv_label_get_text(_lv_obj);
     }
 };
 

@@ -13,6 +13,7 @@
 #include <smooth_ui_toolkit.h>
 #include <smooth_lvgl.h>
 #include <mooncake_log.h>
+#include <random>
 
 using namespace smooth_ui_toolkit;
 using namespace smooth_ui_toolkit::lvgl_cpp;
@@ -25,6 +26,8 @@ int main()
     number_flow->setAlign(LV_ALIGN_CENTER);
     number_flow->setPos(0, -110);
     number_flow->setTextFont(&lv_font_montserrat_48);
+    // number_flow->transparentBg = false;
+    // number_flow->showPositiveSign = true;
 
     auto flex_layout = new LvObject(lv_screen_active());
     flex_layout->setBorderWidth(0);
@@ -46,7 +49,13 @@ int main()
 
     auto btn_random = new LvButton(flex_layout->get());
     btn_random->label().setText("random");
-    btn_random->onClick().connect([&]() { number_flow->setValue(rand()); });
+    btn_random->onClick().connect([&]() {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<int> dist(-2147483648, 2147483647);
+        int randomNum = dist(gen);
+        number_flow->setValue(randomNum);
+    });
 
     int target_value = 0;
     auto slider = new LvSlider(flex_layout->get());

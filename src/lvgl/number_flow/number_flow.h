@@ -17,17 +17,15 @@
 #include <vector>
 #include <memory>
 #include <array>
+#include <algorithm>
 
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
 
 class DigitFlow : public LvObject {
 public:
-    DigitFlow(lv_obj_t* parent = nullptr)
-    {
-        _lv_obj = lv_obj_create(parent);
-        lv_obj_null_on_delete(&_lv_obj);
-    }
+    DigitFlow() : LvObject() {}
+    DigitFlow(lv_obj_t* parent) : LvObject(parent) {}
 
     virtual ~DigitFlow() {};
 
@@ -143,11 +141,18 @@ protected:
 
 class NumberFlow : public LvObject {
 public:
-    struct Digit_t {
-        std::unique_ptr<DigitFlow> digitFlow;
+    struct Item_t {
         AnimateValue positionX;
         AnimateValue opacity;
         bool isGoingDestroy = false;
+    };
+
+    struct Digit_t : public Item_t {
+        std::unique_ptr<DigitFlow> digitFlow;
+    };
+
+    struct Label_t : public Item_t {
+        std::unique_ptr<LvLabel> label;
     };
 
     NumberFlow(lv_obj_t* parent = nullptr)
@@ -159,6 +164,7 @@ public:
     virtual ~NumberFlow() {};
 
     bool transparentBg = true;
+    bool showPositiveSign = false;
 
     inline void init()
     {
@@ -185,19 +191,8 @@ public:
             init();
         }
 
-        handle_digit_destroy();
-
-        for (auto& digit : _digits) {
-            digit.digitFlow->update();
-            digit.digitFlow->setPos(digit.positionX, 0);
-            int opa = digit.opacity;
-            if (opa > 255) {
-                opa = 255;
-            } else if (opa < 0) {
-                opa = 0;
-            }
-            digit.digitFlow->setOpa(opa);
-        }
+        handle_sign_update();
+        handle_digit_update();
     }
 
     inline int value()
@@ -208,8 +203,9 @@ public:
     inline void setValue(int targetValue)
     {
         _current_number = targetValue;
+        handle_sign_changed();
         handle_digit_changed();
-        handle_digit_number();
+        handle_digit_number_changed();
     }
 
 protected:
@@ -219,6 +215,7 @@ protected:
     int _current_number = 0;
     int _current_number_of_digits = 1;
     std::vector<Digit_t> _digits;
+    std::unique_ptr<Label_t> _sign;
 
     inline int get_number_of_digits(int num)
     {
@@ -274,8 +271,14 @@ protected:
         }
 
         // Reorder digits
+        int sign_width = 0;
+        if (_sign) {
+            if (!_sign->isGoingDestroy) {
+                sign_width = lv_font_get_glyph_width(getTextFont(), _current_number < 0 ? '-' : '+', '0');
+            }
+        }
         for (int i = 0; i < new_number_of_digits; i++) {
-            _digits[i].positionX.move(i * _font_width);
+            _digits[i].positionX.move(i * _font_width + sign_width);
             _digits[i].opacity.move(255);
             _digits[i].isGoingDestroy = false;
         }
@@ -283,25 +286,35 @@ protected:
         _current_number_of_digits = new_number_of_digits;
     }
 
-    inline void handle_digit_destroy()
+    inline void handle_digit_update()
     {
         for (int i = 0; i < _digits.size(); i++) {
             if (_digits[i].isGoingDestroy && _digits[i].positionX.done() && _digits[i].opacity.done()) {
                 _digits.erase(_digits.begin() + i);
             }
         }
+
+        for (auto& digit : _digits) {
+            digit.digitFlow->update();
+            digit.digitFlow->setPos(digit.positionX, 0);
+            digit.digitFlow->setOpa(std::clamp((int)digit.opacity.value(), 0, 255));
+        }
     }
 
-    inline void handle_digit_number()
+    inline void handle_digit_number_changed()
     {
         // Iterate through each digit
         int number = _current_number;
         int divisor = std::pow(10, _current_number_of_digits - 1);
         for (int i = 0; i < _current_number_of_digits; ++i) {
-            int digit = number / divisor;
+            int digit = std::abs(number / divisor);
             // mclog::info("{}", digit);
             if (_digits[i].digitFlow->value() != digit) {
-                if (_last_number < _current_number) {
+                bool increase = (_last_number < _current_number);
+                if (_current_number < 0) {
+                    increase = !increase;
+                }
+                if (increase) {
                     _digits[i].digitFlow->increaseTo(digit);
                 } else {
                     _digits[i].digitFlow->decreaseTo(digit);
@@ -311,6 +324,49 @@ protected:
             divisor /= 10;
         }
         _last_number = _current_number;
+    }
+
+    inline void handle_sign_changed()
+    {
+        std::string new_sign;
+        if (_current_number < 0) {
+            new_sign = "-";
+        } else if (_current_number > 0) {
+            new_sign = showPositiveSign ? "+" : "";
+        }
+
+        if (new_sign.empty()) {
+            if (_sign) {
+                _sign->isGoingDestroy = true;
+                _sign->positionX.move(0);
+                _sign->opacity.move(0);
+            }
+        } else {
+            if (!_sign) {
+                _sign = std::make_unique<Label_t>();
+                _sign->label = std::make_unique<LvLabel>(_lv_obj);
+            }
+            _sign->positionX.move(0);
+            if (_sign->label->getText() != new_sign) {
+                _sign->opacity.teleport(0);
+            }
+            _sign->opacity.move(255);
+            _sign->isGoingDestroy = false;
+            _sign->label->setText(new_sign);
+        }
+    }
+
+    inline void handle_sign_update()
+    {
+        if (_sign) {
+            _sign->positionX.update();
+            _sign->opacity.update();
+            _sign->label->setPos(0, _sign->positionX);
+            _sign->label->setOpa(std::clamp((int)_sign->opacity.value(), 0, 255));
+            if (_sign->isGoingDestroy && _sign->positionX.done() && _sign->opacity.done()) {
+                _sign.reset();
+            }
+        }
     }
 };
 

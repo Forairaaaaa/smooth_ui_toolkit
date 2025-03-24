@@ -19,13 +19,14 @@ namespace lvgl_cpp {
 
 class LvButton : public LvObject {
 public:
-    LvButton(lv_obj_t* parent = nullptr)
+    LvButton() {};
+    LvButton(lv_obj_t* parent)
     {
         _lv_obj = lv_button_create(parent);
         lv_obj_null_on_delete(&_lv_obj);
     }
 
-    virtual ~LvButton(){};
+    virtual ~LvButton() {};
 
     LvLabel& label()
     {
