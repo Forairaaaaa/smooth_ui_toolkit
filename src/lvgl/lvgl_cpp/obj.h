@@ -16,7 +16,7 @@ namespace lvgl_cpp {
 
 class LvObject {
 public:
-    LvObject() {};
+    LvObject(){};
     LvObject(lv_obj_t* parent)
     {
         _lv_obj = lv_obj_create(parent);
@@ -243,6 +243,16 @@ public:
     void setPadColumn(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
     {
         lv_obj_set_style_pad_column(_lv_obj, value, selector);
+    }
+
+    void addState(lv_state_t state)
+    {
+        lv_obj_add_state(_lv_obj, state);
+    }
+
+    void removeState(lv_state_t state)
+    {
+        lv_obj_remove_state(_lv_obj, state);
     }
 
     void addEventCb(lv_event_cb_t event_cb, lv_event_code_t filter, void* user_data = nullptr)
