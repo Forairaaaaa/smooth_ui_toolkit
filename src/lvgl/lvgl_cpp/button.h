@@ -35,7 +35,7 @@ public:
     LvLabel& label()
     {
         if (!_label) {
-            _label = std::make_unique<LvLabel>(_lv_obj.get());
+            _label = std::make_shared<LvLabel>(_lv_obj.get());
         }
         return *_label;
     }
@@ -53,7 +53,7 @@ public:
     Signal<void>& onClick(void)
     {
         if (!_on_click) {
-            _on_click = std::make_unique<Signal<void>>();
+            _on_click = std::make_shared<Signal<void>>();
             addEventCb(
                 [](lv_event_t* e) {
                     auto on_click = (Signal<void>*)lv_event_get_user_data(e);
@@ -65,8 +65,8 @@ public:
     }
 
 protected:
-    std::unique_ptr<LvLabel> _label;
-    std::unique_ptr<Signal<void>> _on_click;
+    std::shared_ptr<LvLabel> _label;
+    std::shared_ptr<Signal<void>> _on_click;
 };
 
 } // namespace lvgl_cpp
