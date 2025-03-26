@@ -21,25 +21,29 @@ public:
     LvLabel() {};
     LvLabel(lv_obj_t* parent)
     {
-        _lv_obj = lv_label_create(parent);
-        lv_obj_null_on_delete(&_lv_obj);
+        _lv_obj = std::shared_ptr<lv_obj_t>(lv_label_create(parent), lv_obj_delete);
     }
 
     virtual ~LvLabel() {};
 
+    virtual void create(lv_obj_t* parent) override
+    {
+        _lv_obj = std::shared_ptr<lv_obj_t>(lv_label_create(parent), lv_obj_delete);
+    }
+
     void setText(const char* text)
     {
-        lv_label_set_text(_lv_obj, text);
+        lv_label_set_text(_lv_obj.get(), text);
     }
 
     void setText(const std::string& text)
     {
-        lv_label_set_text(_lv_obj, text.c_str());
+        lv_label_set_text(_lv_obj.get(), text.c_str());
     }
 
     std::string getText()
     {
-        return lv_label_get_text(_lv_obj);
+        return lv_label_get_text(_lv_obj.get());
     }
 };
 

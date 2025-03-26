@@ -22,16 +22,20 @@ public:
     LvButton() {};
     LvButton(lv_obj_t* parent)
     {
-        _lv_obj = lv_button_create(parent);
-        lv_obj_null_on_delete(&_lv_obj);
+        _lv_obj = std::shared_ptr<lv_obj_t>(lv_button_create(parent), lv_obj_delete);
     }
 
     virtual ~LvButton() {};
 
+    virtual void create(lv_obj_t* parent) override
+    {
+        _lv_obj = std::shared_ptr<lv_obj_t>(lv_button_create(parent), lv_obj_delete);
+    }
+
     LvLabel& label()
     {
         if (!_label) {
-            _label = std::make_unique<LvLabel>(_lv_obj);
+            _label = std::make_unique<LvLabel>(_lv_obj.get());
         }
         return *_label;
     }

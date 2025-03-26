@@ -32,32 +32,32 @@ target_include_directories(lvgl PUBLIC ${SDL2_INCLUDE_DIRS})
 add_executable(dev_zone ./dev_zone.cpp)
 target_link_libraries(dev_zone ${PROJECT_NAME} raylib mooncake_log lvgl lvgl_examples lvgl_demos ${SDL2_LIBRARIES})
 
-add_executable(ui_hal ./basic/ui_hal.cpp)
-target_link_libraries(ui_hal ${PROJECT_NAME} raylib mooncake_log)
+# add_executable(ui_hal ./basic/ui_hal.cpp)
+# target_link_libraries(ui_hal ${PROJECT_NAME} raylib mooncake_log)
 
-add_executable(animate ./basic/animate.cpp)
-target_link_libraries(animate ${PROJECT_NAME} raylib mooncake_log)
+# add_executable(animate ./basic/animate.cpp)
+# target_link_libraries(animate ${PROJECT_NAME} raylib mooncake_log)
 
-add_executable(animate_value ./basic/animate_value.cpp)
-target_link_libraries(animate_value ${PROJECT_NAME} raylib mooncake_log)
+# add_executable(animate_value ./basic/animate_value.cpp)
+# target_link_libraries(animate_value ${PROJECT_NAME} raylib mooncake_log)
 
-add_executable(animate_value_options ./basic/animate_value_options.cpp)
-target_link_libraries(animate_value_options ${PROJECT_NAME} raylib mooncake_log)
+# add_executable(animate_value_options ./basic/animate_value_options.cpp)
+# target_link_libraries(animate_value_options ${PROJECT_NAME} raylib mooncake_log)
 
-add_executable(basic_animations ./basic/basic_animations.cpp)
-target_link_libraries(basic_animations ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})
+# add_executable(basic_animations ./basic/basic_animations.cpp)
+# target_link_libraries(basic_animations ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})
 
-add_executable(multi_cursor ./basic/multi_cursor.cpp)
-target_link_libraries(multi_cursor ${PROJECT_NAME} raylib mooncake_log)
+# add_executable(multi_cursor ./basic/multi_cursor.cpp)
+# target_link_libraries(multi_cursor ${PROJECT_NAME} raylib mooncake_log)
 
-add_executable(bubbles ./basic/bubbles.cpp)
-target_link_libraries(bubbles ${PROJECT_NAME} raylib mooncake_log)
+# add_executable(bubbles ./basic/bubbles.cpp)
+# target_link_libraries(bubbles ${PROJECT_NAME} raylib mooncake_log)
 
-add_executable(event_queue ./event/event_queue.cpp)
-target_link_libraries(event_queue ${PROJECT_NAME} pthread)
+# add_executable(event_queue ./event/event_queue.cpp)
+# target_link_libraries(event_queue ${PROJECT_NAME} pthread)
 
-add_executable(signal ./event/signal.cpp)
-target_link_libraries(signal ${PROJECT_NAME} pthread)
+# add_executable(signal ./event/signal.cpp)
+# target_link_libraries(signal ${PROJECT_NAME} pthread)
 
-add_executable(number_flow ./smooth_lvgl/number_flow.cpp)
-target_link_libraries(number_flow ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})
+# add_executable(number_flow ./smooth_lvgl/number_flow.cpp)
+# target_link_libraries(number_flow ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})

@@ -21,11 +21,15 @@ public:
     LvSwitch() {};
     LvSwitch(lv_obj_t* parent)
     {
-        _lv_obj = lv_switch_create(parent);
-        lv_obj_null_on_delete(&_lv_obj);
+        _lv_obj = std::shared_ptr<lv_obj_t>(lv_switch_create(parent), lv_obj_delete);
     }
 
     virtual ~LvSwitch() {};
+
+    virtual void create(lv_obj_t* parent) override
+    {
+        _lv_obj = std::shared_ptr<lv_obj_t>(lv_switch_create(parent), lv_obj_delete);
+    }
 
     void setValue(bool value)
     {
@@ -38,7 +42,7 @@ public:
 
     bool getValue()
     {
-        return lv_obj_has_state(_lv_obj, LV_STATE_CHECKED);
+        return lv_obj_has_state(_lv_obj.get(), LV_STATE_CHECKED);
     }
 
     Signal<bool>& onValueChanged(void)

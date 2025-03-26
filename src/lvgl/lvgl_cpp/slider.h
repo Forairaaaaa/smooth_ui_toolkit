@@ -10,7 +10,6 @@
  */
 #pragma once
 #include "obj.h"
-#include "label.h"
 #include "utils/event/signal.h"
 #include <memory>
 
@@ -19,28 +18,33 @@ namespace lvgl_cpp {
 
 class LvSlider : public LvObject {
 public:
-    LvSlider(lv_obj_t* parent = nullptr)
+    LvSlider() {};
+    LvSlider(lv_obj_t* parent)
     {
-        _lv_obj = lv_slider_create(parent);
-        lv_obj_null_on_delete(&_lv_obj);
+        _lv_obj = std::shared_ptr<lv_obj_t>(lv_slider_create(parent), lv_obj_delete);
     }
 
     virtual ~LvSlider() {};
 
+    virtual void create(lv_obj_t* parent) override
+    {
+        _lv_obj = std::shared_ptr<lv_obj_t>(lv_slider_create(parent), lv_obj_delete);
+    }
+
     void setRange(int min, int max)
     {
-        lv_slider_set_range(_lv_obj, min, max);
-        lv_slider_set_value(_lv_obj, (max + min) / 2, LV_ANIM_ON);
+        lv_slider_set_range(_lv_obj.get(), min, max);
+        lv_slider_set_value(_lv_obj.get(), (max + min) / 2, LV_ANIM_ON);
     }
 
     int32_t getValue()
     {
-        return lv_slider_get_value(_lv_obj);
+        return lv_slider_get_value(_lv_obj.get());
     }
 
     void setValue(int32_t value)
     {
-        lv_slider_set_value(_lv_obj, value, LV_ANIM_ON);
+        lv_slider_set_value(_lv_obj.get(), value, LV_ANIM_ON);
     }
 
     void onValueChanged(lv_event_cb_t event_cb, void* user_data = nullptr)

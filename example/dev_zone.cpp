@@ -8,10 +8,13 @@
  * @copyright Copyright (c) 2025
  *
  */
+#include "number_flow/number_flow.h"
+#include "utils/hal/hal.h"
 #include "utils/lvgl_wrapper.h"
 #include <smooth_ui_toolkit.h>
 #include <smooth_lvgl.h>
 #include <mooncake_log.h>
+#include <src/misc/lv_color.h>
 
 using namespace smooth_ui_toolkit;
 using namespace smooth_ui_toolkit::lvgl_cpp;
@@ -19,6 +22,53 @@ using namespace smooth_ui_toolkit::lvgl_cpp;
 int main()
 {
     lvgl::create_window(800, 520);
+
+    // {
+    //     auto obj = new LvObject(lv_screen_active());
+    //     // obj->setSize(LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    //     // obj->setAlign(LV_ALIGN_CENTER);
+    //     obj->setPos(0, 0);
+    //     obj->setBgColor(lv_color_black());
+    //     obj->setRotation(240);
+
+    //     auto label = new LvLabel(lv_screen_active());
+    //     label->setText("Hello");
+    //     label->setAlign(LV_ALIGN_CENTER);
+    //     label->setPos(0, 0);
+
+    //     auto btn = new LvButton(lv_screen_active());
+    //     btn->label().setText("asdasdasd");
+    //     // btn->setAlign(LV_ALIGN_CENTER);
+    //     btn->setPos(300, 100);
+
+    //     auto sw = new LvSwitch();
+    //     sw->create(lv_screen_active());
+    //     sw->setPos(300, 200);
+
+    //     // delete obj;
+    //     // delete label;
+    //     // delete btn;
+    //     // delete sw;
+    // }
+
+    // auto digit = new DigitFlow(lv_screen_active());
+    // digit->setAlign(LV_ALIGN_CENTER);
+    // digit->setPos(0, 0);
+
+    // // digit->init();
+    // // delete digit;
+
+    // int time_count = 0;
+    // while (1) {
+    //     if (ui_hal::get_tick() - time_count > 1000) {
+    //         // digit->increase();
+    //         digit->decrease();
+    //         time_count = ui_hal::get_tick();
+    //     }
+
+    //     digit->update();
+    //     lvgl::update_window();
+    // }
 
     auto number_flow = new NumberFlow(lv_screen_active());
     number_flow->setAlign(LV_ALIGN_CENTER);
