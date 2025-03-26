@@ -1,12 +1,29 @@
+include(FetchContent)
+
 # Dependencies
-add_subdirectory(dependencies/raylib)
+FetchContent_Declare(
+    raylib
+    GIT_REPOSITORY https://github.com/raysan5/raylib.git
+    GIT_TAG 5.5
+)
+FetchContent_MakeAvailable(raylib)
 
 set(MOONCAKE_LOG_BUILD_EXAMPLE OFF)
-add_subdirectory(dependencies/mooncake_log)
+FetchContent_Declare(
+    mooncake_log
+    GIT_REPOSITORY https://github.com/Forairaaaaa/mooncake_log.git
+    GIT_TAG main
+)
+FetchContent_MakeAvailable(mooncake_log)
 
 set(LV_CONF_INCLUDE_SIMPLE OFF)
-set(LV_CONF_PATH ../../utils/lv_conf.h)
-add_subdirectory(dependencies/lvgl)
+set(LV_CONF_PATH ${CMAKE_SOURCE_DIR}/example/utils/lv_conf.h)
+FetchContent_Declare(
+    lvgl
+    GIT_REPOSITORY https://github.com/lvgl/lvgl.git
+    GIT_TAG v9.2.2
+)
+FetchContent_MakeAvailable(lvgl)
 
 find_package(SDL2 REQUIRED SDL2)
 include_directories(PUBLIC ${SDL2_INCLUDE_DIRS})

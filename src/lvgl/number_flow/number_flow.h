@@ -17,6 +17,7 @@
 #include <vector>
 #include <memory>
 #include <array>
+#include <cmath>
 #include <algorithm>
 
 namespace smooth_ui_toolkit {
@@ -27,7 +28,7 @@ public:
     DigitFlow() : LvObject() {}
     DigitFlow(lv_obj_t* parent) : LvObject(parent) {}
 
-    virtual ~DigitFlow() {};
+    virtual ~DigitFlow(){};
 
     inline void init()
     {
@@ -161,7 +162,7 @@ public:
         lv_obj_null_on_delete(&_lv_obj);
     }
 
-    virtual ~NumberFlow() {};
+    virtual ~NumberFlow(){};
 
     bool transparentBg = true;
     bool showPositiveSign = false;
