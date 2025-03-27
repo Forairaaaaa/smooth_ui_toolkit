@@ -16,35 +16,30 @@
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
 
-class LvSlider : public LvObject {
+/**
+ * @brief Lvgl slider
+ *
+ */
+class Slider : public Widget<lv_slider_create> {
 public:
-    LvSlider() {};
-    LvSlider(lv_obj_t* parent)
-    {
-        _lv_obj = std::shared_ptr<lv_obj_t>(lv_slider_create(parent), lv_obj_delete);
-    }
+    using Widget::Widget;
 
-    virtual ~LvSlider() {};
-
-    virtual void create(lv_obj_t* parent) override
+    void setRange(int min, int max, bool autoCenterValue = true)
     {
-        _lv_obj = std::shared_ptr<lv_obj_t>(lv_slider_create(parent), lv_obj_delete);
-    }
-
-    void setRange(int min, int max)
-    {
-        lv_slider_set_range(_lv_obj.get(), min, max);
-        lv_slider_set_value(_lv_obj.get(), (max + min) / 2, LV_ANIM_ON);
+        lv_slider_set_range(this->raw_ptr(), min, max);
+        if (autoCenterValue) {
+            setValue((max + min) / 2);
+        }
     }
 
     int32_t getValue()
     {
-        return lv_slider_get_value(_lv_obj.get());
+        return lv_slider_get_value(this->raw_ptr());
     }
 
     void setValue(int32_t value)
     {
-        lv_slider_set_value(_lv_obj.get(), value, LV_ANIM_ON);
+        lv_slider_set_value(this->raw_ptr(), value, LV_ANIM_ON);
     }
 
     void onValueChanged(lv_event_cb_t event_cb, void* user_data = nullptr)

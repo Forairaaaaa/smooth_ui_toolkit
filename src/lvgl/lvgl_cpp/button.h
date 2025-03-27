@@ -17,32 +17,25 @@
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
 
-class LvButton : public LvObject {
+/**
+ * @brief Lvgl button
+ *
+ */
+class Button : public Widget<lv_button_create> {
 public:
-    LvButton() {};
-    LvButton(lv_obj_t* parent)
-    {
-        _lv_obj = std::shared_ptr<lv_obj_t>(lv_button_create(parent), lv_obj_delete);
-    }
+    using Widget::Widget;
 
-    virtual ~LvButton() {};
-
-    virtual void create(lv_obj_t* parent) override
-    {
-        _lv_obj = std::shared_ptr<lv_obj_t>(lv_button_create(parent), lv_obj_delete);
-    }
-
-    LvLabel& label()
+    Label& label()
     {
         if (!_label) {
-            _label = std::make_shared<LvLabel>(_lv_obj.get());
+            _label = std::make_unique<Label>(this->raw_ptr());
         }
         return *_label;
     }
 
     void onClick(lv_event_cb_t event_cb, void* user_data = nullptr)
     {
-        LvObject::onClick(event_cb, user_data);
+        Object::onClick(event_cb, user_data);
     }
 
     /**
@@ -53,7 +46,7 @@ public:
     Signal<void>& onClick(void)
     {
         if (!_on_click) {
-            _on_click = std::make_shared<Signal<void>>();
+            _on_click = std::make_unique<Signal<void>>();
             addEventCb(
                 [](lv_event_t* e) {
                     auto on_click = (Signal<void>*)lv_event_get_user_data(e);
@@ -65,8 +58,8 @@ public:
     }
 
 protected:
-    std::shared_ptr<LvLabel> _label;
-    std::shared_ptr<Signal<void>> _on_click;
+    std::unique_ptr<Label> _label;
+    std::unique_ptr<Signal<void>> _on_click;
 };
 
 } // namespace lvgl_cpp

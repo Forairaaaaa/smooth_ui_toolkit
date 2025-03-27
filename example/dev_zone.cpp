@@ -10,9 +10,11 @@
  */
 #include "lvgl_cpp/button.h"
 #include "lvgl_cpp/label.h"
+#include "lvgl_cpp/switch.h"
 #include "number_flow/number_flow.h"
 #include "utils/hal/hal.h"
 #include "utils/lvgl_wrapper.h"
+#include <memory>
 #include <smooth_ui_toolkit.h>
 #include <smooth_lvgl.h>
 #include <mooncake_log.h>
@@ -26,33 +28,40 @@ int main()
 {
     lvgl::create_window(800, 520);
 
-    // {
-    //     auto obj = new LvObject(lv_screen_active());
-    //     // obj->setSize(LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-    //     // obj->setAlign(LV_ALIGN_CENTER);
-    //     obj->setPos(0, 0);
-    //     obj->setBgColor(lv_color_black());
-    //     obj->setRotation(240);
+    {
+        auto obj = new Container(lv_screen_active());
+        // obj->setAlign(LV_ALIGN_CENTER);
+        obj->setPos(200, 30);
+        // obj->setBgColor(lv_color_black());
+        obj->setRotation(240);
 
-    //     auto label = new LvLabel(lv_screen_active());
-    //     label->setText("Hello");
-    //     label->setAlign(LV_ALIGN_CENTER);
-    //     label->setPos(0, 0);
+        auto label = new Label(lv_screen_active());
+        label->setText("Hello");
+        label->setAlign(LV_ALIGN_CENTER);
+        label->setPos(0, 0);
 
-    //     auto btn = new LvButton(lv_screen_active());
-    //     btn->label().setText("asdasdasd");
-    //     // btn->setAlign(LV_ALIGN_CENTER);
-    //     btn->setPos(300, 100);
+        auto btn = new Button(lv_screen_active());
+        btn->label().setText("asdasdasd");
+        // btn->setAlign(LV_ALIGN_CENTER);
+        btn->setPos(300, 100);
+        btn->onClick().connect([]() { mclog::info("?????"); });
 
-    //     auto sw = new LvSwitch();
-    //     sw->create(lv_screen_active());
-    //     sw->setPos(300, 200);
+        auto sw = new Switch(lv_screen_active());
+        // auto sw = new Switch(btn->get());
+        sw->setPos(300, 200);
+        sw->onValueChanged().connect([](bool value) { mclog::info("value: {}", value); });
 
-    //     // delete obj;
-    //     // delete label;
-    //     // delete btn;
-    //     // delete sw;
-    // }
+        auto slider = new Slider(lv_screen_active());
+        slider->setPos(300, 300);
+        slider->setRange(0, 100);
+        slider->onValueChanged().connect([](int value) { mclog::info("value: {}", value); });
+
+        // delete obj;
+        // delete label;
+        // delete btn;
+        // delete sw;
+        // delete slider;
+    }
 
     // auto digit = new DigitFlow(lv_screen_active());
     // digit->setAlign(LV_ALIGN_CENTER);
@@ -61,38 +70,53 @@ int main()
     // // digit->init();
     // // delete digit;
 
-    // int time_count = 0;
-    // while (1) {
-    //     if (ui_hal::get_tick() - time_count > 1000) {
-    //         // digit->increase();
-    //         digit->decrease();
-    //         time_count = ui_hal::get_tick();
-    //     }
-
-    //     digit->update();
-    //     lvgl::update_window();
-    // }
-
-    std::vector<DigitFlow> ssss;
-    // std::vector<LvButton> ssss;
-    ssss.resize(10);
-    for (int i = 0; i < ssss.size(); i++) {
-        ssss[i].create(lv_screen_active());
-        ssss[i].setPos(i * 100, 0);
-        ssss[i].init();
-    }
-
     int time_count = 0;
     while (1) {
-        if (ui_hal::get_tick() - time_count > 5000) {
-            ssss.erase(ssss.begin() + 5);
-            time_count = ui_hal::get_tick();
-        }
-        // for (int i = 0; i < ssss.size(); i++) {
-        //     ssss[i].update();
+        // if (ui_hal::get_tick() - time_count > 1000) {
+        //     // digit->increase();
+        //     digit->decrease();
+        //     time_count = ui_hal::get_tick();
         // }
+        // digit->update();
+
         lvgl::update_window();
     }
+
+    // // std::vector<DigitFlow> ssss;
+    // // std::vector<LvButton> ssss;
+    // std::vector<std::unique_ptr<Label>> ssss;
+    // // std::vector<Label> ssss;
+    // // ssss.resize(10);
+    // // for (int i = 0; i < ssss.size(); i++) {
+    // //     // ssss[i] = std::make_unique<Label>(lv_screen_active());
+
+    // //     ssss[i].setPos(i * 100, 0);
+    // //     // ssss[i].init();
+    // // }
+
+    // auto obj = new Container(lv_screen_active());
+    // obj->setAlign(LV_ALIGN_CENTER);
+    // obj->setPos(0, 0);
+
+    // for (int i = 0; i < 10; i++) {
+    //     // ssss.push_back(std::make_unique<Label>(lv_screen_active()));
+    //     ssss.push_back(std::make_unique<Label>(obj->get()));
+    //     ssss.back()->setPos(i * 100, 0);
+    // }
+
+    // int time_count = 0;
+    // while (1) {
+    //     if (ui_hal::get_tick() - time_count > 3000) {
+    //         // ssss.erase(ssss.begin() + 5);
+    //         // ssss.clear();
+    //         delete obj;
+    //         time_count = ui_hal::get_tick();
+    //     }
+    //     // for (int i = 0; i < ssss.size(); i++) {
+    //     //     ssss[i].update();
+    //     // }
+    //     lvgl::update_window();
+    // }
 
     // auto number_flow = new NumberFlow(lv_screen_active());
     // number_flow->setAlign(LV_ALIGN_CENTER);
