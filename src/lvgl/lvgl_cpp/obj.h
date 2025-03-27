@@ -101,6 +101,22 @@ public:
         lv_obj_set_style_transform_rotation(this->raw_ptr(), value, selector);
     }
 
+    void setTransformPivotX(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_transform_pivot_x(this->raw_ptr(), value, selector);
+    }
+
+    void setTransformPivotY(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_transform_pivot_y(this->raw_ptr(), value, selector);
+    }
+
+    void setTransformPivot(int32_t x, int32_t y, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_transform_pivot_x(this->raw_ptr(), x, selector);
+        lv_obj_set_style_transform_pivot_y(this->raw_ptr(), y, selector);
+    }
+
     void setScrollbarMode(lv_scrollbar_mode_t mode)
     {
         lv_obj_set_scrollbar_mode(this->raw_ptr(), mode);
