@@ -25,7 +25,7 @@ int main()
     number_flow->setPos(0, -110);
     number_flow->setTextFont(&lv_font_montserrat_48);
 
-    auto flex_layout = new LvObject(lv_screen_active());
+    auto flex_layout = new Container(lv_screen_active());
     flex_layout->setBorderWidth(0);
     flex_layout->setBgOpa(0);
     flex_layout->setFlexFlow(LV_FLEX_FLOW_ROW);
@@ -35,20 +35,20 @@ int main()
     flex_layout->setPos(0, 150);
     flex_layout->setPadColumn(50);
 
-    auto btn_next = new LvButton(flex_layout->get());
+    auto btn_next = new Button(flex_layout->get());
     btn_next->label().setText("-1");
     btn_next->onClick().connect([&]() { number_flow->setValue(number_flow->value() - 1); });
 
-    auto btn_last = new LvButton(flex_layout->get());
+    auto btn_last = new Button(flex_layout->get());
     btn_last->label().setText("+1");
     btn_last->onClick().connect([&]() { number_flow->setValue(number_flow->value() + 1); });
 
-    auto btn_random = new LvButton(flex_layout->get());
+    auto btn_random = new Button(flex_layout->get());
     btn_random->label().setText("random");
     btn_random->onClick().connect([&]() { number_flow->setValue(rand()); });
 
     int target_value = 0;
-    auto slider = new LvSlider(flex_layout->get());
+    auto slider = new Slider(flex_layout->get());
     slider->setRange(1, 9);
     slider->setValue(1);
     slider->onValueChanged().connect([&](int value) {

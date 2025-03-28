@@ -16,16 +16,13 @@
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
 
-class LvSwitch : public LvObject {
+/**
+ * @brief Lvgl switch
+ *
+ */
+class Switch : public Widget<lv_switch_create> {
 public:
-    LvSwitch() {};
-    LvSwitch(lv_obj_t* parent)
-    {
-        _lv_obj = lv_switch_create(parent);
-        lv_obj_null_on_delete(&_lv_obj);
-    }
-
-    virtual ~LvSwitch() {};
+    using Widget::Widget;
 
     void setValue(bool value)
     {
@@ -38,7 +35,7 @@ public:
 
     bool getValue()
     {
-        return lv_obj_has_state(_lv_obj, LV_STATE_CHECKED);
+        return lv_obj_has_state(this->raw_ptr(), LV_STATE_CHECKED);
     }
 
     Signal<bool>& onValueChanged(void)

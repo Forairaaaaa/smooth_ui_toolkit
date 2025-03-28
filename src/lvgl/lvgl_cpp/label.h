@@ -16,30 +16,27 @@
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
 
-class LvLabel : public LvObject {
+/**
+ * @brief Lvgl label
+ *
+ */
+class Label : public Widget<lv_label_create> {
 public:
-    LvLabel() {};
-    LvLabel(lv_obj_t* parent)
-    {
-        _lv_obj = lv_label_create(parent);
-        lv_obj_null_on_delete(&_lv_obj);
-    }
-
-    virtual ~LvLabel() {};
-
-    void setText(const char* text)
-    {
-        lv_label_set_text(_lv_obj, text);
-    }
+    using Widget::Widget;
 
     void setText(const std::string& text)
     {
-        lv_label_set_text(_lv_obj, text.c_str());
+        lv_label_set_text(this->raw_ptr(), text.c_str());
     }
 
-    std::string getText()
+    const char* getText()
     {
-        return lv_label_get_text(_lv_obj);
+        return lv_label_get_text(this->raw_ptr());
+    }
+
+    void setLongMode(lv_label_long_mode_t mode)
+    {
+        lv_label_set_long_mode(this->raw_ptr(), mode);
     }
 };
 

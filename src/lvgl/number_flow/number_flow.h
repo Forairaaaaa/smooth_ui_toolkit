@@ -12,136 +12,25 @@
 #pragma once
 #include "../lvgl_cpp/obj.h"
 #include "../lvgl_cpp/label.h"
+#include "digit_flow.h"
 #include "../../animation/animate_value/animate_value.h"
 #include <lvgl.h>
 #include <vector>
 #include <memory>
-#include <array>
 #include <cmath>
 #include <algorithm>
 
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
 
-class DigitFlow : public LvObject {
+class NumberFlow : public Widget<lv_obj_create> {
 public:
-    DigitFlow() : LvObject() {}
-    DigitFlow(lv_obj_t* parent) : LvObject(parent) {}
+    using Widget::Widget;
 
-    virtual ~DigitFlow(){};
+    // no copy constructor and copy assignment operator
+    NumberFlow(const NumberFlow&) = delete;
+    NumberFlow& operator=(const NumberFlow&) = delete;
 
-    inline void init()
-    {
-        // Mask basic
-        setPadding(0, 0, 0, 0);
-        setOutlineWidth(0);
-        setRadius(0);
-        setBorderWidth(0);
-        removeFlag(LV_OBJ_FLAG_SCROLLABLE);
-        setBgOpa(LV_OPA_TRANSP);
-
-        // Child labels
-        _digit_labels.clear();
-        _digit_labels.resize(12);
-        for (int i = 0; i < 12; i++) {
-            _digit_labels[i] = std::make_shared<LvLabel>(_lv_obj);
-            _digit_labels[i]->setText(std::to_string(_digit_list[i]));
-            _digit_labels[i]->setAlign(LV_ALIGN_CENTER);
-        }
-
-        // Font height
-        _font_height = lv_font_get_line_height(getTextFont());
-        _digit_y_offset.springOptions().visualDuration = 0.6;
-        _digit_y_offset.springOptions().bounce = 0.05;
-        _digit_y_offset = _current_digit_index * _font_height;
-        setSize(LV_SIZE_CONTENT, _font_height);
-    }
-
-    inline void setTextFont(const lv_font_t* font, lv_style_selector_t selector = LV_PART_MAIN)
-    {
-        LvObject::setTextFont(font, selector);
-        init();
-    }
-
-    inline void setTextColor(lv_color_t color)
-    {
-        LvObject::setTextColor(color);
-        for (auto& digit : _digit_labels) {
-            digit->setTextColor(color);
-        }
-    }
-
-    inline void update()
-    {
-        if (_font_height <= 0) {
-            init();
-        }
-        _digit_y_offset.update();
-        for (int i = 0; i < _digit_labels.size(); i++) {
-            _digit_labels[i]->setPos(0, i * _font_height - _digit_y_offset.directValue());
-        }
-    }
-
-    inline int value()
-    {
-        return _digit_list[_current_digit_index];
-    }
-
-    inline void increase()
-    {
-        if (_current_digit_index >= _digit_list.size() - 2) {
-            _current_digit_index = 1;
-            _digit_y_offset.retarget(0, 1 * _font_height);
-        } else {
-            _current_digit_index++;
-            _digit_y_offset = _current_digit_index * _font_height;
-        }
-    }
-
-    inline void decrease()
-    {
-        if (_current_digit_index <= 1) {
-            _current_digit_index = _digit_list.size() - 2;
-            _digit_y_offset.retarget((_digit_list.size() - 1) * _font_height, _current_digit_index * _font_height);
-        } else {
-            _current_digit_index--;
-            _digit_y_offset = _current_digit_index * _font_height;
-        }
-    }
-
-    inline void increaseTo(int targetValue)
-    {
-        increase();
-        int target_digit = std::abs(targetValue) % 10;
-        while (value() != target_digit) {
-            increase();
-        }
-    }
-
-    inline void decreaseTo(int targetValue)
-    {
-        decrease();
-        int target_digit = std::abs(targetValue) % 10;
-        while (value() != target_digit) {
-            decrease();
-        }
-    }
-
-    inline AnimateValue& flowAnimate()
-    {
-        return _digit_y_offset;
-    }
-
-protected:
-    static inline constexpr std::array<int, 12> _digit_list = {9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
-    int32_t _font_height = 0;
-    AnimateValue _digit_y_offset;
-    size_t _current_digit_index = 1;
-    std::vector<std::shared_ptr<LvLabel>> _digit_labels;
-};
-
-class NumberFlow : public LvObject {
-public:
     struct Item_t {
         AnimateValue positionX;
         AnimateValue opacity;
@@ -153,21 +42,13 @@ public:
     };
 
     struct Label_t : public Item_t {
-        std::unique_ptr<LvLabel> label;
+        std::unique_ptr<Label> label;
     };
-
-    NumberFlow(lv_obj_t* parent = nullptr)
-    {
-        _lv_obj = lv_obj_create(parent);
-        lv_obj_null_on_delete(&_lv_obj);
-    }
-
-    virtual ~NumberFlow(){};
 
     bool transparentBg = true;
     bool showPositiveSign = false;
 
-    inline void init()
+    void init()
     {
         // Mask basic
         setPadding(0, 0, 0, 0);
@@ -186,7 +67,7 @@ public:
         setValue(_current_number);
     }
 
-    inline void update()
+    void update()
     {
         if (_digits.empty()) {
             init();
@@ -196,12 +77,12 @@ public:
         handle_digit_update();
     }
 
-    inline int value()
+    int value()
     {
         return _current_number;
     }
 
-    inline void setValue(int targetValue)
+    void setValue(int targetValue)
     {
         _current_number = targetValue;
         handle_sign_changed();
@@ -218,7 +99,7 @@ protected:
     std::vector<Digit_t> _digits;
     std::unique_ptr<Label_t> _sign;
 
-    inline int get_number_of_digits(int num)
+    int get_number_of_digits(int num)
     {
         if (num == 0) {
             return 1;
@@ -231,7 +112,7 @@ protected:
         return count;
     }
 
-    inline void handle_digit_changed()
+    void handle_digit_changed()
     {
         auto new_number_of_digits = get_number_of_digits(_current_number);
         int digit_list_size = _digits.size();
@@ -241,7 +122,7 @@ protected:
             // mclog::info("add digits");
             while (new_number_of_digits > digit_list_size) {
                 _digits.push_back(Digit_t());
-                _digits.back().digitFlow = std::make_unique<DigitFlow>(_lv_obj);
+                _digits.back().digitFlow = std::make_unique<DigitFlow>(this->raw_ptr());
                 _digits.back().digitFlow->init();
                 _digits.back().digitFlow->setTextColor(getTextColor());
                 _digits.back().positionX.springOptions().visualDuration = 0.6;
@@ -287,7 +168,7 @@ protected:
         _current_number_of_digits = new_number_of_digits;
     }
 
-    inline void handle_digit_update()
+    void handle_digit_update()
     {
         for (int i = 0; i < _digits.size(); i++) {
             if (_digits[i].isGoingDestroy && _digits[i].positionX.done() && _digits[i].opacity.done()) {
@@ -302,7 +183,7 @@ protected:
         }
     }
 
-    inline void handle_digit_number_changed()
+    void handle_digit_number_changed()
     {
         // Iterate through each digit
         int number = _current_number;
@@ -327,7 +208,7 @@ protected:
         _last_number = _current_number;
     }
 
-    inline void handle_sign_changed()
+    void handle_sign_changed()
     {
         std::string new_sign;
         if (_current_number < 0) {
@@ -345,7 +226,7 @@ protected:
         } else {
             if (!_sign) {
                 _sign = std::make_unique<Label_t>();
-                _sign->label = std::make_unique<LvLabel>(_lv_obj);
+                _sign->label = std::make_unique<Label>(this->raw_ptr());
             }
             _sign->positionX.move(0);
             if (_sign->label->getText() != new_sign) {
@@ -357,7 +238,7 @@ protected:
         }
     }
 
-    inline void handle_sign_update()
+    void handle_sign_update()
     {
         if (_sign) {
             _sign->positionX.update();

@@ -17,28 +17,25 @@
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
 
-class LvButton : public LvObject {
+/**
+ * @brief Lvgl button
+ *
+ */
+class Button : public Widget<lv_button_create> {
 public:
-    LvButton() {};
-    LvButton(lv_obj_t* parent)
-    {
-        _lv_obj = lv_button_create(parent);
-        lv_obj_null_on_delete(&_lv_obj);
-    }
+    using Widget::Widget;
 
-    virtual ~LvButton() {};
-
-    LvLabel& label()
+    Label& label()
     {
         if (!_label) {
-            _label = std::make_unique<LvLabel>(_lv_obj);
+            _label = std::make_unique<Label>(this->raw_ptr());
         }
         return *_label;
     }
 
     void onClick(lv_event_cb_t event_cb, void* user_data = nullptr)
     {
-        LvObject::onClick(event_cb, user_data);
+        Object::onClick(event_cb, user_data);
     }
 
     /**
@@ -61,7 +58,7 @@ public:
     }
 
 protected:
-    std::unique_ptr<LvLabel> _label;
+    std::unique_ptr<Label> _label;
     std::unique_ptr<Signal<void>> _on_click;
 };
 
