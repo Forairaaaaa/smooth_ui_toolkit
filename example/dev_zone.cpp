@@ -10,6 +10,8 @@
  */
 #include "lvgl_cpp/button.h"
 #include "lvgl_cpp/label.h"
+#include "lvgl_cpp/obj.h"
+#include "lvgl_cpp/slider.h"
 #include "lvgl_cpp/switch.h"
 #include "number_flow/number_flow.h"
 #include "utils/hal/hal.h"
@@ -28,63 +30,63 @@ int main()
 {
     lvgl::create_window(800, 520);
 
-    {
-        auto obj = new Container(lv_screen_active());
-        // obj->setAlign(LV_ALIGN_CENTER);
-        obj->setPos(200, 30);
-        // obj->setBgColor(lv_color_black());
-        obj->setRotation(240);
+    // {
+    //     auto obj = new Container(lv_screen_active());
+    //     // obj->setAlign(LV_ALIGN_CENTER);
+    //     obj->setPos(200, 30);
+    //     // obj->setBgColor(lv_color_black());
+    //     obj->setRotation(240);
 
-        auto label = new Label(lv_screen_active());
-        label->setText("Hello");
-        label->setAlign(LV_ALIGN_CENTER);
-        label->setPos(0, 0);
+    //     auto label = new Label(lv_screen_active());
+    //     label->setText("Hello");
+    //     label->setAlign(LV_ALIGN_CENTER);
+    //     label->setPos(0, 0);
 
-        auto btn = new Button(lv_screen_active());
-        btn->label().setText("asdasdasd");
-        // btn->setAlign(LV_ALIGN_CENTER);
-        btn->setPos(300, 100);
-        btn->onClick().connect([]() { mclog::info("?????"); });
+    //     auto btn = new Button(lv_screen_active());
+    //     btn->label().setText("asdasdasd");
+    //     // btn->setAlign(LV_ALIGN_CENTER);
+    //     btn->setPos(300, 100);
+    //     btn->onClick().connect([]() { mclog::info("?????"); });
 
-        auto sw = new Switch(lv_screen_active());
-        // auto sw = new Switch(btn->get());
-        sw->setPos(300, 200);
-        sw->onValueChanged().connect([](bool value) { mclog::info("value: {}", value); });
+    //     auto sw = new Switch(lv_screen_active());
+    //     // auto sw = new Switch(btn->get());
+    //     sw->setPos(300, 200);
+    //     sw->onValueChanged().connect([](bool value) { mclog::info("value: {}", value); });
 
-        auto slider = new Slider(lv_screen_active());
-        slider->setPos(300, 300);
-        slider->setRange(0, 100);
-        slider->onValueChanged().connect([](int value) { mclog::info("value: {}", value); });
+    //     auto slider = new Slider(lv_screen_active());
+    //     slider->setPos(300, 300);
+    //     slider->setRange(0, 100);
+    //     slider->onValueChanged().connect([](int value) { mclog::info("value: {}", value); });
 
-        // delete obj;
-        // delete label;
-        // delete btn;
-        // delete sw;
-        // delete slider;
-    }
+    //     // delete obj;
+    //     // delete label;
+    //     // delete btn;
+    //     // delete sw;
+    //     // delete slider;
+    // }
 
     // auto digit = new DigitFlow(lv_screen_active());
     // digit->setAlign(LV_ALIGN_CENTER);
     // digit->setPos(0, 0);
 
-    // // digit->init();
-    // // delete digit;
+    // digit->init();
+    // delete digit;
 
-    int time_count = 0;
-    while (1) {
-        // if (ui_hal::get_tick() - time_count > 1000) {
-        //     // digit->increase();
-        //     digit->decrease();
-        //     time_count = ui_hal::get_tick();
-        // }
-        // digit->update();
+    // int time_count = 0;
+    // while (1) {
+    //     if (ui_hal::get_tick() - time_count > 1000) {
+    //         // // digit->increase();
+    //         // digit->decrease();
+    //         time_count = ui_hal::get_tick();
+    //     }
+    //     digit->update();
 
-        lvgl::update_window();
-    }
+    //     lvgl::update_window();
+    // }
 
-    // // std::vector<DigitFlow> ssss;
+    // std::vector<std::unique_ptr<DigitFlow>> ssss;
     // // std::vector<LvButton> ssss;
-    // std::vector<std::unique_ptr<Label>> ssss;
+    // // std::vector<std::unique_ptr<Label>> ssss;
     // // std::vector<Label> ssss;
     // // ssss.resize(10);
     // // for (int i = 0; i < ssss.size(); i++) {
@@ -100,67 +102,72 @@ int main()
 
     // for (int i = 0; i < 10; i++) {
     //     // ssss.push_back(std::make_unique<Label>(lv_screen_active()));
-    //     ssss.push_back(std::make_unique<Label>(obj->get()));
+    //     // ssss.push_back(std::make_unique<Label>(obj->get()));
+    //     ssss.push_back(std::make_unique<DigitFlow>(obj->get()));
     //     ssss.back()->setPos(i * 100, 0);
     // }
 
     // int time_count = 0;
     // while (1) {
     //     if (ui_hal::get_tick() - time_count > 3000) {
-    //         // ssss.erase(ssss.begin() + 5);
+    //         ssss.erase(ssss.begin() + 5);
     //         // ssss.clear();
-    //         delete obj;
+    //         // delete obj;
+    //         while (1) {
+    //             ssss[2]->update();
+    //             lvgl::update_window();
+    //         }
     //         time_count = ui_hal::get_tick();
     //     }
-    //     // for (int i = 0; i < ssss.size(); i++) {
-    //     //     ssss[i].update();
-    //     // }
-    //     lvgl::update_window();
-    // }
-
-    // auto number_flow = new NumberFlow(lv_screen_active());
-    // number_flow->setAlign(LV_ALIGN_CENTER);
-    // number_flow->setPos(0, -110);
-    // number_flow->setTextFont(&lv_font_montserrat_48);
-
-    // auto flex_layout = new LvObject(lv_screen_active());
-    // flex_layout->setBorderWidth(0);
-    // flex_layout->setBgOpa(0);
-    // flex_layout->setFlexFlow(LV_FLEX_FLOW_ROW);
-    // flex_layout->setFlexAlign(LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START);
-    // flex_layout->setSize(LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-    // flex_layout->setAlign(LV_ALIGN_CENTER);
-    // flex_layout->setPos(0, 150);
-    // flex_layout->setPadColumn(50);
-
-    // auto btn_next = new LvButton(flex_layout->get());
-    // btn_next->label().setText("-1");
-    // btn_next->onClick().connect([&]() { number_flow->setValue(number_flow->value() - 1); });
-
-    // auto btn_last = new LvButton(flex_layout->get());
-    // btn_last->label().setText("+1");
-    // btn_last->onClick().connect([&]() { number_flow->setValue(number_flow->value() + 1); });
-
-    // auto btn_random = new LvButton(flex_layout->get());
-    // btn_random->label().setText("random");
-    // btn_random->onClick().connect([&]() { number_flow->setValue(rand()); });
-
-    // int target_value = 0;
-    // auto slider = new LvSlider(flex_layout->get());
-    // slider->setRange(1, 9);
-    // slider->setValue(1);
-    // slider->onValueChanged().connect([&](int value) {
-    //     int target_value = 0;
-    //     for (int i = 1; i <= value; ++i) {
-    //         target_value = target_value * 10 + i;
+    //     for (int i = 0; i < ssss.size(); i++) {
+    //         ssss[i]->update();
     //     }
-    //     number_flow->setValue(target_value);
-    // });
-
-    // while (1) {
-    //     number_flow->update();
     //     lvgl::update_window();
     // }
+
+    auto number_flow = new NumberFlow(lv_screen_active());
+    number_flow->setAlign(LV_ALIGN_CENTER);
+    number_flow->setPos(0, -110);
+    number_flow->setTextFont(&lv_font_montserrat_48);
+
+    auto flex_layout = new Container(lv_screen_active());
+    flex_layout->setBorderWidth(0);
+    flex_layout->setBgOpa(0);
+    flex_layout->setFlexFlow(LV_FLEX_FLOW_ROW);
+    flex_layout->setFlexAlign(LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START);
+    flex_layout->setSize(LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    flex_layout->setAlign(LV_ALIGN_CENTER);
+    flex_layout->setPos(0, 150);
+    flex_layout->setPadColumn(50);
+
+    auto btn_next = new Button(flex_layout->get());
+    btn_next->label().setText("-1");
+    btn_next->onClick().connect([&]() { number_flow->setValue(number_flow->value() - 1); });
+
+    auto btn_last = new Button(flex_layout->get());
+    btn_last->label().setText("+1");
+    btn_last->onClick().connect([&]() { number_flow->setValue(number_flow->value() + 1); });
+
+    auto btn_random = new Button(flex_layout->get());
+    btn_random->label().setText("random");
+    btn_random->onClick().connect([&]() { number_flow->setValue(rand()); });
+
+    int target_value = 0;
+    auto slider = new Slider(flex_layout->get());
+    slider->setRange(1, 9);
+    slider->setValue(1);
+    slider->onValueChanged().connect([&](int value) {
+        int target_value = 0;
+        for (int i = 1; i <= value; ++i) {
+            target_value = target_value * 10 + i;
+        }
+        number_flow->setValue(target_value);
+    });
+
+    while (1) {
+        number_flow->update();
+        lvgl::update_window();
+    }
 
     return 0;
 }

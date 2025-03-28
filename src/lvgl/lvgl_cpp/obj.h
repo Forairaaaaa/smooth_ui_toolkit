@@ -154,7 +154,7 @@ public:
         lv_obj_move_foreground(this->raw_ptr());
     }
 
-    void hidden(bool hidden)
+    void setHidden(bool hidden)
     {
         if (hidden) {
             addFlag(LV_OBJ_FLAG_HIDDEN);
@@ -171,6 +171,11 @@ public:
     void removeFlag(lv_obj_flag_t flag)
     {
         lv_obj_remove_flag(this->raw_ptr(), flag);
+    }
+
+    bool hasFlag(lv_obj_flag_t flag)
+    {
+        return lv_obj_has_flag(this->raw_ptr(), flag);
     }
 
     int32_t getX()
