@@ -11,6 +11,7 @@
 #pragma once
 #include "../generators/generators.h"
 #include "../generators/spring/spring.h"
+#include "../generators/easing/easing.h"
 #include <functional>
 #include <memory>
 // 参数参考：https://motion.dev/docs/animate#options
@@ -60,7 +61,11 @@ public:
     // When repeating an animation, repeatDelay will set the duration of the time to wait, in seconds, between each
     // repetition
     float repeatDelay = 0.0f;
-    // Spring animation options
+    // Animation type
+    animation_type::Type_t animationType = animation_type::spring;
+    // Easing animation options, call this method will set animation type to easing
+    EasingOptions_t& easingOptions();
+    // Spring animation options, call this method will set animation type to spring
     SpringOptions_t& springOptions();
     // On value update
     void onUpdate(std::function<void(const float&)> callback)

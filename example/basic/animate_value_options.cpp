@@ -24,10 +24,17 @@ int main()
     x.stop();
     y.stop();
 
+    // Spring options
     x.springOptions().bounce = 0.1;
     y.springOptions().bounce = 0.1;
     x.springOptions().visualDuration = 0.6;
     y.springOptions().visualDuration = 0.6;
+
+    // Or easing options
+    // x.easingOptions().easingFunction = ease_out;
+    // y.easingOptions().easingFunction = ease_out;
+    // x.easingOptions().duration = 0.3;
+    // y.easingOptions().duration = 0.3;
 
     // Begin animation
     x.begin();

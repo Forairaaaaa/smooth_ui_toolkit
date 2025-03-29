@@ -51,9 +51,9 @@ public:
     virtual void init() override;
     virtual void retarget(const float& start, const float& end) override;
     virtual bool next(const float& t) override;
-    virtual Type_t type() const override
+    virtual animation_type::Type_t type() const override
     {
-        return Type_t::Spring;
+        return animation_type::spring;
     }
 
 protected:

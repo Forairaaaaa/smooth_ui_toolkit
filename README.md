@@ -4,7 +4,7 @@ todo:
 - [x] animate value default value by constructor
 - [x] https://motion.dev/docs/react-animation demo
 - [x] https://motion.dev/docs/react-animation motion+ Multicursor demo
-- [ ] easing key frame generator
+- [x] easing key frame generator
 - [ ] ~~sequence~~
 - [ ] ~~baker? or fix point easing generator~~
 - [ ] color tools
