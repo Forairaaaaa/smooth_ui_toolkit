@@ -31,8 +31,8 @@ int main()
     y.springOptions().visualDuration = 0.6;
 
     // Or easing options
-    // x.easingOptions().easingFunction = ease_out;
-    // y.easingOptions().easingFunction = ease_out;
+    // x.easingOptions().easingFunction = ease::ease_out_quad;
+    // y.easingOptions().easingFunction = ease::ease_out_quad;
     // x.easingOptions().duration = 0.3;
     // y.easingOptions().duration = 0.3;
 

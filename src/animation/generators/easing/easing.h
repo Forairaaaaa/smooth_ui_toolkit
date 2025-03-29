@@ -16,8 +16,8 @@
 namespace smooth_ui_toolkit {
 
 struct EasingOptions_t {
-    float duration = 1.0f;                                    // 动画持续时间，单位 s
-    std::function<float(float)> easingFunction = ease_in_out; // 缓动函数
+    float duration = 1.0f;                                               // 动画持续时间，单位 s
+    std::function<float(float)> easingFunction = ease::ease_in_out_quad; // 缓动函数
 };
 
 class Easing : public KeyFrameGenerator {
@@ -27,7 +27,7 @@ public:
 
     EasingOptions_t easingOptions;
 
-    inline void setEasingOptions(float duration = 1000.0f, std::function<float(float)> easingFunction = ease_out)
+    inline void setEasingOptions(float duration, std::function<float(float)> easingFunction)
     {
         easingOptions.duration = duration;
         easingOptions.easingFunction = easingFunction;
