@@ -30,6 +30,20 @@ public:
     DigitFlow(const DigitFlow&) = delete;
     DigitFlow& operator=(const DigitFlow&) = delete;
 
+    // Spring will feels more natural
+    animation_type::Type_t animationType = animation_type::spring;
+
+    static void setup_animation(AnimateValue& animateValue, animation_type::Type_t animationType)
+    {
+        if (animationType == animation_type::spring) {
+            animateValue.springOptions().visualDuration = 0.6;
+            animateValue.springOptions().bounce = 0.05;
+        } else if (animationType == animation_type::easing) {
+            animateValue.easingOptions().duration = 0.6;
+            animateValue.easingOptions().easingFunction = ease::ease_out_quad;
+        }
+    }
+
     void init()
     {
         // Mask basic
@@ -51,8 +65,7 @@ public:
 
         // Font height
         _font_height = lv_font_get_line_height(getTextFont());
-        _digit_y_offset.springOptions().visualDuration = 0.6;
-        _digit_y_offset.springOptions().bounce = 0.05;
+        setup_animation(_digit_y_offset, animationType);
         _digit_y_offset = _current_digit_index * _font_height;
         setSize(LV_SIZE_CONTENT, _font_height);
     }

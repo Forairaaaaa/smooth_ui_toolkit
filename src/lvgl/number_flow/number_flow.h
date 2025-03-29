@@ -45,6 +45,8 @@ public:
         std::unique_ptr<Label> label;
     };
 
+    // Spring will feels more natural
+    animation_type::Type_t animationType = animation_type::spring;
     bool transparentBg = true;
     bool showPositiveSign = false;
 
@@ -123,16 +125,15 @@ protected:
             while (new_number_of_digits > digit_list_size) {
                 _digits.push_back(Digit_t());
                 _digits.back().digitFlow = std::make_unique<DigitFlow>(this->raw_ptr());
+                _digits.back().digitFlow->animationType = animationType;
                 _digits.back().digitFlow->init();
                 _digits.back().digitFlow->setTextColor(getTextColor());
-                _digits.back().positionX.springOptions().visualDuration = 0.6;
-                _digits.back().positionX.springOptions().bounce = 0.05;
+                DigitFlow::setup_animation(_digits.back().positionX, animationType);
                 if (digit_list_size != 0) {
                     _digits.back().positionX.teleport((_current_number_of_digits - 1) * _font_width);
                 }
                 _digits.back().positionX.move(digit_list_size * _font_width);
-                _digits.back().opacity.springOptions().visualDuration = 0.3;
-                _digits.back().opacity.springOptions().bounce = 0.05;
+                DigitFlow::setup_animation(_digits.back().opacity, animationType);
                 _digits.back().opacity.move(255);
                 digit_list_size++;
             }
@@ -227,6 +228,8 @@ protected:
             if (!_sign) {
                 _sign = std::make_unique<Label_t>();
                 _sign->label = std::make_unique<Label>(this->raw_ptr());
+                DigitFlow::setup_animation(_sign->positionX, animationType);
+                DigitFlow::setup_animation(_sign->opacity, animationType);
             }
             _sign->positionX.move(0);
             if (_sign->label->getText() != new_sign) {

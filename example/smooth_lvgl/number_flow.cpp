@@ -29,6 +29,7 @@ int main()
     number_flow->setAlign(LV_ALIGN_CENTER);
     number_flow->setPos(0, -110);
     number_flow->setTextFont(&lv_font_montserrat_48);
+    // number_flow->animationType = animation_type::easing;
     // number_flow->transparentBg = false;
     // number_flow->showPositiveSign = true;
 
