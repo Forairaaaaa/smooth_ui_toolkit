@@ -10,9 +10,6 @@
  */
 // Refs: https://number-flow.barvian.me
 #include "../utils/lvgl_wrapper.h"
-#include "lvgl_cpp/button.h"
-#include "lvgl_cpp/obj.h"
-#include "lvgl_cpp/slider.h"
 #include <smooth_ui_toolkit.h>
 #include <smooth_lvgl.h>
 #include <mooncake_log.h>

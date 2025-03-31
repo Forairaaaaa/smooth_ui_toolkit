@@ -61,3 +61,6 @@ target_link_libraries(signal ${PROJECT_NAME} pthread)
 
 add_executable(number_flow ./smooth_lvgl/number_flow.cpp)
 target_link_libraries(number_flow ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})
+
+add_executable(lvgl_cpp ./smooth_lvgl/lvgl_cpp.cpp)
+target_link_libraries(lvgl_cpp ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})
