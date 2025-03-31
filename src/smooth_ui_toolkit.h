@@ -17,3 +17,4 @@
 #include "utils/event/signal.h"
 #include "utils/hal/hal.h"
 #include "utils/ring_buffer/ring_buffer.h"
+#include "utils/color/color.h"
