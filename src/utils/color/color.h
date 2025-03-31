@@ -9,6 +9,8 @@
  *
  */
 #pragma once
+#include "../../animation/animate_value/animate_value.h"
+#include "utils/easing/ease.h"
 #include <cstdint>
 #include <string>
 
@@ -74,7 +76,6 @@ struct Rgb_t {
         *this = hex_to_rgb(hex);
         return *this;
     }
-
     Rgb_t& operator=(const std::string& hex)
     {
         *this = hex_to_rgb(hex);
@@ -89,6 +90,98 @@ struct Rgb_t {
     inline std::string toHexString() const
     {
         return rgb_to_hex_string(*this);
+    }
+};
+
+struct AnimateRgb_t : public Rgb_t {
+    using Rgb_t::Rgb_t;
+
+    float duration = 1.0f;
+
+    AnimateValue r_anim;
+    AnimateValue g_anim;
+    AnimateValue b_anim;
+
+    inline void begin()
+    {
+        r_anim.easingOptions().easingFunction = ease::linear;
+        g_anim.easingOptions().easingFunction = ease::linear;
+        b_anim.easingOptions().easingFunction = ease::linear;
+        r_anim.easingOptions().duration = duration;
+        g_anim.easingOptions().duration = duration;
+        b_anim.easingOptions().duration = duration;
+        teleport(r, g, b);
+    }
+
+    inline void update()
+    {
+        r = r_anim;
+        g = g_anim;
+        b = b_anim;
+    }
+
+    inline void teleport(uint8_t r, uint8_t g, uint8_t b)
+    {
+        r_anim.teleport(r);
+        g_anim.teleport(g);
+        b_anim.teleport(b);
+    }
+    inline void teleport(const Rgb_t& rgb)
+    {
+        teleport(rgb.r, rgb.g, rgb.b);
+    }
+    inline void teleport(uint32_t hex)
+    {
+        teleport(hex_to_rgb(hex));
+    }
+    inline void teleport(const std::string& hex)
+    {
+        teleport(hex_to_rgb(hex));
+    }
+
+    inline void move(uint8_t r, uint8_t g, uint8_t b)
+    {
+        r_anim.move(r);
+        g_anim.move(g);
+        b_anim.move(b);
+    }
+    inline void move(const Rgb_t& rgb)
+    {
+        move(rgb.r, rgb.g, rgb.b);
+    }
+    inline void move(uint32_t hex)
+    {
+        move(hex_to_rgb(hex));
+    }
+    inline void move(const std::string& hex)
+    {
+        move(hex_to_rgb(hex));
+    }
+
+    AnimateRgb_t& operator=(const Rgb_t& rgb)
+    {
+        move(rgb);
+        return *this;
+    }
+    AnimateRgb_t& operator=(uint32_t hex)
+    {
+        move(hex);
+        return *this;
+    }
+    AnimateRgb_t& operator=(const std::string& hex)
+    {
+        move(hex);
+        return *this;
+    }
+
+    inline Rgb_t target()
+    {
+        return Rgb_t(r_anim.end, g_anim.end, b_anim.end);
+    }
+
+    inline bool done()
+    {
+        return r_anim.done() && g_anim.done() && b_anim.done();
     }
 };
 
