@@ -42,5 +42,14 @@ std::string rgb_to_hex_string(const Rgb_t& rgb)
     return std::string(buffer);
 }
 
+Rgb_t blend_in_difference(Rgb_t bg, Rgb_t fg)
+{
+    Rgb_t ret;
+    ret.r = std::abs(bg.r - fg.r);
+    ret.g = std::abs(bg.g - fg.g);
+    ret.b = std::abs(bg.b - fg.b);
+    return ret;
+}
+
 } // namespace color
 } // namespace smooth_ui_toolkit

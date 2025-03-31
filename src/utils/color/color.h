@@ -52,6 +52,15 @@ uint32_t rgb_to_hex(const Rgb_t& rgb);
 std::string rgb_to_hex_string(const Rgb_t& rgb);
 
 /**
+ * @brief 差值混合
+ *
+ * @param bg
+ * @param fg
+ * @return Rgb_t
+ */
+Rgb_t blend_in_difference(Rgb_t bg, Rgb_t fg);
+
+/**
  * @brief RGB888 color
  *
  */

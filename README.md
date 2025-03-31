@@ -7,5 +7,5 @@ todo:
 - [x] easing key frame generator
 - [ ] ~~sequence~~
 - [ ] ~~baker? or fix point easing generator~~
-- [ ] color tools
+- [x] color tools
 - [ ] menu shit
