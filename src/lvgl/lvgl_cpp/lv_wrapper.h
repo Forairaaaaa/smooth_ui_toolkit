@@ -7,7 +7,8 @@
 #pragma once
 #include <memory>
 #include <functional>
-#include "lvgl.h"
+#include <lvgl.h>
+#include <cstring>
 
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
@@ -60,7 +61,7 @@ static RawDblArray<char> str_vector_to_char_array(const std::vector<std::string>
     auto raw_arr = make_double_array<char>(arr.size());
     for (size_t n = 0; n < arr.size(); n++) {
         raw_arr.get()[n] = static_cast<char*>(calloc(arr[n].size() + 1, sizeof(char)));
-        memset(raw_arr.get()[n], 0, arr[n].size() + 1);
+        std::memset(raw_arr.get()[n], 0, arr[n].size() + 1);
         std::copy(arr[n].begin(), arr[n].end(), raw_arr.get()[n]);
     }
     return raw_arr;
