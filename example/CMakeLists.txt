@@ -67,3 +67,6 @@ target_link_libraries(lvgl_cpp ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIE
 
 add_executable(animate_color ./basic/animate_color.cpp)
 target_link_libraries(animate_color ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})
+
+add_executable(animte_sequence ./basic/animte_sequence.cpp)
+target_link_libraries(animte_sequence ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})

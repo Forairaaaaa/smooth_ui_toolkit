@@ -11,6 +11,7 @@
 #pragma once
 #include "animation/animate/animate.h"
 #include "animation/animate_value/animate_value.h"
+#include "animation/sequence/animate_sequence.h"
 #include "utils/easing/cubic_bezier/cubic_bezier.h"
 #include "utils/easing/ease.h"
 #include "utils/event/event_queue.h"
