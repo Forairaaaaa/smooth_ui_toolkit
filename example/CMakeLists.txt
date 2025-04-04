@@ -64,3 +64,6 @@ target_link_libraries(number_flow ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRA
 
 add_executable(lvgl_cpp ./smooth_lvgl/lvgl_cpp.cpp)
 target_link_libraries(lvgl_cpp ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})
+
+add_executable(animate_color ./basic/animate_color.cpp)
+target_link_libraries(animate_color ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})

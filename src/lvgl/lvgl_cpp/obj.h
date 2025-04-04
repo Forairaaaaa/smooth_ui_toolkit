@@ -11,6 +11,7 @@
 // Refs: https://github.com/vpaeder/lvglpp
 #pragma once
 #include "lv_wrapper.h"
+#include "utils/event/signal.h"
 #include <lvgl.h>
 #include <memory>
 
@@ -283,6 +284,28 @@ public:
     {
         addEventCb(event_cb, LV_EVENT_CLICKED, user_data);
     }
+
+    /**
+     * @brief On click signal
+     *
+     * @return Signal<void>&
+     */
+    Signal<void>& onClick(void)
+    {
+        if (!_on_click) {
+            _on_click = std::make_unique<Signal<void>>();
+            addEventCb(
+                [](lv_event_t* e) {
+                    auto on_click = (Signal<void>*)lv_event_get_user_data(e);
+                    on_click->emit();
+                },
+                LV_EVENT_CLICKED, _on_click.get());
+        }
+        return *_on_click;
+    }
+
+protected:
+    std::unique_ptr<Signal<void>> _on_click;
 };
 
 /** \brief Wraps a lv_obj_t object created with the given allocator.
