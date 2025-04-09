@@ -14,5 +14,6 @@
 #include "lvgl_cpp/slider.h"
 #include "lvgl_cpp/button.h"
 #include "lvgl_cpp/switch.h"
+#include "lvgl_cpp/line.h"
 #include "number_flow/digit_flow.h"
 #include "number_flow/number_flow.h"
