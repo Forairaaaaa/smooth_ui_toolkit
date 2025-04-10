@@ -47,6 +47,11 @@ public:
         lv_obj_set_align(this->raw_ptr(), alignment);
     }
 
+    void align(lv_align_t align, int32_t x_ofs, int32_t y_ofs)
+    {
+        lv_obj_align(this->raw_ptr(), align, x_ofs, y_ofs);
+    }
+
     void setOpa(lv_opa_t opa, lv_style_selector_t selector = LV_PART_MAIN)
     {
         lv_obj_set_style_opa(this->raw_ptr(), opa, selector);
@@ -253,6 +258,11 @@ public:
     void setPadColumn(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
     {
         lv_obj_set_style_pad_column(this->raw_ptr(), value, selector);
+    }
+
+    void setStyleSize(int32_t width, int32_t height, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_size(this->raw_ptr(), width, height, selector);
     }
 
     void addState(lv_state_t state)

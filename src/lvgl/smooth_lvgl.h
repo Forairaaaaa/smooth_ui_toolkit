@@ -16,5 +16,6 @@
 #include "lvgl_cpp/switch.h"
 #include "lvgl_cpp/line.h"
 #include "lvgl_cpp/canvas.h"
+#include "lvgl_cpp/chart.h"
 #include "number_flow/digit_flow.h"
 #include "number_flow/number_flow.h"
