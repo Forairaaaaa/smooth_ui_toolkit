@@ -9,6 +9,7 @@
 #include <functional>
 #include <lvgl.h>
 #include <cstring>
+#include <utility>
 
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
@@ -18,54 +19,54 @@ namespace lvgl_cpp {
 //  */
 // namespace lvgl {
 
-/** \typedef template <typename Class> using RawDblArray
- *  \brief A unique_ptr wrapping a raw double array with custom deleter.
- *  \param Class: array type.
- */
-template <typename Class>
-using RawDblArray = std::unique_ptr<Class*, std::function<void(Class**)>>;
+// /** \typedef template <typename Class> using RawDblArray
+//  *  \brief A unique_ptr wrapping a raw double array with custom deleter.
+//  *  \param Class: array type.
+//  */
+// template <typename Class>
+// using RawDblArray = std::unique_ptr<Class*, std::function<void(Class**)>>;
 
-/** \brief Generates a deleter function for a double array of given type and size.
- *  \tparam Class: array type.
- *  \param size: array size (1st dimension).
- *  \returns a deleter function for double arrays of given type and size.
- */
-template <typename Class>
-std::function<void(Class**)> RawDblArrayDeleter(size_t size)
-{
-    return [size](Class** obj) {
-        std::for_each(obj, obj + size, std::default_delete<Class[]>());
-        delete[] obj;
-    };
-}
+// /** \brief Generates a deleter function for a double array of given type and size.
+//  *  \tparam Class: array type.
+//  *  \param size: array size (1st dimension).
+//  *  \returns a deleter function for double arrays of given type and size.
+//  */
+// template <typename Class>
+// std::function<void(Class**)> RawDblArrayDeleter(size_t size)
+// {
+//     return [size](Class** obj) {
+//         std::for_each(obj, obj + size, std::default_delete<Class[]>());
+//         delete[] obj;
+//     };
+// }
 
-/** \fn template <typename Class> RawDblArray<Class> make_double_array(size_t size)
- *  \brief Creates a double array of given type and size wrapped in a unique_ptr.
- *  \tparam Class: array type.
- *  \param size: array size (1st dimension).
- *  \returns unique_ptr wrapping a double array of given type.
- */
-template <typename Class>
-RawDblArray<Class> make_double_array(size_t size)
-{
-    return RawDblArray<Class>(new Class*[size], RawDblArrayDeleter<Class>(size));
-}
+// /** \fn template <typename Class> RawDblArray<Class> make_double_array(size_t size)
+//  *  \brief Creates a double array of given type and size wrapped in a unique_ptr.
+//  *  \tparam Class: array type.
+//  *  \param size: array size (1st dimension).
+//  *  \returns unique_ptr wrapping a double array of given type.
+//  */
+// template <typename Class>
+// RawDblArray<Class> make_double_array(size_t size)
+// {
+//     return RawDblArray<Class>(new Class*[size], RawDblArrayDeleter<Class>(size));
+// }
 
-/** \fn static RawDblArray<char> str_vector_to_char_array(const std::vector<std::string> & arr)
- *  \brief Conversion function from string vector to double char array.
- *  \param arr: string vector.
- *  \returns a double char array with a copy of the content of input array.
- */
-static RawDblArray<char> str_vector_to_char_array(const std::vector<std::string>& arr)
-{
-    auto raw_arr = make_double_array<char>(arr.size());
-    for (size_t n = 0; n < arr.size(); n++) {
-        raw_arr.get()[n] = static_cast<char*>(calloc(arr[n].size() + 1, sizeof(char)));
-        std::memset(raw_arr.get()[n], 0, arr[n].size() + 1);
-        std::copy(arr[n].begin(), arr[n].end(), raw_arr.get()[n]);
-    }
-    return raw_arr;
-}
+// /** \fn static RawDblArray<char> str_vector_to_char_array(const std::vector<std::string> & arr)
+//  *  \brief Conversion function from string vector to double char array.
+//  *  \param arr: string vector.
+//  *  \returns a double char array with a copy of the content of input array.
+//  */
+// static RawDblArray<char> str_vector_to_char_array(const std::vector<std::string>& arr)
+// {
+//     auto raw_arr = make_double_array<char>(arr.size());
+//     for (size_t n = 0; n < arr.size(); n++) {
+//         raw_arr.get()[n] = static_cast<char*>(calloc(arr[n].size() + 1, sizeof(char)));
+//         std::memset(raw_arr.get()[n], 0, arr[n].size() + 1);
+//         std::copy(arr[n].begin(), arr[n].end(), raw_arr.get()[n]);
+//     }
+//     return raw_arr;
+// }
 
 /** \typedef template <auto DeleterFunction> CustomDeleter
  *  \brief Wraps a C deleter function for use with smart pointers.

@@ -12,6 +12,7 @@
 #include <functional>
 #include <vector>
 #include <mutex>
+#include <algorithm>
 
 namespace smooth_ui_toolkit {
 
