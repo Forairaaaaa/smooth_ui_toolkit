@@ -87,6 +87,16 @@ public:
         lv_obj_set_size(this->raw_ptr(), w, h);
     }
 
+    void setWidth(int32_t w)
+    {
+        lv_obj_set_width(this->raw_ptr(), w);
+    }
+
+    void setHeight(int32_t h)
+    {
+        lv_obj_set_height(this->raw_ptr(), h);
+    }
+
     void setRadius(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
     {
         lv_obj_set_style_radius(this->raw_ptr(), value, selector);

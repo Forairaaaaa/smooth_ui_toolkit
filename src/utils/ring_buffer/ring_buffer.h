@@ -92,11 +92,11 @@ public:
         _data.current_size--;
     }
 
-    const T& front()
+    T& front()
     {
         return _data.buffer[_data.r_index];
     }
-    const T& back()
+    T& back()
     {
         if (_data.w_index == 0) {
             return _data.buffer[_data.capacity - 1];
@@ -105,7 +105,7 @@ public:
         }
     }
 
-    void popAll(std::function<void(const T&)> onValue)
+    void popAll(std::function<void(T&)> onValue)
     {
         while (!empty()) {
             onValue(front());
@@ -113,7 +113,7 @@ public:
         }
     }
 
-    void peekAll(std::function<void(const T&, bool& stopPeeking)> onValue)
+    void peekAll(std::function<void(T&, bool& stopPeeking)> onValue)
     {
         if (empty()) {
             return;
