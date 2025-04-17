@@ -28,6 +28,7 @@ public:
     {
         if (!_label) {
             _label = std::make_unique<Label>(this->raw_ptr());
+            _label->align(LV_ALIGN_CENTER, 0, 0);
         }
         return *_label;
     }

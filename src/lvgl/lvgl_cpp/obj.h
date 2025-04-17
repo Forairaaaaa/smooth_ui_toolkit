@@ -160,6 +160,36 @@ public:
         lv_obj_set_style_outline_color(this->raw_ptr(), color, selector);
     }
 
+    void setShadowWidth(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_shadow_width(this->raw_ptr(), value, selector);
+    }
+
+    void setShadowOffsetX(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_shadow_offset_x(this->raw_ptr(), value, selector);
+    }
+
+    void setShadowOffsetY(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_shadow_offset_y(this->raw_ptr(), value, selector);
+    }
+
+    void setShadowSpread(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_shadow_spread(this->raw_ptr(), value, selector);
+    }
+
+    void setShadowColor(lv_color_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_shadow_color(this->raw_ptr(), value, selector);
+    }
+
+    void setShadowOpa(lv_opa_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_shadow_opa(this->raw_ptr(), value, selector);
+    }
+
     void moveBackground()
     {
         lv_obj_move_background(this->raw_ptr());
