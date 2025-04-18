@@ -335,6 +335,11 @@ public:
         addEventCb(event_cb, LV_EVENT_CLICKED, user_data);
     }
 
+    void onValueChanged(lv_event_cb_t event_cb, void* user_data = nullptr)
+    {
+        addEventCb(event_cb, LV_EVENT_VALUE_CHANGED, user_data);
+    }
+
     /**
      * @brief On click signal
      *

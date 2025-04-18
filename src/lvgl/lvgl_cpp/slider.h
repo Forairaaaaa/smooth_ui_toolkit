@@ -42,11 +42,6 @@ public:
         lv_slider_set_value(this->raw_ptr(), value, LV_ANIM_ON);
     }
 
-    void onValueChanged(lv_event_cb_t event_cb, void* user_data = nullptr)
-    {
-        addEventCb(event_cb, LV_EVENT_VALUE_CHANGED, user_data);
-    }
-
     /**
      * @brief On value changed signal
      *
