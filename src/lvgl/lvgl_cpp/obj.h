@@ -305,6 +305,31 @@ public:
         lv_obj_set_style_size(this->raw_ptr(), width, height, selector);
     }
 
+    void setArcWidth(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_arc_width(this->raw_ptr(), value, selector);
+    }
+
+    void setArcRounded(bool value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_arc_rounded(this->raw_ptr(), value, selector);
+    }
+
+    void setArcColor(lv_color_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_arc_color(this->raw_ptr(), value, selector);
+    }
+
+    void setArcOpa(lv_opa_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_arc_opa(this->raw_ptr(), value, selector);
+    }
+
+    void setArcImageSrc(const void* value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_arc_image_src(this->raw_ptr(), value, selector);
+    }
+
     void addState(lv_state_t state)
     {
         lv_obj_add_state(this->raw_ptr(), state);

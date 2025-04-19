@@ -20,5 +20,6 @@
 #include "lvgl_cpp/image.h"
 #include "lvgl_cpp/calendar.h"
 #include "lvgl_cpp/roller.h"
+#include "lvgl_cpp/spinner.h"
 #include "number_flow/digit_flow.h"
 #include "number_flow/number_flow.h"
