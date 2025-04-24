@@ -21,5 +21,6 @@
 #include "lvgl_cpp/calendar.h"
 #include "lvgl_cpp/roller.h"
 #include "lvgl_cpp/spinner.h"
+#include "lvgl_cpp/text_area.h"
 #include "number_flow/digit_flow.h"
 #include "number_flow/number_flow.h"
