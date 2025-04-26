@@ -1,14 +1,13 @@
 /**
- * @file number_flow.cpp
+ * @file lvgl_cpp.cpp
  * @author Forairaaaaa
- * @brief
+ * @brief 
  * @version 0.1
- * @date 2025-03-22
- *
+ * @date 2025-04-26
+ * 
  * @copyright Copyright (c) 2025
- *
+ * 
  */
-// Refs: https://number-flow.barvian.me
 #include "../utils/lvgl_wrapper.h"
 #include <smooth_ui_toolkit.h>
 #include <smooth_lvgl.h>
