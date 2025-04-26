@@ -189,6 +189,7 @@ cmake 过程会拉取 example 的依赖仓库，确保网络正常访问
 ```cmake
 # 不编译例程
 set(SMOOTH_UI_TOOLKIT_BUILD_EXAMPLE OFF)
+
 # 引入库路径
 add_subdirectory(path/to/smooth_ui_toolkit)
 
@@ -209,3 +210,11 @@ clone 仓库，直接丢到 `libs` 目录里就行
 #### Arduino 工程
 
 clone 仓库，直接丢到 `xxx` 目录里就行（我不记得那个 library 目录叫什么了）
+
+## TODO
+
+- [ ] ui_hal 的内部 cpp 实现添加宏定义，避免在自定义实现时多余的 linkage
+- [ ] NumberFlow 类在 linux 上有 bug，DigitFlow 正常
+- [ ] AnimateVlaue 如果设置了 delay，只会在第一次有效，retarget 后无效
+- [ ] 脚本化 lvgl widget api 封装
+
