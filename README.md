@@ -1,296 +1,229 @@
 # Smooth UI Toolkit
 
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/SmoothMenuDemo2.gif?raw=true)
+C++ UI 动画工具集
 
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/SmoothMenuDemo1.gif?raw=true)
+- Spring 动画、Easing 动画插值
+- Lvgl C++ 封装
+- signal、ringbuffer ...
 
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/Mix1.gif?raw=true)
+![](https://pic1.imgdb.cn/item/680c639c58cb8da5c8ce22d2.gif)
 
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/oled.gif?raw=true)
+![](https://pic1.imgdb.cn/item/680c58b558cb8da5c8ce1f5b.gif)
 
-带动画曲线插值的 UI 抽象工具集，无依赖
+![](https://pic1.imgdb.cn/item/680c58b458cb8da5c8ce1f5a.gif)
 
-- 动画曲线插值抽象，定点数优化浮点计算，自定义曲线
-- 选择菜单抽象，适用于普通选择菜单、启动器等
-- 更多控件抽象 (TODO)
-- 控件树 (TODO)
+## Animate
 
-视频：https://www.bilibili.com/video/BV1TT4y1W7tz
+基础动画插值类，可配置起止、循环方式、次数、动画类型等，默认动画类型为 **spring**
 
-模拟器：https://github.com/Forairaaaaa/smooth_ui_toolkit_simu
+插值类抽象深受 [Motion](https://motion.dev/) 启发，多谢 Motion 哥
 
-## 文件树
-
-```shell
-.
-├── core
-│   ├── easing_path                   // 动画曲线
-│   ├── smooth_drag
-│   ├── transition                    // 一维过渡抽象
-│   ├── transition2d                  // 二维过渡抽象
-│   └── types                         // 类型定义
-├── select_menu                       // 选择菜单抽象
-│   ├── base
-│   ├── smooth_options
-│   └── smooth_selector
-├── smooth_widget                     // TODO
-│   ├── base
-│   └── button
-└── utils
-    └── fpm                           // 定点数
-```
-
-## Core
-
-### EasingPath
-
-动画曲线函数，参考：https://easings.net/,  [示例](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/main/simu_project/smooth_ui_toolkit_test/easing_path/easing_path_test.cpp#L30)：
+![](https://pic1.imgdb.cn/item/680c58b458cb8da5c8ce1f57.gif)
 
 ```cpp
-using namespace SmoothUIToolKit;
+Animate animation;
 
-// 避免浮点运算，映射到 0 ~ EasingPath::maxT
-for (int t = 0; t < EasingPath::maxT; t++)
-{
-    auto x = EasingPath::easeInQuad(t);
-    // auto x = EasingPath::easeOutQuad(t);
-    // auto x = EasingPath::easeInOutQuad(t);
-    // auto x = EasingPath::easeInCubic(t);
-    // ...
+animation.start = 200;
+animation.end = 600;
+animation.repeat = -1;
+animation.repeatType = animate_repeat_type::reverse;
 
-    spdlog::info("x({}) = {}", t, x);
+// 这里调用 spring option ，则动画类型为 spring
+animation.springOptions().bounce = 0.4;
+animation.springOptions().visualDuration = 0.6;
+
+// 如想要 easing 动画，调用 easing option 即可
+// animation.easingOptions().easingFunction = ease::ease_out_quad;
+// animation.easingOptions().duration = 0.3;
+
+animation.init();
+animation.play();
+
+while (1) {
+    // 更新
+    animation.update();
+    // 取值
+    draw_ball(animation.value(), 233);
 }
 ```
 
-更多具体内容在[头文件定义](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/src/core/easing_path/easing_path.h)
+## AnimateValue
 
-### Transition
+Animate 的派生类，大幅简化赋值、取值操作
 
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/EasingPath.gif?raw=true)
+适合控件坐标、长宽等参数的快速动画化：
 
-一维过渡抽象，[示例](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/dd72391ed4b9aed22d91b95fc760bb65d9fe5807/simu_project/smooth_ui_toolkit_test/transition/transition_test.cpp#L24)：
+视频：[介绍](https://www.bilibili.com/video/BV1RZcTegEUu)
+
+![](https://pic1.imgdb.cn/item/680c58b458cb8da5c8ce1f58.gif)
 
 ```cpp
-using namespace SmoothUIToolKit;
+AnimateValue x = 100;
+AnimateValue y = 225;
 
-Transition t;
+while (1) {
+    // 赋值时自动适应新目标
+    x = get_mouse_x();
+    y = get_mouse_y();
+  
+    // 取值时自动更新、类型转换
+    draw_ball(x, y);
+});
+```
 
-// 初始值
-t.setStartValue(0);
-// 结束值
-t.setEndValue(100);
-// 过渡时间
-t.setDuration(400);
-// 过渡曲线
-t.setTransitionPath(EasingPath::easeOutBack);
+## Lvgl Cpp
 
-// Update 回调函数
-t.setUpdateCallback([](Transition* transition) {
-    spdlog::info("value: {}", transition->getValue());
+再见吧👋 lv_obj_del，可以用智能指针来管理 lvgl 控件了
+
+指针管理参考：*https://github.com/vpaeder/lvglpp*
+
+用了类似 Godot Signal 的信号槽来简化原来的 event 回调
+
+![](https://pic1.imgdb.cn/item/680c58b458cb8da5c8ce1f59.gif)
+
+```cpp
+#include <smooth_lvgl.h>
+// lvgl cpp 封装为 header only
+// 需要工程已满足 #include <lvgl.h> 依赖
+// 当前目标版本为 v9.2.2
+
+// Basic lvgl object
+auto obj = new Container(lv_screen_active());
+obj->setPos(50, 50);
+obj->setSize(200, 100);
+
+// Label
+auto label = new Label(lv_screen_active());
+label->setTextFont(&lv_font_montserrat_24);
+label->setAlign(LV_ALIGN_CENTER);
+label->setText("????????????");
+
+// Button
+int count = 0;
+auto btn = new Button(lv_screen_active());
+btn->setPos(50, 200);
+btn->label().setText("+1");
+btn->onClick().connect([&]() {
+    label->setText(fmt::format("{}", count++));
 });
 
-// 开始过渡, 传入当前时间 (ms)
-t.start(HAL::Millis());
-
-while (1)
-{
-    // 更新过渡，传入当前时间 (ms)
-    t.update(HAL::Millis());
-    // update方法会在最后调用回调函数，当然也可以在外部直接拿值
-    t.getValue();
-}
-```
-
-更多具体内容在[头文件定义](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/src/core/transition/transition.h)
-
-### Transition2D
-
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/Transition2D.gif?raw=true)
-
-二维过渡抽象，最常用的一集 (xy 坐标，wh 形状...)，[示例](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/dd72391ed4b9aed22d91b95fc760bb65d9fe5807/simu_project/smooth_ui_toolkit_test/transition_2d/transition_2d_test.cpp#L25)：
-
-```cpp
-using namespace SmoothUIToolKit;
-
-Transition2D t2d;
-
-// 配置方法和一维无异，略
-...
-// 区别是可以单独配置他们的过渡参数
-t2d.getXTransition()...
-t2d.getYTransition()...
-
-// 一样可以注册回调
-t2d.setUpdateCallback([](Transition2D* transition2d) {
-    spdlog::info("i'm at ({}, {})", transition2d->getValue().x, transition2d->getValue().y);
+// Switch
+auto sw = new Switch(lv_screen_active());
+sw->setPos(50, 300);
+sw->onValueChanged().connect([&](bool value) {
+    label->setText(value ? "ON" : "OFF");
 });
 
-// 跳到指定坐标, 没有过渡, 默认构造函数会跳到(0,0)
-t2d.jumpTo(100, 233);
-
-// 移动到指定坐标，有过渡
-t2d.moveTo(666, 777);
-
-while (1)
-{
-    // 更新过渡，传入当前时间 (ms)
-    t2d.update(HAL::Millis());
-}
+// Slider
+auto slider = new Slider(lv_screen_active());
+slider->setPos(50, 400);
+slider->onValueChanged().connect([&](int value) {
+    label->setText(fmt::format("{}", value));
+});
 ```
 
-更多具体内容在[头文件定义](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/src/core/transition2d/transition2d.h)
+## UI HAL
 
-## SelectMenu
-
-选择菜单的抽象，可以用于实现：
-
-- 带有一个飞来飞去的选择指示器的选择菜单
-- 滚轮选择菜单
-- 选项会变形的环形菜单等
-
-### SmoothSelector
-
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/SmoothSelector.gif?raw=true)
-
-三个概念：
-
-- **选项关键帧列表**，存着每一个选项的关键帧  `x, y, w, h`
-- **选择器**，根据输入，移动到选项关键帧的 `x, y`，变形到选项关键帧的 `w, h`
-- **摄像机**，自动移动到合适的 `x, y`，以保持选择器在摄像机 `w, h` 中
-
-因此只有**选择器**和**摄像机**有运动过渡，选项可视为静态不动的
-
-[示例](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/dd72391ed4b9aed22d91b95fc760bb65d9fe5807/simu_project/smooth_widget_test/select_menu_selector.cpp#L113)：
+动画的更新以系统时间为参考基准，所使用的相关函数来自内部定义：
 
 ```cpp
-using namespace SmoothUIToolKit;
-using namespace SmoothUIToolKit::SelectMenu;
+namespace ui_hal {
 
-class SmoothSelector_test : public SmoothSelector
-{
-    // 重写读取输入回调
-    void onReadInput() override
-    {
-        // 按键Up clicked
-        if (...)
-            goLast();
-        
-        // 按键Down clicked
-        else if (...)
-            goNext();
-    }
-	
-    // 重写渲染回调
-    void onRender() override
-    {
-        // 清屏
-        ...
+/**
+ * @brief Get the number of milliseconds since running
+ *
+ * @return uint32_t
+ */
+uint32_t get_tick();
 
-        // 渲染选项
-        for (auto& i : getOptionList())
-        {
-            ...(i.keyframe.x,
-                i.keyframe.y,
-                i.keyframe.w,
-                i.keyframe.h);
-        }
+/**
+ * @brief Wait a specified number of milliseconds before returning
+ *
+ * @param ms
+ */
+void delay(uint32_t ms);
 
-        // 渲染选择器
-        auto cf = getSelectorCurrentFrame();
-        ...(cf.x,
-            cf.y,
-            cf.w,
-            cf.h);
-
-        // 推屏
-        ...
-    }
-};
-
-SmoothSelector_test menu;
-
-// 添加选项
-menu.addOption({{0, 0, 100, 20}, nullptr});
-menu.addOption({{0, 20, 100, 20}, nullptr});
-menu.addOption({{0, 40, 100, 20}, nullptr});
-
-while (1)
-{
-    // 更新菜单，传入当前时间 (ms)
-    menu.update(HAL::Millis());
-}
+} // namespace ui_hal
 ```
 
-更多具体内容在[头文件定义](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/src/select_menu/smooth_selector/smooth_selector.h)
+其默认实现为 cpp chrono 库
 
-### SmoothOptions
-
-![](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/old-shit-backup/pics/SmoothOptions.gif?raw=true)
-
-两个概念：
-
-- **选项**，根据输入，移动到关键帧的 `x, y`，变形到选项关键帧的 `w, h`
-
-- **关键帧列表**，存着与选项数量相同的关键帧  `x, y, w, h`
-
-因此每个**选项**都有运动过渡，对应数量的关键帧可视为静态不动的。选项们连续地、循环地绕着关键帧列表移动、变形。
-
-[示例](https://github.com/Forairaaaaa/smooth_ui_toolkit_simu/blob/dd72391ed4b9aed22d91b95fc760bb65d9fe5807/simu_project/smooth_widget_test/select_menu_option.cpp#L99)：
+如有需求，可自定义实现方式：
 
 ```cpp
-using namespace SmoothUIToolKit;
-using namespace SmoothUIToolKit::SelectMenu;
+// Arduino 为例，性能应该比 chrono 好
 
-class SmoothOption_Test : public SmoothOptions
-{
-    // 重写读取输入回调
-    void onReadInput() override
-    {
-        // 按键Up clicked
-        if (...)
-            goLast();
-        
-        // 按键Down clicked
-        else if (...)
-            goNext();
-    }
-	
-    // 重写渲染回调
-    void onRender() override
-    {
-        // 清屏
-        ...
+ui_hal::on_get_tick_ms([]() {
+    return millis();
+});
 
-        // 渲染选项
-        for (int i = 0; i < getOptionList().size(); i++)
-        {
-            auto ocf = getOptionCurrentFrame(i);
-			...(ocf.x, 
-                ocf.y, 
-                ocf.w, 
-                ocf.h);
-        }
-
-        // 推屏
-        ...
-    }
-};
-
-SmoothOption_Test menu;
-
-// 添加选项
-for (int i = 0; i < 5; i++)
-{
-    menu.addOption();
-    menu.setLastKeyframe({10 * i, 20 * i, 100, 20});
-}
-
-while (1)
-{
-    // 更新菜单，传入当前时间 (ms)
-    menu.update(HAL::Millis());
-}
+ui_hal::on_delay([](uint32_t ms) {
+    delay(ms);
+});
 ```
 
-更多具体内容在[头文件定义](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/src/select_menu/smooth_options/smooth_options.h)
+## 编译例程
+
+例程里用到了 [lvgl](https://github.com/lvgl/lvgl) 和 [raylib](https://github.com/raysan5/raylib) 作为图形库，所以要安装 [SDL2](https://github.com/libsdl-org/SDL)
+
+### 工具链安装:
+
+- **macOS:**  `brew install sdl2 cmake make`  
+- **Ubuntu:**   `sudo apt install build-essential cmake libsdl2-dev`  
+
+### 拉取项目：
+
+```bash
+git clone https://github.com/Forairaaaaa/smooth_ui_toolkit.git
+```
+
+### 编译：
+
+```bash
+cd smooth_ui_toolkit && mkdir build
+```
+
+```bash
+cd build && cmake .. && make -j8
+```
+
+cmake 过程过程中会拉取依赖 git 仓库，确保网络正常访问
+
+## 库引入
+
+### CMake工程
+
+工程 `CMakeLists.txt` 里添加：
+
+```cmake
+# 不编译例程
+set(SMOOTH_UI_TOOLKIT_BUILD_EXAMPLE OFF)
+
+# 引入库路径
+add_subdirectory(path/to/smooth_ui_toolkit)
+
+# link
+target_link_libraries(your_project PUBLIC
+    smooth_ui_toolkit
+)
+```
+
+### IDF 工程
+
+clone 仓库，直接丢到 `components` 目录里就行
+
+### PIO 工程
+
+clone 仓库，直接丢到 `libs` 目录里就行
+
+### Arduino 工程
+
+clone 仓库，直接丢到 `xxx` 目录里就行（我不记得那个 library 目录叫什么了）
+
+## TODO
+
+- [ ] ui_hal 的内部 cpp 实现添加宏定义，避免在自定义实现时多余的 linkage
+- [ ] NumberFlow 类在 linux 上有 bug，DigitFlow 正常
+- [ ] AnimateVlaue 如果设置了 delay，只会在第一次有效，retarget 后无效
+- [ ] 脚本化 lvgl widget api 封装
 
