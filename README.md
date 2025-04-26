@@ -6,11 +6,19 @@
 - Lvgl C++ 封装
 - signal、ringbuffer ...
 
+插值抽象深受 [Motion](https://motion.dev/) 启发，多谢 Motion 哥
+
+![](https://pic1.imgdb.cn/item/680c58b458cb8da5c8ce1f5a.gif)
+
+![](https://pic1.imgdb.cn/item/680c58b558cb8da5c8ce1f5b.gif)
+
+![](https://pic1.imgdb.cn/item/680c639c58cb8da5c8ce22d2.gif)
+
 ## Animate
 
 基础动画插值类，可配置起止、循环方式、次数、动画类型等，默认动画类型为 **spring**
 
-动画抽象深度借鉴 [Motion](https://motion.dev/)，多谢 Motion 哥
+![](https://pic1.imgdb.cn/item/680c58b458cb8da5c8ce1f57.gif)
 
 ```cpp
 Animate animation;
@@ -41,24 +49,82 @@ while (1) {
 
 ## AnimateValue
 
-Animate 的派生类，大幅简化使用操作
+Animate 的派生类，大幅简化赋值、取值操作
+
+适合控件坐标、长宽等参数的快速动画化：
+
+视频：[介绍](https://www.bilibili.com/video/BV1RZcTegEUu)
+
+![](https://pic1.imgdb.cn/item/680c58b458cb8da5c8ce1f58.gif)
 
 ```cpp
 AnimateValue x = 100;
 AnimateValue y = 225;
 
 while (1) {
+    // 赋值时自动适应新目标
     x = get_mouse_x();
     y = get_mouse_y();
   
-  	// 取值时自动更新
+  	// 取值时自动更新、类型转换
     draw_ball(x, y);
+});
+```
+
+## Lvgl Cpp
+
+再见吧👋 lv_obj_del，可以用智能指针来管理 lvgl 控件了
+
+指针管理参考：*https://github.com/vpaeder/lvglpp*
+
+用了类似 Godot Signal 的信号槽来简化原来的 event 回调
+
+![](https://pic1.imgdb.cn/item/680c58b458cb8da5c8ce1f59.gif)
+
+```cpp
+#include <smooth_lvgl.h>
+// lvgl cpp 封装为 header only
+// 需要工程已满足 #include <lvgl.h> 依赖
+// 当前目标版本为 v9.2.2
+
+// Basic lvgl object
+auto obj = new Container(lv_screen_active());
+obj->setPos(50, 50);
+obj->setSize(200, 100);
+
+// Label
+auto label = new Label(lv_screen_active());
+label->setTextFont(&lv_font_montserrat_24);
+label->setAlign(LV_ALIGN_CENTER);
+label->setText("????????????");
+
+// Button
+int count = 0;
+auto btn = new Button(lv_screen_active());
+btn->setPos(50, 200);
+btn->label().setText("+1");
+btn->onClick().connect([&]() {
+  label->setText(fmt::format("{}", count++));
+});
+
+// Switch
+auto sw = new Switch(lv_screen_active());
+sw->setPos(50, 300);
+sw->onValueChanged().connect([&](bool value) {
+  label->setText(value ? "ON" : "OFF");
+});
+
+// Slider
+auto slider = new Slider(lv_screen_active());
+slider->setPos(50, 400);
+slider->onValueChanged().connect([&](int value) {
+  label->setText(fmt::format("{}", value));
 });
 ```
 
 ## UI HAL
 
-库内部所使用的时间相关函数均来自：
+动画的更新以系统时间为参考基准，所使用的相关函数来自内部定义：
 
 ```cpp
 namespace ui_hal {
@@ -85,7 +151,7 @@ void delay(uint32_t ms);
 如有需求，可自定义实现方式：
 
 ```cpp
-// Arduino 为例
+// Arduino 为例，性能应该比 chrono 好
 
 ui_hal::on_get_tick_ms([]() {
     return millis();
@@ -96,43 +162,9 @@ ui_hal::on_delay([](uint32_t ms) {
 });
 ```
 
-## Lvgl Cpp
+## 构建
 
-再见吧👋 lv_obj_del，指针管理参考：*https://github.com/vpaeder/lvglpp*
-
-```cpp
-#include <smooth_lvgl.h>
-
-// Basic lvgl object
-auto obj = new Container(lv_screen_active());
-obj->setPos(50, 50);
-obj->setSize(200, 100);
-
-// Label
-auto label = new Label(lv_screen_active());
-label->setTextFont(&lv_font_montserrat_24);
-label->setAlign(LV_ALIGN_CENTER);
-label->setText("????????????");
-
-// Button
-int count = 0;
-auto btn = new Button(lv_screen_active());
-btn->setPos(50, 200);
-btn->label().setText("+1");
-btn->onClick().connect([&]() { label->setText(fmt::format("{}", count++)); });
-
-// Switch
-auto sw = new Switch(lv_screen_active());
-sw->setPos(50, 300);
-sw->onValueChanged().connect([&](bool value) { label->setText(value ? "ON" : "OFF"); });
-
-// Slider
-auto slider = new Slider(lv_screen_active());
-slider->setPos(50, 400);
-slider->onValueChanged().connect([&](int value) { label->setText(fmt::format("{}", value)); });
-```
-
-## 编译例程
+### 编译例程
 
 ```bash
 git clone https://github.com/Forairaaaaa/smooth_ui_toolkit.git
@@ -148,3 +180,32 @@ cd build && cmake .. && make -j8
 
 cmake 过程会拉取 example 的依赖仓库，确保网络正常访问
 
+### 库引入
+
+#### CMake工程
+
+工程 `CMakeLists.txt` 里添加：
+
+```cmake
+# 不编译例程
+set(SMOOTH_UI_TOOLKIT_BUILD_EXAMPLE OFF)
+# 引入库路径
+add_subdirectory(path/to/smooth_ui_toolkit)
+
+# link
+target_link_libraries(your_project PUBLIC
+    smooth_ui_toolkit
+)
+```
+
+#### IDF 工程
+
+clone 仓库，直接丢到 `components` 目录里就行
+
+#### PIO 工程
+
+clone 仓库，直接丢到 `libs` 目录里就行
+
+#### Arduino 工程
+
+clone 仓库，直接丢到 `xxx` 目录里就行（我不记得那个 library 目录叫什么了）
