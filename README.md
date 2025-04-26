@@ -104,21 +104,21 @@ auto btn = new Button(lv_screen_active());
 btn->setPos(50, 200);
 btn->label().setText("+1");
 btn->onClick().connect([&]() {
-  label->setText(fmt::format("{}", count++));
+    label->setText(fmt::format("{}", count++));
 });
 
 // Switch
 auto sw = new Switch(lv_screen_active());
 sw->setPos(50, 300);
 sw->onValueChanged().connect([&](bool value) {
-  label->setText(value ? "ON" : "OFF");
+    label->setText(value ? "ON" : "OFF");
 });
 
 // Slider
 auto slider = new Slider(lv_screen_active());
 slider->setPos(50, 400);
 slider->onValueChanged().connect([&](int value) {
-  label->setText(fmt::format("{}", value));
+    label->setText(fmt::format("{}", value));
 });
 ```
 
