@@ -1,6 +1,6 @@
 # Smooth UI Toolkit
 
-轻量级的 C++ UI 动画工具集
+C++ UI 动画工具集
 
 - Spring 动画、Easing 动画插值
 - Lvgl C++ 封装
@@ -66,7 +66,7 @@ while (1) {
     x = get_mouse_x();
     y = get_mouse_y();
   
-  	// 取值时自动更新、类型转换
+    // 取值时自动更新、类型转换
     draw_ball(x, y);
 });
 ```
