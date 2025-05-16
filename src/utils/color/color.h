@@ -61,6 +61,16 @@ std::string rgb_to_hex_string(const Rgb_t& rgb);
 Rgb_t blend_in_difference(Rgb_t bg, Rgb_t fg);
 
 /**
+ * @brief 透明度混合
+ *
+ * @param bg
+ * @param fg
+ * @param opacity
+ * @return Rgb_t
+ */
+Rgb_t blend_in_opacity(Rgb_t bg, Rgb_t fg, float opacity);
+
+/**
  * @brief RGB888 color
  *
  */
