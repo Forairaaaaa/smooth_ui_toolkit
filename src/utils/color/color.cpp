@@ -51,5 +51,14 @@ Rgb_t blend_in_difference(Rgb_t bg, Rgb_t fg)
     return ret;
 }
 
+Rgb_t blend_in_opacity(Rgb_t bg, Rgb_t fg, float opacity)
+{
+    Rgb_t ret;
+    ret.r = bg.r * (1 - opacity) + fg.r * opacity;
+    ret.g = bg.g * (1 - opacity) + fg.g * opacity;
+    ret.b = bg.b * (1 - opacity) + fg.b * opacity;
+    return ret;
+}
+
 } // namespace color
 } // namespace smooth_ui_toolkit
