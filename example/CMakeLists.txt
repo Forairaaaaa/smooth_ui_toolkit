@@ -15,6 +15,9 @@ find_package(SDL2 REQUIRED SDL2)
 include_directories(PUBLIC ${SDL2_INCLUDE_DIRS})
 target_include_directories(lvgl PUBLIC ${SDL2_INCLUDE_DIRS})
 
+add_subdirectory(dependencies/lvgl_fonts)
+
+# Examples
 add_executable(dev_zone ./dev_zone.cpp)
 target_link_libraries(dev_zone ${PROJECT_NAME} raylib mooncake_log lvgl lvgl_examples lvgl_demos ${SDL2_LIBRARIES})
 
@@ -46,7 +49,7 @@ add_executable(signal ./event/signal.cpp)
 target_link_libraries(signal ${PROJECT_NAME} pthread)
 
 add_executable(number_flow ./smooth_lvgl/number_flow.cpp)
-target_link_libraries(number_flow ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})
+target_link_libraries(number_flow ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES} lvgl_fonts)
 
 add_executable(lvgl_cpp ./smooth_lvgl/lvgl_cpp.cpp)
 target_link_libraries(lvgl_cpp ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})

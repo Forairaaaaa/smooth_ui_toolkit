@@ -1,17 +1,22 @@
 [
-    {
-        "url": "https://github.com/raysan5/raylib.git",
-        "path": "dependencies/raylib",
-        "branch": "5.5"
-    },
-    {
-        "url": "https://github.com/Forairaaaaa/mooncake_log.git",
-        "path": "dependencies/mooncake_log",
-        "branch": "main"
-    },
-    {
-        "url": "https://github.com/lvgl/lvgl.git",
-        "path": "dependencies/lvgl",
-        "branch": "v9.3.0"
-    }
+  {
+    "url": "https://github.com/raysan5/raylib.git",
+    "path": "dependencies/raylib",
+    "branch": "5.5"
+  },
+  {
+    "url": "https://github.com/Forairaaaaa/mooncake_log.git",
+    "path": "dependencies/mooncake_log",
+    "branch": "main"
+  },
+  {
+    "url": "https://github.com/lvgl/lvgl.git",
+    "path": "dependencies/lvgl",
+    "branch": "v9.3.0"
+  },
+  {
+    "url": "https://github.com/Forairaaaaa/lvgl_fonts.git",
+    "path": "dependencies/lvgl_fonts",
+    "branch": "main"
+  }
 ]

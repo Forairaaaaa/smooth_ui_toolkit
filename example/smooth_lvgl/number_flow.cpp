@@ -10,6 +10,7 @@
  */
 // Refs: https://number-flow.barvian.me
 #include "../utils/lvgl_wrapper.h"
+#include <rajdhani/rajdhani_bold.h>
 #include <smooth_ui_toolkit.h>
 #include <smooth_lvgl.h>
 #include <mooncake_log.h>
@@ -25,7 +26,7 @@ int main()
     auto number_flow = new NumberFlow(lv_screen_active());
     number_flow->setAlign(LV_ALIGN_CENTER);
     number_flow->setPos(0, -110);
-    number_flow->setTextFont(&lv_font_montserrat_48);
+    number_flow->setTextFont(&lv_font_rajdhani_bold_96);
     // number_flow->animationType = animation_type::easing;
     // number_flow->transparentBg = false;
     // number_flow->showPositiveSign = true;

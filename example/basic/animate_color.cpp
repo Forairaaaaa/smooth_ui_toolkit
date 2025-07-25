@@ -45,8 +45,9 @@ int main()
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> dis(0, color_list.size() - 1);
-        bg_color = color_list[dis(gen)];
-        label.setText(bg_color.toHexString());
+        auto new_color = color_list[dis(gen)];
+        label.setText(fmt::format("#{:06X}", new_color));
+        bg_color = new_color;
     });
 
     while (1) {
