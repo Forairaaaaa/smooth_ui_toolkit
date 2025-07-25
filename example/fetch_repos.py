@@ -9,12 +9,15 @@ def clone_or_update_repo(
     import os
 
     if not os.path.exists(path):
-        subprocess.run(["git", "clone", repo_url, path], check=True)
+        if ref:
+            subprocess.run(
+                ["git", "clone", "--depth", "1", "--branch", ref, repo_url, path],
+                check=True,
+            )
+        else:
+            subprocess.run(["git", "clone", repo_url, path], check=True)
     else:
         subprocess.run(["git", "-C", path, "fetch"], check=True)
-
-    if ref:
-        subprocess.run(["git", "-C", path, "checkout", ref], check=True)
 
     if with_submodules:
         subprocess.run(

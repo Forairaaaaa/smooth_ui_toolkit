@@ -58,10 +58,10 @@ int main()
 
     // Spinner
     auto spinner = new Spinner(screen);
-    spinner->setSize(36, 36);
+    spinner->align(LV_ALIGN_CENTER, 0, -160);
     spinner->setArcWidth(3, LV_PART_MAIN);
     spinner->setArcWidth(3, LV_PART_INDICATOR);
-    spinner->setPos(50, 450);
+    spinner->setSize(76, 76);
 
     // Roller
     auto roller = new Roller(screen);
@@ -79,7 +79,7 @@ int main()
     chart->setStyleSize(0, 0, LV_PART_INDICATOR);
     chart->setUpdateMode(LV_CHART_UPDATE_MODE_SHIFT);
     chart->setRange(LV_CHART_AXIS_PRIMARY_Y, -1000, 1000);
-    chart->addSeries(lv_color_hex(0x4242fd), LV_CHART_AXIS_PRIMARY_Y);
+    chart->addSeries(lv_color_hex(0x1e90ff), LV_CHART_AXIS_PRIMARY_Y);
     auto update_chart = [&]() {
         static uint32_t last_tick = 0;
         uint32_t tick = lv_tick_get();
