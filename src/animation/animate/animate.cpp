@@ -11,6 +11,7 @@
 #include "animate.h"
 #include "utils/hal/hal.h"
 #include <functional>
+#include <memory>
 
 using namespace smooth_ui_toolkit;
 
@@ -196,9 +197,9 @@ KeyFrameGenerator& Animate::get_key_frame_generator()
     if (_generator_dirty || !_key_frame_generator) {
         _key_frame_generator.reset();
         if (animationType == animation_type::spring) {
-            _key_frame_generator = std::make_shared<Spring>();
+            _key_frame_generator = std::make_unique<Spring>();
         } else if (animationType == animation_type::easing) {
-            _key_frame_generator = std::make_shared<Easing>();
+            _key_frame_generator = std::make_unique<Easing>();
         }
         _generator_dirty = false;
     }
