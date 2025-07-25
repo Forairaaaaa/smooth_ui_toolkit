@@ -43,12 +43,12 @@ void Animate::init()
 
 void Animate::play()
 {
-    if (_playing_state == animate_playing_state::playing) {
+    if (_playing_state == animate_state::playing) {
         return;
     }
 
     // If paused, add pause time to start time, resume animation
-    if (_playing_state == animate_playing_state::paused) {
+    if (_playing_state == animate_state::paused) {
         _start_time += ui_hal::get_tick_s() - _pause_time;
     }
     // If not, reset repeat count and start time, start animation
@@ -57,37 +57,34 @@ void Animate::play()
         _start_time = ui_hal::get_tick_s();
     }
 
-    _playing_state = animate_playing_state::playing;
+    _playing_state = delay > 0 ? animate_state::delaying : animate_state::playing;
     get_key_frame_generator().done = false;
 }
 
 void Animate::pause()
 {
-    if (_playing_state == animate_playing_state::playing) {
-        _playing_state = animate_playing_state::paused;
-        _orchestration_state = animate_orchestration_state::on_delay;
+    if (_playing_state == animate_state::playing || _playing_state == animate_state::delaying) {
+        _playing_state = animate_state::paused;
         _pause_time = ui_hal::get_tick_s();
     }
 }
 
 void Animate::complete()
 {
-    if (_playing_state == animate_playing_state::completed) {
+    if (_playing_state == animate_state::completed) {
         return;
     }
-    _playing_state = animate_playing_state::completed;
-    _orchestration_state = animate_orchestration_state::on_delay;
+    _playing_state = animate_state::completed;
     get_key_frame_generator().done = false;
     get_key_frame_generator().value = end;
 }
 
 void Animate::cancel()
 {
-    if (_playing_state == animate_playing_state::cancelled) {
+    if (_playing_state == animate_state::cancelled) {
         return;
     }
-    _playing_state = animate_playing_state::cancelled;
-    _orchestration_state = animate_orchestration_state::on_delay;
+    _playing_state = animate_state::cancelled;
     get_key_frame_generator().done = false;
     get_key_frame_generator().value = start;
 }
@@ -95,8 +92,8 @@ void Animate::cancel()
 void Animate::retarget(const float& start, const float& end)
 {
     get_key_frame_generator().retarget(start, end);
-    if (_playing_state != animate_playing_state::paused) {
-        _playing_state = animate_playing_state::idle;
+    if (_playing_state != animate_state::paused) {
+        _playing_state = animate_state::idle;
         play();
     }
 }
@@ -109,74 +106,71 @@ void Animate::update()
 
 void Animate::update(const float& currentTime)
 {
-    update_orchestration_state_fsm(currentTime);
+    update_state_machine(currentTime);
 }
 
-void Animate::update_playing_state_fsm(const float& currentTime)
+void Animate::update_state_machine(const float& currentTime)
 {
-    if (done()) {
-        return;
-    }
-    if (_playing_state == animate_playing_state::idle || _playing_state == animate_playing_state::paused) {
-        return;
-    }
-
-    // If called complete or cancel method
-    if (_playing_state == animate_playing_state::completed || _playing_state == animate_playing_state::cancelled) {
-        get_key_frame_generator().done = true;
+    // Handle delay state
+    if (_playing_state == animate_state::delaying) {
+        // Invoke callback with current value
         if (_on_update) {
             _on_update(value());
         }
+        // Check delay timeout
+        if (currentTime - _start_time >= delay) {
+            _playing_state = animate_state::playing;
+            _start_time = currentTime;
+        }
         return;
     }
 
-    // Update key frame
-    get_key_frame_generator().next(currentTime - _start_time);
-    if (_on_update) {
-        _on_update(value());
-    }
-
-    // Update playing state
-    if (_playing_state == animate_playing_state::playing && done()) {
-        _playing_state = animate_playing_state::completed;
-        if (_on_complete) {
-            _on_complete();
+    // Handle playing state
+    if (_playing_state == animate_state::playing) {
+        if (done()) {
+            return;
         }
-    }
-}
 
-void Animate::update_orchestration_state_fsm(const float& currentTime)
-{
-    // Handle on delay
-    if (_orchestration_state == animate_orchestration_state::on_delay) {
-        if (_playing_state != animate_playing_state::idle && _playing_state != animate_playing_state::paused) {
-            // Invoke callback
-            if (_on_update) {
-                _on_update(value());
+        // Update key frame
+        get_key_frame_generator().next(currentTime - _start_time);
+        if (_on_update) {
+            _on_update(value());
+        }
+
+        // Check if animation is done
+        if (done()) {
+            _playing_state = animate_state::completed;
+            if (_on_complete) {
+                _on_complete();
             }
-            // Check delay timeout
-            if (currentTime - _start_time >= delay) {
-                _orchestration_state = animate_orchestration_state::on_playing;
-                _start_time = currentTime;
+
+            // Handle repeat
+            if (_repeat_count != 0) {
+                // Decrement repeat count
+                if (_repeat_count > 0) {
+                    _repeat_count--;
+                }
+
+                // Check if we need repeat delay
+                if (repeatDelay > 0) {
+                    _playing_state = animate_state::repeat_delaying;
+                    _start_time = currentTime;
+                } else {
+                    // Reset animation immediately
+                    if (repeatType == animate_repeat_type::reverse) {
+                        std::swap(start, end);
+                    }
+                    init();
+                    _playing_state = delay > 0 ? animate_state::delaying : animate_state::playing;
+                    _start_time = currentTime;
+                }
             }
         }
+        return;
     }
 
-    // Handle on playing
-    else if (_orchestration_state == animate_orchestration_state::on_playing) {
-        update_playing_state_fsm(currentTime);
-        if (done() && _repeat_count != 0) {
-            // Decrement repeat count
-            if (_repeat_count > 0) {
-                _repeat_count--;
-            }
-            _orchestration_state = animate_orchestration_state::on_repeat_delay;
-            _start_time = currentTime;
-        }
-    }
-
-    // Handle on repeat delay
-    else {
+    // Handle repeat delay state
+    if (_playing_state == animate_state::repeat_delaying) {
         // Check repeat delay timeout
         if (currentTime - _start_time >= repeatDelay) {
             // Reset animation
@@ -184,10 +178,19 @@ void Animate::update_orchestration_state_fsm(const float& currentTime)
                 std::swap(start, end);
             }
             init();
-            _playing_state = animate_playing_state::playing;
-            _orchestration_state = animate_orchestration_state::on_delay;
+            _playing_state = delay > 0 ? animate_state::delaying : animate_state::playing;
             _start_time = currentTime;
         }
+        return;
+    }
+
+    // Handle completed/cancelled states
+    if (_playing_state == animate_state::completed || _playing_state == animate_state::cancelled) {
+        get_key_frame_generator().done = true;
+        if (_on_update) {
+            _on_update(value());
+        }
+        return;
     }
 }
 

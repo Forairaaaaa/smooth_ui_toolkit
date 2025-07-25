@@ -28,8 +28,12 @@ int main()
     animation.springOptions().visualDuration = 0.6;
 
     // Callbacks
-    animation.onUpdate([&](const float& value) { mclog::info("{}", value); });
-    animation.onComplete([&]() { mclog::info("done"); });
+    animation.onUpdate([&](const float& value) {
+        mclog::info("{}", value);
+    });
+    animation.onComplete([&]() {
+        mclog::info("done");
+    });
 
     // Init and play
     animation.init();

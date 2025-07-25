@@ -24,21 +24,15 @@ enum Type_t {
 };
 }
 
-namespace animate_playing_state {
+namespace animate_state {
 enum State_t {
-    idle = 0,
-    playing,
-    paused,
-    completed,
-    cancelled,
-};
-}
-
-namespace animate_orchestration_state {
-enum State_t {
-    on_delay = 0,
-    on_playing,
-    on_repeat_delay,
+    idle = 0,        // 空闲状态
+    delaying,        // 等待开始（delay阶段）
+    playing,         // 正在播放动画
+    paused,          // 暂停
+    repeat_delaying, // 重复等待阶段
+    completed,       // 完成
+    cancelled        // 取消
 };
 }
 
@@ -156,7 +150,7 @@ public:
         return get_key_frame_generator().value;
     }
 
-    inline animate_playing_state::State_t currentPlayingState()
+    inline animate_state::State_t currentPlayingState()
     {
         return _playing_state;
     }
@@ -166,15 +160,13 @@ protected:
     std::function<void()> _on_complete;
     std::unique_ptr<KeyFrameGenerator> _key_frame_generator;
     KeyFrameGenerator& get_key_frame_generator();
-    animate_playing_state::State_t _playing_state = animate_playing_state::idle;
-    animate_orchestration_state::State_t _orchestration_state = animate_orchestration_state::on_delay;
+    animate_state::State_t _playing_state = animate_state::idle;
     float _start_time = 0.0f;
     float _pause_time = 0.0f;
     int _repeat_count = 0;
     bool _generator_dirty = true;
 
-    void update_playing_state_fsm(const float& currentTime);
-    void update_orchestration_state_fsm(const float& currentTime);
+    void update_state_machine(const float& currentTime);
 };
 
 } // namespace smooth_ui_toolkit
