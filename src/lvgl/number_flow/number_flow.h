@@ -13,7 +13,6 @@
 #include "../lvgl_cpp/obj.h"
 #include "../lvgl_cpp/label.h"
 #include "digit_flow.h"
-#include "../../animation/animate_value/animate_value.h"
 #include <lvgl.h>
 #include <vector>
 #include <memory>
@@ -98,7 +97,7 @@ protected:
     int _last_number = 0;
     int _current_number = 0;
     int _current_number_of_digits = 1;
-    std::vector<Digit_t> _digits;
+    std::vector<std::unique_ptr<Digit_t>> _digits;
     std::unique_ptr<Label_t> _sign;
 
     int get_number_of_digits(int num)
@@ -123,18 +122,18 @@ protected:
         if (new_number_of_digits > digit_list_size) {
             // mclog::info("add digits");
             while (new_number_of_digits > digit_list_size) {
-                _digits.push_back(Digit_t());
-                _digits.back().digitFlow = std::make_unique<DigitFlow>(this->raw_ptr());
-                _digits.back().digitFlow->animationType = animationType;
-                _digits.back().digitFlow->init();
-                _digits.back().digitFlow->setTextColor(getTextColor());
-                DigitFlow::setup_animation(_digits.back().positionX, animationType);
+                _digits.push_back(std::make_unique<Digit_t>());
+                _digits.back()->digitFlow = std::make_unique<DigitFlow>(this->raw_ptr());
+                _digits.back()->digitFlow->animationType = animationType;
+                _digits.back()->digitFlow->init();
+                _digits.back()->digitFlow->setTextColor(getTextColor());
+                DigitFlow::setup_animation(_digits.back()->positionX, animationType);
                 if (digit_list_size != 0) {
-                    _digits.back().positionX.teleport((_current_number_of_digits - 1) * _font_width);
+                    _digits.back()->positionX.teleport((_current_number_of_digits - 1) * _font_width);
                 }
-                _digits.back().positionX.move(digit_list_size * _font_width);
-                DigitFlow::setup_animation(_digits.back().opacity, animationType);
-                _digits.back().opacity.move(255);
+                _digits.back()->positionX.move(digit_list_size * _font_width);
+                DigitFlow::setup_animation(_digits.back()->opacity, animationType);
+                _digits.back()->opacity.move(255);
                 digit_list_size++;
             }
         }
@@ -145,10 +144,10 @@ protected:
             if (_current_number_of_digits > new_number_of_digits) {
                 // move extra digits back to 0, and mark destroy
                 for (int i = new_number_of_digits; i < digit_list_size; i++) {
-                    _digits[i].positionX.move((new_number_of_digits - 1) * _font_width);
-                    _digits[i].opacity = 0;
-                    _digits[i].opacity.move(0);
-                    _digits[i].isGoingDestroy = true;
+                    _digits[i]->positionX.move((new_number_of_digits - 1) * _font_width);
+                    _digits[i]->opacity = 0;
+                    _digits[i]->opacity.move(0);
+                    _digits[i]->isGoingDestroy = true;
                 }
             }
         }
@@ -161,9 +160,9 @@ protected:
             }
         }
         for (int i = 0; i < new_number_of_digits; i++) {
-            _digits[i].positionX.move(i * _font_width + sign_width);
-            _digits[i].opacity.move(255);
-            _digits[i].isGoingDestroy = false;
+            _digits[i]->positionX.move(i * _font_width + sign_width);
+            _digits[i]->opacity.move(255);
+            _digits[i]->isGoingDestroy = false;
         }
 
         _current_number_of_digits = new_number_of_digits;
@@ -172,15 +171,15 @@ protected:
     void handle_digit_update()
     {
         for (int i = 0; i < _digits.size(); i++) {
-            if (_digits[i].isGoingDestroy && _digits[i].positionX.done() && _digits[i].opacity.done()) {
+            if (_digits[i]->isGoingDestroy && _digits[i]->positionX.done() && _digits[i]->opacity.done()) {
                 _digits.erase(_digits.begin() + i);
             }
         }
 
         for (auto& digit : _digits) {
-            digit.digitFlow->update();
-            digit.digitFlow->setPos(digit.positionX, 0);
-            digit.digitFlow->setOpa(std::clamp((int)digit.opacity.value(), 0, 255));
+            digit->digitFlow->update();
+            digit->digitFlow->setPos(digit->positionX, 0);
+            digit->digitFlow->setOpa(std::clamp((int)digit->opacity.value(), 0, 255));
         }
     }
 
@@ -192,15 +191,15 @@ protected:
         for (int i = 0; i < _current_number_of_digits; ++i) {
             int digit = std::abs(number / divisor);
             // mclog::info("{}", digit);
-            if (_digits[i].digitFlow->value() != digit) {
+            if (_digits[i]->digitFlow->value() != digit) {
                 bool increase = (_last_number < _current_number);
                 if (_current_number < 0) {
                     increase = !increase;
                 }
                 if (increase) {
-                    _digits[i].digitFlow->increaseTo(digit);
+                    _digits[i]->digitFlow->increaseTo(digit);
                 } else {
-                    _digits[i].digitFlow->decreaseTo(digit);
+                    _digits[i]->digitFlow->decreaseTo(digit);
                 }
             }
             number %= divisor;

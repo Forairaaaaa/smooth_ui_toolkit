@@ -28,6 +28,8 @@ AllowShortLambdasOnASingleLine: false
 AllowShortIfStatementsOnASingleLine: false
 # 允许短的循环保持在同一行
 AllowShortLoopsOnASingleLine: false
+# 允许构造函数初始化器放在下一行
+AllowAllConstructorInitializersOnNextLine: true
 # 总是在定义返回类型后换行(deprecated)
 AlwaysBreakAfterDefinitionReturnType: None
 # 总是在返回类型后换行: None, All, TopLevel(顶级函数，不包括在类中的函数),
@@ -38,7 +40,7 @@ AlwaysBreakBeforeMultilineStrings: true
 # 总是在template声明后换行
 AlwaysBreakTemplateDeclarations: true
 # false表示函数实参要么都在同一行，要么都各自一行
-BinPackArguments: true
+BinPackArguments: false
 # false表示所有形参要么都在同一行，要么都各自一行
 BinPackParameters: false
 # 大括号换行，只有当BreakBeforeBraces设置为Custom时才有效

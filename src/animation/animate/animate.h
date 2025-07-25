@@ -47,48 +47,9 @@ public:
     Animate() {}
     virtual ~Animate() {}
 
-    // Custom copy constructor - ensures independent generators
-    Animate(const Animate& other)
-        : start(other.start),
-          end(other.end),
-          delay(other.delay),
-          repeat(other.repeat),
-          repeatType(other.repeatType),
-          repeatDelay(other.repeatDelay),
-          animationType(other.animationType),
-          _on_update(other._on_update),
-          _on_complete(other._on_complete),
-          _playing_state(other._playing_state),
-          _orchestration_state(other._orchestration_state),
-          _start_time(other._start_time),
-          _pause_time(other._pause_time),
-          _repeat_count(other._repeat_count),
-          _generator_dirty(true) // Force recreation of generator
-    {
-    }
-
-    // Custom copy assignment operator - ensures independent generators
-    Animate& operator=(const Animate& other)
-    {
-        if (this != &other) {
-            start = other.start;
-            end = other.end;
-            delay = other.delay;
-            repeat = other.repeat;
-            repeatType = other.repeatType;
-            repeatDelay = other.repeatDelay;
-            animationType = other.animationType;
-            _on_update = other._on_update;
-            _on_complete = other._on_complete;
-            _playing_state = other._playing_state;
-            _orchestration_state = other._orchestration_state;
-            _start_time = other._start_time;
-            _pause_time = other._pause_time;
-            _repeat_count = other._repeat_count;
-            _generator_dirty = true; // Force recreation of generator
-        }
-        return *this;
-    }
+    // Disable copy constructor and copy assignment operator
+    Animate(const Animate&) = delete;
+    Animate& operator=(const Animate&) = delete;
 
     // 参数参考：https://motion.dev/docs/animate#options
 
