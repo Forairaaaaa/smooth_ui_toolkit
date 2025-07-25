@@ -177,11 +177,11 @@ ui_hal::on_delay([](uint32_t ms) {
 git clone https://github.com/Forairaaaaa/smooth_ui_toolkit.git
 ```
 
-### 拉取依赖
-
 ```bash
 cd smooth_ui_toolkit
 ```
+
+### 拉取依赖
 
 ```bash
 python example/fetch_repos.py

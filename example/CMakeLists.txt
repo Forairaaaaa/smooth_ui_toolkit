@@ -7,8 +7,8 @@ set(MOONCAKE_LOG_BUILD_EXAMPLE OFF)
 add_subdirectory(dependencies/mooncake_log)
 
 set(LV_CONF_INCLUDE_SIMPLE OFF)
-set(LV_BUILD_CONF_PATH ${CMAKE_SOURCE_DIR}/example/utils/lv_conf.h)
-set(LV_CONF_PATH ${CMAKE_SOURCE_DIR}/example/utils/lv_conf.h)
+set(LV_BUILD_CONF_PATH ${CMAKE_SOURCE_DIR}/example/utils/lv_conf.h CACHE PATH "LVGL config path")
+set(LV_CONF_PATH ${CMAKE_SOURCE_DIR}/example/utils/lv_conf.h CACHE PATH "LVGL config path")
 add_subdirectory(dependencies/lvgl)
 
 find_package(SDL2 REQUIRED SDL2)
