@@ -181,6 +181,9 @@ git clone https://github.com/Forairaaaaa/smooth_ui_toolkit.git
 
 ```bash
 cd smooth_ui_toolkit
+```
+
+```bash
 python example/fetch_repos.py
 ```
 
