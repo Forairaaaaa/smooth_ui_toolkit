@@ -124,6 +124,13 @@ public:
     void update();
 
     /**
+     * @brief Update animation with explicit current time, more efficient for batch updates
+     *
+     * @param currentTime Current time in seconds
+     */
+    void update(const float& currentTime);
+
+    /**
      * @brief Is key frame generator done
      *
      * @return true
@@ -160,8 +167,8 @@ protected:
     float _pause_time = 0.0f;
     int _repeat_count = 0;
 
-    void update_playing_state_fsm();
-    void update_orchestration_state_fsm();
+    void update_playing_state_fsm(const float& currentTime);
+    void update_orchestration_state_fsm(const float& currentTime);
 };
 
 } // namespace smooth_ui_toolkit

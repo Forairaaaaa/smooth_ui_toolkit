@@ -96,10 +96,16 @@ void Animate::retarget(const float& start, const float& end)
 
 void Animate::update()
 {
-    update_orchestration_state_fsm();
+    const float currentTime = ui_hal::get_tick_s();
+    update(currentTime);
 }
 
-void Animate::update_playing_state_fsm()
+void Animate::update(const float& currentTime)
+{
+    update_orchestration_state_fsm(currentTime);
+}
+
+void Animate::update_playing_state_fsm(const float& currentTime)
 {
     if (done()) {
         return;
@@ -118,7 +124,7 @@ void Animate::update_playing_state_fsm()
     }
 
     // Update key frame
-    get_key_frame_generator().next(ui_hal::get_tick_s() - _start_time);
+    get_key_frame_generator().next(currentTime - _start_time);
     if (_on_update) {
         _on_update(value());
     }
@@ -132,7 +138,7 @@ void Animate::update_playing_state_fsm()
     }
 }
 
-void Animate::update_orchestration_state_fsm()
+void Animate::update_orchestration_state_fsm(const float& currentTime)
 {
     // Handle on delay
     if (_orchestration_state == animate_orchestration_state::on_delay) {
@@ -142,30 +148,30 @@ void Animate::update_orchestration_state_fsm()
                 _on_update(value());
             }
             // Check delay timeout
-            if (ui_hal::get_tick_s() - _start_time >= delay) {
+            if (currentTime - _start_time >= delay) {
                 _orchestration_state = animate_orchestration_state::on_playing;
-                _start_time = ui_hal::get_tick_s();
+                _start_time = currentTime;
             }
         }
     }
 
     // Handle on playing
     else if (_orchestration_state == animate_orchestration_state::on_playing) {
-        update_playing_state_fsm();
+        update_playing_state_fsm(currentTime);
         if (done() && _repeat_count != 0) {
             // Decrement repeat count
             if (_repeat_count > 0) {
                 _repeat_count--;
             }
             _orchestration_state = animate_orchestration_state::on_repeat_delay;
-            _start_time = ui_hal::get_tick_s();
+            _start_time = currentTime;
         }
     }
 
     // Handle on repeat delay
     else {
         // Check repeat delay timeout
-        if (ui_hal::get_tick_s() - _start_time >= repeatDelay) {
+        if (currentTime - _start_time >= repeatDelay) {
             // Reset animation
             if (repeatType == animate_repeat_type::reverse) {
                 std::swap(start, end);
@@ -173,7 +179,7 @@ void Animate::update_orchestration_state_fsm()
             init();
             _playing_state = animate_playing_state::playing;
             _orchestration_state = animate_orchestration_state::on_delay;
-            _start_time = ui_hal::get_tick_s();
+            _start_time = currentTime;
         }
     }
 }
