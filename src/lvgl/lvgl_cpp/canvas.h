@@ -57,7 +57,6 @@ public:
                   int32_t width = 2,
                   lv_color_t color = lv_color_black(),
                   lv_opa_t opa = LV_OPA_COVER,
-                  lv_blend_mode_t blend_mode = LV_BLEND_MODE_NORMAL,
                   uint8_t round_start = 0,
                   uint8_t round_end = 0,
                   int32_t dash_width = 0,
@@ -75,7 +74,6 @@ public:
         dsc.p2.y = y2;
         dsc.dash_gap = dash_gap;
         dsc.dash_width = dash_width;
-        dsc.blend_mode = blend_mode;
         dsc.opa = opa;
         drawLine(dsc);
     }

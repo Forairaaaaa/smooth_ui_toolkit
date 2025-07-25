@@ -73,10 +73,10 @@ public:
         lv_roller_get_selected_str(this->raw_ptr(), buf, buf_size);
     }
 
-    std::string getSelectedStr()
+    std::string getSelectedStr(size_t buf_size = 128)
     {
-        char buf[128];
-        getSelectedStrRaw(buf, sizeof(buf));
+        char buf[buf_size];
+        getSelectedStrRaw(buf, buf_size);
         return std::string(buf);
     }
 

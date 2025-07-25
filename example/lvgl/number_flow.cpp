@@ -42,11 +42,15 @@ int main()
 
     auto btn_next = new Button(flex_layout->get());
     btn_next->label().setText("-1");
-    btn_next->onClick().connect([&]() { number_flow->setValue(number_flow->value() - 1); });
+    btn_next->onClick().connect([&]() {
+        number_flow->setValue(number_flow->value() - 1);
+    });
 
     auto btn_last = new Button(flex_layout->get());
     btn_last->label().setText("+1");
-    btn_last->onClick().connect([&]() { number_flow->setValue(number_flow->value() + 1); });
+    btn_last->onClick().connect([&]() {
+        number_flow->setValue(number_flow->value() + 1);
+    });
 
     auto btn_random = new Button(flex_layout->get());
     btn_random->label().setText("random");
