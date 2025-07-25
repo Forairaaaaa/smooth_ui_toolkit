@@ -166,6 +166,7 @@ protected:
     float _start_time = 0.0f;
     float _pause_time = 0.0f;
     int _repeat_count = 0;
+    bool _generator_dirty = true;
 
     void update_playing_state_fsm(const float& currentTime);
     void update_orchestration_state_fsm(const float& currentTime);

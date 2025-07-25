@@ -16,13 +16,19 @@ using namespace smooth_ui_toolkit;
 
 EasingOptions_t& Animate::easingOptions()
 {
-    animationType = animation_type::easing;
+    if (animationType != animation_type::easing) {
+        animationType = animation_type::easing;
+        _generator_dirty = true;
+    }
     return static_cast<Easing&>(get_key_frame_generator()).easingOptions;
 }
 
 SpringOptions_t& Animate::springOptions()
 {
-    animationType = animation_type::spring;
+    if (animationType != animation_type::spring) {
+        animationType = animation_type::spring;
+        _generator_dirty = true;
+    }
     return static_cast<Spring&>(get_key_frame_generator()).springOptions;
 }
 
@@ -187,17 +193,14 @@ void Animate::update_orchestration_state_fsm(const float& currentTime)
 // Lazy loading, default spring
 KeyFrameGenerator& Animate::get_key_frame_generator()
 {
-    if (_key_frame_generator) {
-        if (_key_frame_generator->type() != animationType) {
-            _key_frame_generator.reset();
-        }
-    }
-    if (!_key_frame_generator) {
+    if (_generator_dirty || !_key_frame_generator) {
+        _key_frame_generator.reset();
         if (animationType == animation_type::spring) {
             _key_frame_generator = std::make_shared<Spring>();
         } else if (animationType == animation_type::easing) {
             _key_frame_generator = std::make_shared<Easing>();
         }
+        _generator_dirty = false;
     }
     return *_key_frame_generator;
 }
