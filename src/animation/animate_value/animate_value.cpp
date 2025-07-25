@@ -97,3 +97,23 @@ float AnimateValue::directValue()
     }
     return get_key_frame_generator().value;
 }
+
+AnimateValue::AnimateValue(AnimateValue&& other) noexcept
+    : Animate(std::move(other)), _is_begin(other._is_begin), _default_value(other._default_value)
+{
+    other._is_begin = false;
+    other._default_value = 0.0f;
+}
+
+AnimateValue& AnimateValue::operator=(AnimateValue&& other) noexcept
+{
+    if (this != &other) {
+        Animate::operator=(std::move(other));
+        _is_begin = other._is_begin;
+        _default_value = other._default_value;
+
+        other._is_begin = false;
+        other._default_value = 0.0f;
+    }
+    return *this;
+}

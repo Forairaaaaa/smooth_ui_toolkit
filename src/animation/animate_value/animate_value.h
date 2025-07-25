@@ -19,6 +19,10 @@ public:
     AnimateValue(float defaultValue);
     ~AnimateValue() {}
 
+    // Enable move constructor and move assignment operator
+    AnimateValue(AnimateValue&& other) noexcept;
+    AnimateValue& operator=(AnimateValue&& other) noexcept;
+
     // Override assignment operator
     AnimateValue& operator=(float newValue);
 

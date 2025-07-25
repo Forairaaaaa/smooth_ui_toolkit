@@ -208,3 +208,51 @@ KeyFrameGenerator& Animate::get_key_frame_generator()
     }
     return *_key_frame_generator;
 }
+
+Animate::Animate(Animate&& other) noexcept
+    : start(other.start),
+      end(other.end),
+      delay(other.delay),
+      repeat(other.repeat),
+      repeatType(other.repeatType),
+      repeatDelay(other.repeatDelay),
+      animationType(other.animationType),
+      _on_update(std::move(other._on_update)),
+      _on_complete(std::move(other._on_complete)),
+      _key_frame_generator(std::move(other._key_frame_generator)),
+      _playing_state(other._playing_state),
+      _start_time(other._start_time),
+      _pause_time(other._pause_time),
+      _repeat_count(other._repeat_count),
+      _generator_dirty(other._generator_dirty)
+{
+    // Reset other object to default state
+    other._playing_state = animate_state::idle;
+    other._generator_dirty = true;
+}
+
+Animate& Animate::operator=(Animate&& other) noexcept
+{
+    if (this != &other) {
+        start = other.start;
+        end = other.end;
+        delay = other.delay;
+        repeat = other.repeat;
+        repeatType = other.repeatType;
+        repeatDelay = other.repeatDelay;
+        animationType = other.animationType;
+        _on_update = std::move(other._on_update);
+        _on_complete = std::move(other._on_complete);
+        _key_frame_generator = std::move(other._key_frame_generator);
+        _playing_state = other._playing_state;
+        _start_time = other._start_time;
+        _pause_time = other._pause_time;
+        _repeat_count = other._repeat_count;
+        _generator_dirty = other._generator_dirty;
+
+        // Reset other object to default state
+        other._playing_state = animate_state::idle;
+        other._generator_dirty = true;
+    }
+    return *this;
+}

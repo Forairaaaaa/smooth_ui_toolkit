@@ -45,6 +45,10 @@ public:
     Animate(const Animate&) = delete;
     Animate& operator=(const Animate&) = delete;
 
+    // Enable move constructor and move assignment operator
+    Animate(Animate&& other) noexcept;
+    Animate& operator=(Animate&& other) noexcept;
+
     // 参数参考：https://motion.dev/docs/animate#options
 
     // Start value
