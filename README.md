@@ -2,21 +2,23 @@
 
 C++ UI 动画工具集
 
-- Spring 动画、Easing 动画插值
-- Lvgl C++ 封装
-- signal、ringbuffer ...
+- Spring、Easing 动画插值，RGB 颜色过渡插值
+- Lvgl C++ 封装，NumberFlow 风格控件
+- signal、ringbuffer、颜色混合等杂类工具
 
-![](https://pic1.imgdb.cn/item/680c639c58cb8da5c8ce22d2.gif)
+![Jul-26-2025 01-00-39](https://github.com/user-attachments/assets/1930f5e6-4a72-47e3-aa1e-e54335e3b4c2)
 
-![](https://pic1.imgdb.cn/item/680c58b558cb8da5c8ce1f5b.gif)
+![Jul-26-2025 00-47-13](https://github.com/user-attachments/assets/2a3e9302-87df-438f-9c97-2c1dc7415cec)
 
-![](https://pic1.imgdb.cn/item/680c58b458cb8da5c8ce1f5a.gif)
+![Jul-26-2025 01-07-33](https://github.com/user-attachments/assets/b47c41b4-8c73-4cc0-bb84-3efda0bda1ee)
 
-## Animate
+## 主要组件
+
+### Animate
 
 基础动画插值类，可配置起止、循环方式、次数、动画类型等，默认动画类型为 **spring**
 
-插值类抽象深受 [Motion](https://motion.dev/) 启发，多谢 Motion 哥
+插值类抽象参考 [Motion](https://motion.dev/) ，多谢 Motion 哥
 
 ![](https://pic1.imgdb.cn/item/680c58b458cb8da5c8ce1f57.gif)
 
@@ -47,15 +49,13 @@ while (1) {
 }
 ```
 
-## AnimateValue
+### AnimateValue
 
-Animate 的派生类，大幅简化赋值、取值操作
+Animate 的派生类，简化取值赋值操作，让其使用更接近于普通变量
 
-适合控件坐标、长宽等参数的快速动画化：
+适合控件的坐标、长宽等参数的过渡插值，来实现动画效果：[视频](https://www.bilibili.com/video/BV1RZcTegEUu)
 
-视频：[介绍](https://www.bilibili.com/video/BV1RZcTegEUu)
-
-![](https://pic1.imgdb.cn/item/680c58b458cb8da5c8ce1f58.gif)
+![Jul-26-2025 01-24-37](https://github.com/user-attachments/assets/9ef569b6-5226-4365-bb20-2c16208866e4)
 
 ```cpp
 AnimateValue x = 100;
@@ -71,36 +71,87 @@ while (1) {
 });
 ```
 
-## Lvgl Cpp
+配合 [spring 参数](https://motion.dev/docs/animate#spring) 可以实现不同的动画效果
 
-再见吧👋 lv_obj_del，可以用智能指针来管理 lvgl 控件了
+![Jul-26-2025 00-54-17](https://github.com/user-attachments/assets/1a63077a-6536-4081-a97a-fa9bf7c82faf)
+
+```cpp
+AnimateValue x = 100;
+
+x.springOptions().bounce = 0.1;
+x.springOptions().visualDuration = 0.6;
+...
+```
+
+### 颜色转换、混合
+```cpp
+...
+Rgb_t hex_to_rgb(const uint32_t& hex);
+Rgb_t hex_to_rgb(const std::string& hex);
+uint32_t rgb_to_hex(const Rgb_t& rgb);
+std::string rgb_to_hex_string(const Rgb_t& rgb);
+...
+
+Rgb_t blend_in_difference(Rgb_t bg, Rgb_t fg); // 差值混合
+Rgb_t blend_in_opacity(Rgb_t bg, Rgb_t fg, float opacity); // 透明度混合
+...
+```
+
+### 颜色过渡
+
+RGB 颜色的变换过渡插值
+
+![Jul-26-2025 01-03-01](https://github.com/user-attachments/assets/0c4e521e-4fff-4423-926f-7eb9d288b4b8)
+
+```cpp
+std::vector<uint32_t> color_list = {...}
+
+AnimateRgb_t bg_color;
+bg_color.duration = 0.3;
+bg_color.begin();
+
+...
+btn_random.onClick().connect([&]() {
+    bg_color = color_list[random];
+});
+
+while (1) {
+    bg_color.update();
+    xxx.setBgColor(lv_color_hex(bg_color.toHex()));
+}
+```
+
+
+### Lvgl Cpp
+
+Lvgl 控件智能指针封装
 
 指针管理参考：*https://github.com/vpaeder/lvglpp*
 
-用了类似 Godot Signal 的信号槽来简化原来的 event 回调
+添加了类似 Godot Signal 的观察者来简化事件处理
 
-![](https://pic1.imgdb.cn/item/680c58b458cb8da5c8ce1f59.gif)
+![Jul-26-2025 00-56-19](https://github.com/user-attachments/assets/4aa17149-6a3c-4b78-87cc-38150f12dcf2)
 
 ```cpp
 #include <smooth_lvgl.h>
 // lvgl cpp 封装为 header only
 // 需要工程已满足 #include <lvgl.h> 依赖
-// 当前目标版本为 v9.2.2
+// 当前目标版本为 v9.3.0
 
 // Basic lvgl object
-auto obj = new Container(lv_screen_active());
+auto obj = new Container(screen);
 obj->setPos(50, 50);
 obj->setSize(200, 100);
 
 // Label
-auto label = new Label(lv_screen_active());
+auto label = new Label(screen);
 label->setTextFont(&lv_font_montserrat_24);
-label->setAlign(LV_ALIGN_CENTER);
-label->setText("????????????");
+label->align(LV_ALIGN_CENTER, -180, 0);
+label->setText("??");
 
 // Button
 int count = 0;
-auto btn = new Button(lv_screen_active());
+auto btn = new Button(screen);
 btn->setPos(50, 200);
 btn->label().setText("+1");
 btn->onClick().connect([&]() {
@@ -108,18 +159,66 @@ btn->onClick().connect([&]() {
 });
 
 // Switch
-auto sw = new Switch(lv_screen_active());
+auto sw = new Switch(screen);
 sw->setPos(50, 300);
 sw->onValueChanged().connect([&](bool value) {
     label->setText(value ? "ON" : "OFF");
 });
 
 // Slider
-auto slider = new Slider(lv_screen_active());
-slider->setPos(50, 400);
+auto slider = new Slider(screen);
+slider->setPos(50, 390);
 slider->onValueChanged().connect([&](int value) {
     label->setText(fmt::format("{}", value));
 });
+
+// Spinner
+auto spinner = new Spinner(screen);
+spinner->align(LV_ALIGN_CENTER, 0, -160);
+spinner->setArcWidth(3, LV_PART_MAIN);
+spinner->setArcWidth(3, LV_PART_INDICATOR);
+spinner->setSize(76, 76);
+
+// Roller
+auto roller = new Roller(screen);
+roller->align(LV_ALIGN_CENTER, 0, 0);
+roller->setOptions({"nihao", "wohao", "dajiahao"});
+roller->onValueChanged().connect([&](uint32_t value) {
+    label->setText(fmt::format("{}", roller->getSelectedStr()));
+});
+
+// Chart
+auto chart = new Chart(screen);
+chart->align(LV_ALIGN_CENTER, 250, 0);
+chart->setSize(250, 200);
+chart->setPointCount(256);
+chart->setStyleSize(0, 0, LV_PART_INDICATOR);
+chart->setUpdateMode(LV_CHART_UPDATE_MODE_SHIFT);
+chart->setRange(LV_CHART_AXIS_PRIMARY_Y, -1000, 1000);
+chart->addSeries(lv_color_hex(0x1e90ff), LV_CHART_AXIS_PRIMARY_Y);
+
+// ...
+
+```
+
+### NumberFlow
+
+基于 Lvgl 实现的 [NumberFlow](https://number-flow.barvian.me/) 风格数字显示控件，支持正负值显示
+
+![Jul-26-2025 00-50-36](https://github.com/user-attachments/assets/4535f621-9ba8-4937-bbf2-2ce358d42929)
+
+```cpp
+auto number_flow = new NumberFlow(lv_screen_active());
+
+...
+btn_random->onClick().connect([&]() {
+    number_flow->setValue(randomNum);
+});
+
+while (1) {
+    number_flow->update();
+}
+
 ```
 
 ## UI HAL
