@@ -177,17 +177,22 @@ ui_hal::on_delay([](uint32_t ms) {
 git clone https://github.com/Forairaaaaa/smooth_ui_toolkit.git
 ```
 
+### 拉取依赖
+
+```bash
+cd smooth_ui_toolkit
+python example/fetch_repos.py
+```
+
 ### 编译：
 
 ```bash
-cd smooth_ui_toolkit && mkdir build
+mkdir build && cd build
 ```
 
 ```bash
-cd build && cmake .. && make -j8
+cmake .. && make -j8
 ```
-
-cmake 过程过程中会拉取依赖 git 仓库，确保网络正常访问
 
 ## 库引入
 
