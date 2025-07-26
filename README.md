@@ -1,10 +1,8 @@
 # Smooth UI Toolkit
 
-C++ UI 动画工具集
-
 - Spring、Easing 动画插值，RGB 颜色过渡插值
 - Lvgl C++ 封装，NumberFlow 风格控件
-- signal、ringbuffer、颜色混合等杂类工具
+- 颜色混合、signal、ringbuffer 等杂类工具
 
 ![Jul-26-2025 01-00-39](https://github.com/user-attachments/assets/1930f5e6-4a72-47e3-aa1e-e54335e3b4c2)
 
@@ -16,7 +14,7 @@ C++ UI 动画工具集
 
 ### Animate
 
-基础动画插值类，可配置起止、循环方式、次数、动画类型等，默认动画类型为 **spring**
+基础动画插值类，默认动画类型为 **spring**
 
 插值类抽象参考 [Motion](https://motion.dev/) ，多谢 Motion 哥
 
@@ -49,9 +47,67 @@ while (1) {
 }
 ```
 
+#### 可配置参数：
+
+```cpp
+// 开始值
+float start = 0.0f;
+
+// 结束值
+float end = 0.0f;
+
+// 动画开始前延迟（秒）
+float delay = 0.0f;
+
+// 重复次数，-1 表示无限循环
+int repeat = 0;
+
+// 重复类型
+animate_repeat_type::Type_t repeatType = animate_repeat_type::loop;
+
+// 重复间隔时间（秒）
+float repeatDelay = 0.0f;
+
+// 动画类型
+animation_type::Type_t animationType = animation_type::spring;
+
+// easing 动画配置，调用此方法，动画类型将自动切换为 easing
+EasingOptions_t& easingOptions();
+
+// spring 动画配置，调用此方法，动画类型将自动切换为 spring
+SpringOptions_t& springOptions();
+```
+
+#### Spring 动画参数：
+
+```cpp
+struct SpringOptions_t {
+    float stiffness = 100.0;    // 弹性系数
+    float damping = 10.0;       // 阻尼系数
+    float mass = 1.0;           // 质量
+    float velocity = 0.0;       // 初始速度
+    float restSpeed = 0.1;      // 静止速度阈值
+    float restDelta = 0.1;      // 静止位置阈值
+    float duration = 0.0;       // 动画持续时间 ms
+    float bounce = 0.3;         // 反弹系数 0.05~1.0
+    float visualDuration = 0.0; // 可视化时间
+};
+```
+
+具体参数含义可以参考 [Motion 文档](https://motion.dev/docs/animate#spring)
+
+#### Easing 动画参数：
+
+```cpp
+struct EasingOptions_t {
+    float duration = 1.0f;                                               // 动画持续时间，单位 s
+    std::function<float(float)> easingFunction = ease::ease_in_out_quad; // 缓动函数
+};
+```
+
 ### AnimateValue
 
-Animate 的派生类，简化取值赋值操作，让其使用更接近于普通变量
+Animate 的派生类，简化取值赋值操作，使用起来更接近于普通变量
 
 适合控件的坐标、长宽等参数的过渡插值，来实现动画效果：[视频](https://www.bilibili.com/video/BV1RZcTegEUu)
 
@@ -85,16 +141,23 @@ x.springOptions().visualDuration = 0.6;
 
 ### 颜色转换、混合
 ```cpp
-...
+// 0xffffff -> rgb(255, 255, 255)
 Rgb_t hex_to_rgb(const uint32_t& hex);
-Rgb_t hex_to_rgb(const std::string& hex);
-uint32_t rgb_to_hex(const Rgb_t& rgb);
-std::string rgb_to_hex_string(const Rgb_t& rgb);
-...
 
-Rgb_t blend_in_difference(Rgb_t bg, Rgb_t fg); // 差值混合
-Rgb_t blend_in_opacity(Rgb_t bg, Rgb_t fg, float opacity); // 透明度混合
-...
+// "#ffffff" -> rgb(255, 255, 255)
+Rgb_t hex_to_rgb(const std::string& hex);
+
+// rgb(255, 255, 255) -> 0xffffff
+uint32_t rgb_to_hex(const Rgb_t& rgb);
+
+// rgb(255, 255, 255) -> "#ffffff"
+std::string rgb_to_hex_string(const Rgb_t& rgb);
+
+// 差值混合
+Rgb_t blend_in_difference(Rgb_t bg, Rgb_t fg);
+
+// 透明度混合
+Rgb_t blend_in_opacity(Rgb_t bg, Rgb_t fg, float opacity);
 ```
 
 ### 颜色过渡
