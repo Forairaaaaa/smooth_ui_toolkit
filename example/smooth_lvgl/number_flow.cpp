@@ -27,9 +27,18 @@ int main()
     number_flow->setAlign(LV_ALIGN_CENTER);
     number_flow->setPos(0, -60);
     number_flow->setTextFont(&lv_font_rajdhani_bold_96);
+
+    // 使用 easing 动画，效果会比 spring 差些
     // number_flow->animationType = animation_type::easing;
+
+    // 透明背景
     // number_flow->transparentBg = false;
+
+    // 显示正负号
     // number_flow->showPositiveSign = true;
+
+    // 设置最小位数，不足时前导补0
+    // number_flow->minDigits = 6;
 
     auto flex_layout = new Container(lv_screen_active());
     flex_layout->setBorderWidth(0);

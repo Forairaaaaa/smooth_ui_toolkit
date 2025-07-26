@@ -48,10 +48,17 @@ public:
 
     // Spring will feels more natural
     animation_type::Type_t animationType = animation_type::spring;
+
+    // 透明背景
     bool transparentBg = true;
+    // 显示正负号
     bool showPositiveSign = false;
+    // 前缀颜色
     std::string prefixColor = "";
+    // 后缀颜色
     std::string suffixColor = "";
+    // 最小显示位数，不足时前导补0
+    int minDigits = 0;
 
     void init()
     {
@@ -139,17 +146,23 @@ protected:
     int _cached_prefix_width = 0;
     int _cached_suffix_width = 0;
 
-    int get_number_of_digits(int num)
+    int get_actual_digits(int num)
     {
         if (num == 0) {
             return 1;
         }
         int count = 0;
-        while (num != 0) {
-            num /= 10;
+        int temp = std::abs(num);
+        while (temp != 0) {
+            temp /= 10;
             count++;
         }
         return count;
+    }
+
+    int get_number_of_digits(int num)
+    {
+        return std::max(get_actual_digits(num), minDigits);
     }
 
     int get_text_width(const std::string& text)
@@ -249,11 +262,23 @@ protected:
     void handle_digit_number_changed()
     {
         // Iterate through each digit
-        int number = _current_number;
+        int number = std::abs(_current_number);
+        int actual_digits = get_actual_digits(number);
         int divisor = std::pow(10, _current_number_of_digits - 1);
+
         for (int i = 0; i < _current_number_of_digits; ++i) {
-            int digit = std::abs(number / divisor);
-            // mclog::info("{}", digit);
+            int digit;
+
+            // 如果当前位是前导零位置
+            if (i < (_current_number_of_digits - actual_digits)) {
+                digit = 0;
+            } else {
+                digit = number / divisor;
+                number %= divisor;
+            }
+            divisor /= 10;
+
+            // mclog::info("pos {}: digit {}", i, digit);
             if (_digits[i].digitFlow->value() != digit) {
                 bool increase = (_last_number < _current_number);
                 if (_current_number < 0) {
@@ -265,8 +290,6 @@ protected:
                     _digits[i].digitFlow->decreaseTo(digit);
                 }
             }
-            number %= divisor;
-            divisor /= 10;
         }
         _last_number = _current_number;
     }
