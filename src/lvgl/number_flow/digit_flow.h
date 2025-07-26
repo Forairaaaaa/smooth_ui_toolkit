@@ -52,6 +52,7 @@ public:
         setRadius(0);
         setBorderWidth(0);
         removeFlag(LV_OBJ_FLAG_SCROLLABLE);
+        removeFlag(LV_OBJ_FLAG_CLICKABLE);
         setBgOpa(LV_OPA_TRANSP);
 
         // Child labels
