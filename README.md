@@ -132,11 +132,12 @@ while (1) {
 ![Jul-26-2025 00-54-17](https://github.com/user-attachments/assets/1a63077a-6536-4081-a97a-fa9bf7c82faf)
 
 ```cpp
-AnimateValue x = 100;
-
-x.springOptions().bounce = 0.1;
-x.springOptions().visualDuration = 0.6;
-...
+for (int i = 0; i < cursors.size(); i++) {
+    ...
+    cursors[i].x.springOptions().stiffness = 55 + i * 25;
+    cursors[i].x.springOptions().damping = 13 - i;
+    ...
+}
 ```
 
 ### 颜色转换、混合
@@ -266,7 +267,7 @@ chart->addSeries(lv_color_hex(0x1e90ff), LV_CHART_AXIS_PRIMARY_Y);
 
 ### NumberFlow
 
-基于 Lvgl 实现的 [NumberFlow](https://number-flow.barvian.me/) 风格数字显示控件，支持正负值显示
+基于 Lvgl 实现的 [NumberFlow](https://number-flow.barvian.me/) 风格数字显示控件，支持正负、小数和前后缀显示
 
 ![Jul-26-2025 00-50-36](https://github.com/user-attachments/assets/4535f621-9ba8-4937-bbf2-2ce358d42929)
 
@@ -282,6 +283,44 @@ while (1) {
     number_flow->update();
 }
 
+```
+
+#### 前后缀文本、颜色设置：
+
+![Jul-26-2025 21-41-14](https://github.com/user-attachments/assets/edecc1ab-6f64-4b59-b3ba-2eb406cc390a)
+
+```cpp
+...
+// 设置前缀颜色
+number_flow->setPrefixColor(lv_color_hex(0x00b894));
+
+// 设置数字颜色
+number_flow->setDigitColor(lv_color_hex(0xa29bfe));
+
+// 设置后缀颜色
+number_flow->setSuffixColor(lv_color_hex(0xff4757));
+
+number_flow->onClick().connect([&]() {
+
+    // 设置前缀
+    number_flow->setPrefix(get_random_prefix());
+
+    // 设置后缀
+    number_flow->setSuffix(get_random_suffix());
+
+    ...
+});
+...
+```
+
+#### 小数支持：
+
+![Jul-26-2025 21-52-02](https://github.com/user-attachments/assets/9e80e62b-612c-428a-bc9a-1ddeb807c1db)
+
+```cpp
+// 替换对象类型即可
+auto number_flow = new NumberFlowFloat(lv_screen_active());
+...
 ```
 
 ## UI HAL
