@@ -31,10 +31,12 @@ public:
     {
         easingOptions.duration = duration;
         easingOptions.easingFunction = easingFunction;
+        _inv_duration = 1.0f / duration; // 更新持续时间倒数
     }
     inline void setEasingOptions(const EasingOptions_t& options)
     {
         easingOptions = options;
+        _inv_duration = 1.0f / options.duration; // 更新持续时间倒数
     }
 
     virtual void init() override;
@@ -44,6 +46,10 @@ public:
     {
         return animation_type::easing;
     }
+
+private:
+    float _range = 0.0f;        // 缓存 end - start 的计算结果
+    float _inv_duration = 1.0f; // 缓存 1.0f / duration 的计算结果
 };
 
 } // namespace smooth_ui_toolkit
