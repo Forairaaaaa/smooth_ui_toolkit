@@ -57,6 +57,10 @@ jobs:
         .\vcpkg\bootstrap-vcpkg.bat
         .\vcpkg\vcpkg install sdl2
 
+    # -------- 拉取项目依赖 --------
+    - name: Fetch project dependencies
+      run: python example/fetch_repos.py
+
     # -------- 构建目录变量 --------
     - name: Set reusable strings
       id: strings
