@@ -11,18 +11,25 @@
 #include "animate.h"
 #include "utils/hal/hal.h"
 #include <functional>
+#include <memory>
 
 using namespace smooth_ui_toolkit;
 
 EasingOptions_t& Animate::easingOptions()
 {
-    animationType = animation_type::easing;
+    if (animationType != animation_type::easing) {
+        animationType = animation_type::easing;
+        _generator_dirty = true;
+    }
     return static_cast<Easing&>(get_key_frame_generator()).easingOptions;
 }
 
 SpringOptions_t& Animate::springOptions()
 {
-    animationType = animation_type::spring;
+    if (animationType != animation_type::spring) {
+        animationType = animation_type::spring;
+        _generator_dirty = true;
+    }
     return static_cast<Spring&>(get_key_frame_generator()).springOptions;
 }
 
@@ -36,12 +43,12 @@ void Animate::init()
 
 void Animate::play()
 {
-    if (_playing_state == animate_playing_state::playing) {
+    if (_playing_state == animate_state::playing) {
         return;
     }
 
     // If paused, add pause time to start time, resume animation
-    if (_playing_state == animate_playing_state::paused) {
+    if (_playing_state == animate_state::paused) {
         _start_time += ui_hal::get_tick_s() - _pause_time;
     }
     // If not, reset repeat count and start time, start animation
@@ -50,37 +57,34 @@ void Animate::play()
         _start_time = ui_hal::get_tick_s();
     }
 
-    _playing_state = animate_playing_state::playing;
+    _playing_state = delay > 0 ? animate_state::delaying : animate_state::playing;
     get_key_frame_generator().done = false;
 }
 
 void Animate::pause()
 {
-    if (_playing_state == animate_playing_state::playing) {
-        _playing_state = animate_playing_state::paused;
-        _orchestration_state = animate_orchestration_state::on_delay;
+    if (_playing_state == animate_state::playing || _playing_state == animate_state::delaying) {
+        _playing_state = animate_state::paused;
         _pause_time = ui_hal::get_tick_s();
     }
 }
 
 void Animate::complete()
 {
-    if (_playing_state == animate_playing_state::completed) {
+    if (_playing_state == animate_state::completed) {
         return;
     }
-    _playing_state = animate_playing_state::completed;
-    _orchestration_state = animate_orchestration_state::on_delay;
+    _playing_state = animate_state::completed;
     get_key_frame_generator().done = false;
     get_key_frame_generator().value = end;
 }
 
 void Animate::cancel()
 {
-    if (_playing_state == animate_playing_state::cancelled) {
+    if (_playing_state == animate_state::cancelled) {
         return;
     }
-    _playing_state = animate_playing_state::cancelled;
-    _orchestration_state = animate_orchestration_state::on_delay;
+    _playing_state = animate_state::cancelled;
     get_key_frame_generator().done = false;
     get_key_frame_generator().value = start;
 }
@@ -88,110 +92,167 @@ void Animate::cancel()
 void Animate::retarget(const float& start, const float& end)
 {
     get_key_frame_generator().retarget(start, end);
-    if (_playing_state != animate_playing_state::paused) {
-        _playing_state = animate_playing_state::idle;
+    if (_playing_state != animate_state::paused) {
+        _playing_state = animate_state::idle;
         play();
     }
 }
 
 void Animate::update()
 {
-    update_orchestration_state_fsm();
+    const float currentTime = ui_hal::get_tick_s();
+    update(currentTime);
 }
 
-void Animate::update_playing_state_fsm()
+void Animate::update(const float& currentTime)
 {
-    if (done()) {
-        return;
-    }
-    if (_playing_state == animate_playing_state::idle || _playing_state == animate_playing_state::paused) {
+    update_state_machine(currentTime);
+}
+
+void Animate::update_state_machine(const float& currentTime)
+{
+    // Handle delay state
+    if (_playing_state == animate_state::delaying) {
+        // Invoke callback with current value
+        if (_on_update) {
+            _on_update(value());
+        }
+        // Check delay timeout
+        if (currentTime - _start_time >= delay) {
+            _playing_state = animate_state::playing;
+            _start_time = currentTime;
+        }
         return;
     }
 
-    // If called complete or cancel method
-    if (_playing_state == animate_playing_state::completed || _playing_state == animate_playing_state::cancelled) {
+    // Handle playing state
+    if (_playing_state == animate_state::playing) {
+        if (done()) {
+            return;
+        }
+
+        // Update key frame
+        get_key_frame_generator().next(currentTime - _start_time);
+        if (_on_update) {
+            _on_update(value());
+        }
+
+        // Check if animation is done
+        if (done()) {
+            _playing_state = animate_state::completed;
+            if (_on_complete) {
+                _on_complete();
+            }
+
+            // Handle repeat
+            if (_repeat_count != 0) {
+                // Decrement repeat count
+                if (_repeat_count > 0) {
+                    _repeat_count--;
+                }
+
+                // Check if we need repeat delay
+                if (repeatDelay > 0) {
+                    _playing_state = animate_state::repeat_delaying;
+                    _start_time = currentTime;
+                } else {
+                    // Reset animation immediately
+                    if (repeatType == animate_repeat_type::reverse) {
+                        std::swap(start, end);
+                    }
+                    init();
+                    _playing_state = delay > 0 ? animate_state::delaying : animate_state::playing;
+                    _start_time = currentTime;
+                }
+            }
+        }
+        return;
+    }
+
+    // Handle repeat delay state
+    if (_playing_state == animate_state::repeat_delaying) {
+        // Check repeat delay timeout
+        if (currentTime - _start_time >= repeatDelay) {
+            // Reset animation
+            if (repeatType == animate_repeat_type::reverse) {
+                std::swap(start, end);
+            }
+            init();
+            _playing_state = delay > 0 ? animate_state::delaying : animate_state::playing;
+            _start_time = currentTime;
+        }
+        return;
+    }
+
+    // Handle completed/cancelled states
+    if (_playing_state == animate_state::completed || _playing_state == animate_state::cancelled) {
         get_key_frame_generator().done = true;
         if (_on_update) {
             _on_update(value());
         }
         return;
     }
-
-    // Update key frame
-    get_key_frame_generator().next(ui_hal::get_tick_s() - _start_time);
-    if (_on_update) {
-        _on_update(value());
-    }
-
-    // Update playing state
-    if (_playing_state == animate_playing_state::playing && done()) {
-        _playing_state = animate_playing_state::completed;
-        if (_on_complete) {
-            _on_complete();
-        }
-    }
-}
-
-void Animate::update_orchestration_state_fsm()
-{
-    // Handle on delay
-    if (_orchestration_state == animate_orchestration_state::on_delay) {
-        if (_playing_state != animate_playing_state::idle && _playing_state != animate_playing_state::paused) {
-            // Invoke callback
-            if (_on_update) {
-                _on_update(value());
-            }
-            // Check delay timeout
-            if (ui_hal::get_tick_s() - _start_time >= delay) {
-                _orchestration_state = animate_orchestration_state::on_playing;
-                _start_time = ui_hal::get_tick_s();
-            }
-        }
-    }
-
-    // Handle on playing
-    else if (_orchestration_state == animate_orchestration_state::on_playing) {
-        update_playing_state_fsm();
-        if (done() && _repeat_count != 0) {
-            // Decrement repeat count
-            if (_repeat_count > 0) {
-                _repeat_count--;
-            }
-            _orchestration_state = animate_orchestration_state::on_repeat_delay;
-            _start_time = ui_hal::get_tick_s();
-        }
-    }
-
-    // Handle on repeat delay
-    else {
-        // Check repeat delay timeout
-        if (ui_hal::get_tick_s() - _start_time >= repeatDelay) {
-            // Reset animation
-            if (repeatType == animate_repeat_type::reverse) {
-                std::swap(start, end);
-            }
-            init();
-            _playing_state = animate_playing_state::playing;
-            _orchestration_state = animate_orchestration_state::on_delay;
-            _start_time = ui_hal::get_tick_s();
-        }
-    }
 }
 
 // Lazy loading, default spring
 KeyFrameGenerator& Animate::get_key_frame_generator()
 {
-    if (_key_frame_generator) {
-        if (_key_frame_generator->type() != animationType) {
-            _key_frame_generator.reset();
-        }
-    }
-    if (!_key_frame_generator) {
+    if (_generator_dirty || !_key_frame_generator) {
+        _key_frame_generator.reset();
         if (animationType == animation_type::spring) {
-            _key_frame_generator = std::make_shared<Spring>();
+            _key_frame_generator = std::make_unique<Spring>();
         } else if (animationType == animation_type::easing) {
-            _key_frame_generator = std::make_shared<Easing>();
+            _key_frame_generator = std::make_unique<Easing>();
         }
+        _generator_dirty = false;
     }
     return *_key_frame_generator;
+}
+
+Animate::Animate(Animate&& other) noexcept
+    : start(other.start),
+      end(other.end),
+      delay(other.delay),
+      repeat(other.repeat),
+      repeatType(other.repeatType),
+      repeatDelay(other.repeatDelay),
+      animationType(other.animationType),
+      _on_update(std::move(other._on_update)),
+      _on_complete(std::move(other._on_complete)),
+      _key_frame_generator(std::move(other._key_frame_generator)),
+      _playing_state(other._playing_state),
+      _start_time(other._start_time),
+      _pause_time(other._pause_time),
+      _repeat_count(other._repeat_count),
+      _generator_dirty(other._generator_dirty)
+{
+    // Reset other object to default state
+    other._playing_state = animate_state::idle;
+    other._generator_dirty = true;
+}
+
+Animate& Animate::operator=(Animate&& other) noexcept
+{
+    if (this != &other) {
+        start = other.start;
+        end = other.end;
+        delay = other.delay;
+        repeat = other.repeat;
+        repeatType = other.repeatType;
+        repeatDelay = other.repeatDelay;
+        animationType = other.animationType;
+        _on_update = std::move(other._on_update);
+        _on_complete = std::move(other._on_complete);
+        _key_frame_generator = std::move(other._key_frame_generator);
+        _playing_state = other._playing_state;
+        _start_time = other._start_time;
+        _pause_time = other._pause_time;
+        _repeat_count = other._repeat_count;
+        _generator_dirty = other._generator_dirty;
+
+        // Reset other object to default state
+        other._playing_state = animate_state::idle;
+        other._generator_dirty = true;
+    }
+    return *this;
 }

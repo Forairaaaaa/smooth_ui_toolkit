@@ -20,6 +20,8 @@ struct Bubble {
     AnimateValue y;
     int radius;
     Color color;
+
+    Bubble(int x_, int y_, int r, Color c) : x(x_), y(y_), radius(r), color(c) {}
 };
 
 int main()
@@ -27,7 +29,9 @@ int main()
     std::vector<Bubble> bubbles;
 
     raylib::create_window(
-        800, 450, "你好",
+        800,
+        450,
+        "你好",
         [&]() {
             // Move to mouse postion when click
             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
@@ -51,12 +55,9 @@ int main()
         [&]() {
             // Generate random bubbles
             for (int i = 0; i < 1145; i++) {
-                bubbles.push_back({
-                    (int)(GetScreenWidth() / 2),
-                    (int)(GetScreenHeight() / 2),
-                    GetRandomValue(3, 6),
-                    GetRandomColor(),
-                });
+                bubbles.emplace_back(
+                    (int)(GetScreenWidth() / 2), (int)(GetScreenHeight() / 2), GetRandomValue(3, 6), GetRandomColor());
+
                 bubbles.back().x.springOptions().stiffness = GetRandomValue(50, 150);
                 bubbles.back().x.springOptions().damping = GetRandomValue(5, 15);
                 bubbles.back().y.springOptions() = bubbles.back().x.springOptions();

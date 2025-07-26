@@ -57,13 +57,27 @@ public:
     }
 
 protected:
-    float _damping_ratio;                        // 阻尼比
-    float _undamped_angular_freq;                // 未阻尼角频率
-    float _current_velocity;                     // 当前速度
-    std::function<float(float)> _resolve_spring; // 动画计算公式
+    float _damping_ratio;         // 阻尼比
+    float _undamped_angular_freq; // 未阻尼角频率
+    float _current_velocity;      // 当前速度
+
+    // 移除function对象，使用内联计算
+    enum class DampingType { Underdamped, Critical, Overdamped } _damping_type;
+
+    // 预计算的常量，避免重复计算
+    float _sqrt_stiffness_mass; // sqrt(stiffness * mass)
+    float _damped_angular_freq; // 阻尼角频率
+    float _initial_delta;       // 初始位置差
+
+    // 速度计算相关常量
+    float _velocity_c1, _velocity_c2; // 速度公式系数
 
     void calc_velocity(const float& t);
+    void calc_velocity_analytical(const float& t);
     float calc_angular_freq(float undampedFreq, float dampingRatio);
+
+    // 内联位置计算函数
+    inline float calc_position(const float& t);
 };
 
 } // namespace smooth_ui_toolkit

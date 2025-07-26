@@ -10,7 +10,6 @@
  */
 // Refs: https://motion.dev/docs/react-animation bottom Motion+: "Introducing Cursor"
 #include "../utils/raylib_wrapper.h"
-#include "raylib.h"
 #include <mooncake_log.h>
 #include <smooth_ui_toolkit.h>
 #include <vector>
@@ -54,7 +53,9 @@ int main()
     }
 
     raylib::create_window(
-        800, 450, "你好",
+        800,
+        450,
+        "你好",
         [&]() {
             // If mouse inside of window, move to mouse position
             if (CheckCollisionPointRec(GetMousePosition(), (Rectangle){0, 0, 800, 450})) {
@@ -66,13 +67,15 @@ int main()
             }
 
             // Render
-            ClearBackground(GetColor(0x181B1F));
+            ClearBackground(BLACK);
             DrawCircle(GetMouseX(), GetMouseY(), 8, WHITE);
             for (int i = 0; i < cursors.size(); i++) {
                 DrawCircle(cursors[i].x, cursors[i].y, 8, GetColor(colors[i]));
             }
         },
-        []() { HideCursor(); });
+        []() {
+            HideCursor();
+        });
 
     return 0;
 }

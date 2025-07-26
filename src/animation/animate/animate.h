@@ -14,32 +14,25 @@
 #include "../generators/easing/easing.h"
 #include <functional>
 #include <memory>
-// 参数参考：https://motion.dev/docs/animate#options
 
 namespace smooth_ui_toolkit {
 
 namespace animate_repeat_type {
 enum Type_t {
-    loop = 0, // Repeats the animation from the start
-    reverse,  // Alternates between forward and backwards playback
+    loop = 0, // 循环播放
+    reverse,  // 反向播放
 };
 }
 
-namespace animate_playing_state {
+namespace animate_state {
 enum State_t {
-    idle = 0,
-    playing,
-    paused,
-    completed,
-    cancelled,
-};
-}
-
-namespace animate_orchestration_state {
-enum State_t {
-    on_delay = 0,
-    on_playing,
-    on_repeat_delay,
+    idle = 0,        // 空闲状态
+    delaying,        // 等待开始（delay阶段）
+    playing,         // 正在播放动画
+    paused,          // 暂停
+    repeat_delaying, // 重复等待阶段
+    completed,       // 完成
+    cancelled        // 取消
 };
 }
 
@@ -48,31 +41,40 @@ public:
     Animate() {}
     virtual ~Animate() {}
 
-    // Start value
+    // Disable copy constructor and copy assignment operator
+    Animate(const Animate&) = delete;
+    Animate& operator=(const Animate&) = delete;
+
+    // Enable move constructor and move assignment operator
+    Animate(Animate&& other) noexcept;
+    Animate& operator=(Animate&& other) noexcept;
+
+    // 参数参考：https://motion.dev/docs/animate#options
+
+    // 开始值
     float start = 0.0f;
-    // End value
+    // 结束值
     float end = 0.0f;
-    // Delay the animation by this duration (in seconds)
+    // 动画开始前延迟（秒）
     float delay = 0.0f;
-    // The number of times to repeat the transition. Set to -1 for perpetual animation
+    // 重复次数，-1 表示无限循环
     int repeat = 0;
-    // How to repeat the animation
+    // 重复类型
     animate_repeat_type::Type_t repeatType = animate_repeat_type::loop;
-    // When repeating an animation, repeatDelay will set the duration of the time to wait, in seconds, between each
-    // repetition
+    // 重复间隔时间（秒）
     float repeatDelay = 0.0f;
-    // Animation type
+    // 动画类型
     animation_type::Type_t animationType = animation_type::spring;
-    // Easing animation options, call this method will set animation type to easing
+    // easing 动画配置，调用此方法，动画类型将自动切换为 easing
     EasingOptions_t& easingOptions();
-    // Spring animation options, call this method will set animation type to spring
+    // spring 动画配置，调用此方法，动画类型将自动切换为 spring
     SpringOptions_t& springOptions();
-    // On value update
+    // 值更新回调
     void onUpdate(std::function<void(const float&)> callback)
     {
         _on_update = callback;
     }
-    // On animation complete
+    // 动画完成回调
     void onComplete(std::function<void()> callback)
     {
         _on_complete = callback;
@@ -124,6 +126,13 @@ public:
     void update();
 
     /**
+     * @brief Update animation with explicit current time, more efficient for batch updates
+     *
+     * @param currentTime Current time in seconds
+     */
+    void update(const float& currentTime);
+
+    /**
      * @brief Is key frame generator done
      *
      * @return true
@@ -144,7 +153,7 @@ public:
         return get_key_frame_generator().value;
     }
 
-    inline animate_playing_state::State_t currentPlayingState()
+    inline animate_state::State_t currentPlayingState()
     {
         return _playing_state;
     }
@@ -152,16 +161,15 @@ public:
 protected:
     std::function<void(const float&)> _on_update;
     std::function<void()> _on_complete;
-    std::shared_ptr<KeyFrameGenerator> _key_frame_generator;
+    std::unique_ptr<KeyFrameGenerator> _key_frame_generator;
     KeyFrameGenerator& get_key_frame_generator();
-    animate_playing_state::State_t _playing_state = animate_playing_state::idle;
-    animate_orchestration_state::State_t _orchestration_state = animate_orchestration_state::on_delay;
+    animate_state::State_t _playing_state = animate_state::idle;
     float _start_time = 0.0f;
     float _pause_time = 0.0f;
     int _repeat_count = 0;
+    bool _generator_dirty = true;
 
-    void update_playing_state_fsm();
-    void update_orchestration_state_fsm();
+    void update_state_machine(const float& currentTime);
 };
 
 } // namespace smooth_ui_toolkit

@@ -1,37 +1,25 @@
 include(FetchContent)
 
 # Dependencies
-FetchContent_Declare(
-    raylib
-    GIT_REPOSITORY https://github.com/raysan5/raylib.git
-    GIT_TAG 5.5
-)
-FetchContent_MakeAvailable(raylib)
+add_subdirectory(dependencies/raylib)
 
 set(MOONCAKE_LOG_BUILD_EXAMPLE OFF)
-FetchContent_Declare(
-    mooncake_log
-    GIT_REPOSITORY https://github.com/Forairaaaaa/mooncake_log.git
-    GIT_TAG main
-)
-FetchContent_MakeAvailable(mooncake_log)
+add_subdirectory(dependencies/mooncake_log)
 
 set(LV_CONF_INCLUDE_SIMPLE OFF)
-set(LV_BUILD_CONF_PATH ${CMAKE_SOURCE_DIR}/example/utils/lv_conf.h)
-set(LV_CONF_PATH ${CMAKE_SOURCE_DIR}/example/utils/lv_conf.h)
-FetchContent_Declare(
-    lvgl
-    GIT_REPOSITORY https://github.com/lvgl/lvgl.git
-    GIT_TAG v9.3.0
-)
-FetchContent_MakeAvailable(lvgl)
+set(LV_BUILD_CONF_PATH ${CMAKE_SOURCE_DIR}/example/utils/lv_conf.h CACHE PATH "LVGL config path")
+set(LV_CONF_PATH ${CMAKE_SOURCE_DIR}/example/utils/lv_conf.h CACHE PATH "LVGL config path")
+add_subdirectory(dependencies/lvgl)
 
 find_package(SDL2 REQUIRED SDL2)
 include_directories(PUBLIC ${SDL2_INCLUDE_DIRS})
 target_include_directories(lvgl PUBLIC ${SDL2_INCLUDE_DIRS})
 
+add_subdirectory(dependencies/lvgl_fonts)
+
+# Examples
 add_executable(dev_zone ./dev_zone.cpp)
-target_link_libraries(dev_zone ${PROJECT_NAME} raylib mooncake_log lvgl lvgl_examples lvgl_demos ${SDL2_LIBRARIES})
+target_link_libraries(dev_zone ${PROJECT_NAME} raylib mooncake_log lvgl lvgl_examples lvgl_demos ${SDL2_LIBRARIES} lvgl_fonts)
 
 add_executable(ui_hal ./basic/ui_hal.cpp)
 target_link_libraries(ui_hal ${PROJECT_NAME} raylib mooncake_log)
@@ -60,10 +48,13 @@ target_link_libraries(event_queue ${PROJECT_NAME} pthread)
 add_executable(signal ./event/signal.cpp)
 target_link_libraries(signal ${PROJECT_NAME} pthread)
 
-add_executable(number_flow ./lvgl/number_flow.cpp)
-target_link_libraries(number_flow ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})
+add_executable(number_flow ./smooth_lvgl/number_flow.cpp)
+target_link_libraries(number_flow ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES} lvgl_fonts)
 
-add_executable(lvgl_cpp ./lvgl/lvgl_cpp.cpp)
+add_executable(number_flow_ext ./smooth_lvgl/number_flow_ext.cpp)
+target_link_libraries(number_flow_ext ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES} lvgl_fonts)
+
+add_executable(lvgl_cpp ./smooth_lvgl/lvgl_cpp.cpp)
 target_link_libraries(lvgl_cpp ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})
 
 add_executable(animate_color ./basic/animate_color.cpp)

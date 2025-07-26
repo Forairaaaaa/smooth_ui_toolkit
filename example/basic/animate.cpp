@@ -24,12 +24,20 @@ int main()
     animation.end = 600;
     animation.repeat = -1;
     animation.repeatType = animate_repeat_type::reverse;
+
     animation.springOptions().bounce = 0.4;
     animation.springOptions().visualDuration = 0.6;
 
+    // animation.easingOptions().duration = 0.6;
+    // animation.easingOptions().easingFunction = ease::ease_out_back;
+
     // Callbacks
-    animation.onUpdate([&](const float& value) { mclog::info("{}", value); });
-    animation.onComplete([&]() { mclog::info("done"); });
+    animation.onUpdate([&](const float& value) {
+        mclog::info("{}", value);
+    });
+    animation.onComplete([&]() {
+        mclog::info("done");
+    });
 
     // Init and play
     animation.init();
