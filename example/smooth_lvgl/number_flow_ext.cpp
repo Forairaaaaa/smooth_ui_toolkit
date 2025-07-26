@@ -30,10 +30,10 @@ int main()
             "( ",
             "[ ",
             "{ ",
-            "TEMP: ",
-            "HUMI: ",
-            "WEIGHT: ",
-            "HEIGHT: ",
+            "Temp: ",
+            "Humi: ",
+            "Weight: ",
+            "Height: ",
         };
         std::random_device rd;
         std::mt19937 gen(rd());
@@ -42,7 +42,8 @@ int main()
     };
 
     auto get_random_suffix = []() {
-        std::vector<std::string> suffix = {"", " )", " ]", " }", " C", " F", " K", " %", " $", " CM", " M", " KG"};
+        std::vector<std::string> suffix = {
+            "", " )", " ]", " }", " C", " F", " K", " %", " $", " cm", " m", " kg", " mm"};
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<int> dist(0, suffix.size() - 1);
@@ -60,11 +61,16 @@ int main()
     number_flow->setAlign(LV_ALIGN_CENTER);
     number_flow->setPos(0, -110);
     number_flow->setTextFont(&lv_font_rajdhani_bold_36);
-    // number_flow->setTextColor(lv_color_hex(0x000000));
+    number_flow->setTextColor(lv_color_hex(0xa29bfe));
 
     // 单独设置前后缀颜色
     number_flow->prefixColor = "#00b894";
     number_flow->suffixColor = "#ff4757";
+    number_flow->setPrefix("( ");
+    number_flow->setSuffix(" )");
+
+    // 配置好后再调用 init
+    number_flow->init();
 
     auto btn_random = new Button(lv_screen_active());
     btn_random->align(LV_ALIGN_CENTER, 0, 100);
