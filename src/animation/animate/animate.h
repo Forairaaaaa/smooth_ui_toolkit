@@ -19,8 +19,8 @@ namespace smooth_ui_toolkit {
 
 namespace animate_repeat_type {
 enum Type_t {
-    loop = 0, // Repeats the animation from the start
-    reverse,  // Alternates between forward and backwards playback
+    loop = 0, // 循环播放
+    reverse,  // 反向播放
 };
 }
 
@@ -51,31 +51,30 @@ public:
 
     // 参数参考：https://motion.dev/docs/animate#options
 
-    // Start value
+    // 开始值
     float start = 0.0f;
-    // End value
+    // 结束值
     float end = 0.0f;
-    // Delay the animation by this duration (in seconds)
+    // 动画开始前延迟（秒）
     float delay = 0.0f;
-    // The number of times to repeat the transition. Set to -1 for perpetual animation
+    // 重复次数，-1 表示无限循环
     int repeat = 0;
-    // How to repeat the animation
+    // 重复类型
     animate_repeat_type::Type_t repeatType = animate_repeat_type::loop;
-    // When repeating an animation, repeatDelay will set the duration of the time to wait, in seconds, between each
-    // repetition
+    // 重复间隔时间（秒）
     float repeatDelay = 0.0f;
-    // Animation type
+    // 动画类型
     animation_type::Type_t animationType = animation_type::spring;
-    // Easing animation options, call this method will set animation type to easing
+    // easing 动画配置，调用此方法，动画类型将自动切换为 easing
     EasingOptions_t& easingOptions();
-    // Spring animation options, call this method will set animation type to spring
+    // spring 动画配置，调用此方法，动画类型将自动切换为 spring
     SpringOptions_t& springOptions();
-    // On value update
+    // 值更新回调
     void onUpdate(std::function<void(const float&)> callback)
     {
         _on_update = callback;
     }
-    // On animation complete
+    // 动画完成回调
     void onComplete(std::function<void()> callback)
     {
         _on_complete = callback;
