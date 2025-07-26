@@ -308,12 +308,12 @@ void delay(uint32_t ms);
 } // namespace ui_hal
 ```
 
-其默认实现为 cpp chrono 库
+默认实现为 chrono 和 thread，cmake 里 OFF `SMOOTH_UI_TOOLKIT_ENABLE_DEFAULT_HAL` 可以关闭这个实现
 
-如有需求，可自定义实现方式：
+自定义实现方式：
 
 ```cpp
-// Arduino 为例，性能应该比 chrono 好
+// 比如 Arduino，性能应该比 chrono 好
 
 ui_hal::on_get_tick_ms([]() {
     return millis();
@@ -326,7 +326,7 @@ ui_hal::on_delay([](uint32_t ms) {
 
 ## 编译例程
 
-例程里用到了 [lvgl](https://github.com/lvgl/lvgl) 和 [raylib](https://github.com/raysan5/raylib) 作为图形库，所以要安装 [SDL2](https://github.com/libsdl-org/SDL)
+例程用了 [lvgl](https://github.com/lvgl/lvgl) 和 [raylib](https://github.com/raysan5/raylib) 作为图形库，所以要安装 [SDL2](https://github.com/libsdl-org/SDL)
 
 ### 工具链安装:
 
@@ -389,10 +389,3 @@ clone 仓库，直接丢到 `libs` 目录里就行
 ### Arduino 工程
 
 clone 仓库，直接丢到 `xxx` 目录里就行（我不记得那个 library 目录叫什么了）
-
-## TODO
-
-- [ ] ui_hal 的内部 cpp 实现添加宏定义，避免在自定义实现时多余的 linkage
-- [ ] AnimateVlaue 如果设置了 delay，只会在第一次有效，retarget 后无效
-- [ ] 脚本化 lvgl widget api 封装
-
