@@ -61,16 +61,16 @@ int main()
     number_flow->setAlign(LV_ALIGN_CENTER);
     number_flow->setPos(0, -110);
     number_flow->setTextFont(&lv_font_rajdhani_bold_36);
-    number_flow->setTextColor(lv_color_hex(0xa29bfe));
 
-    // 单独设置前后缀颜色
-    number_flow->prefixColor = "#00b894";
-    number_flow->suffixColor = "#ff4757";
+    // 设置初始前后缀（要在 init 之前）
     number_flow->setPrefix("( ");
     number_flow->setSuffix(" )");
 
-    // 配置好后再调用 init
     number_flow->init();
+
+    number_flow->setDigitColor(lv_color_hex(0xa29bfe));
+    number_flow->setPrefixColor(lv_color_hex(0x00b894));
+    number_flow->setSuffixColor(lv_color_hex(0xff4757));
 
     auto btn_random = new Button(lv_screen_active());
     btn_random->align(LV_ALIGN_CENTER, 0, 100);

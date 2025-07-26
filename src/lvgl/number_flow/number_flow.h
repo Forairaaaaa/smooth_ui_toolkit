@@ -12,7 +12,6 @@
 #pragma once
 #include "../lvgl_cpp/obj.h"
 #include "../lvgl_cpp/label.h"
-#include "../../utils/color/color.h"
 #include "digit_flow.h"
 #include <lvgl.h>
 #include <vector>
@@ -46,17 +45,12 @@ public:
         std::unique_ptr<Label> label;
     };
 
-    // Spring will feels more natural
+    // 动画类型，默认 spring 更自然
     animation_type::Type_t animationType = animation_type::spring;
-
     // 透明背景
     bool transparentBg = true;
     // 显示正负号
     bool showPositiveSign = false;
-    // 前缀颜色
-    std::string prefixColor = "";
-    // 后缀颜色
-    std::string suffixColor = "";
     // 最小显示位数，不足时前导补0
     int minDigits = 0;
 
@@ -91,6 +85,36 @@ public:
     {
         _suffix = newSuffix;
         handle_suffix_changed();
+    }
+
+    // 设置前缀颜色
+    void setPrefixColor(lv_color_t color)
+    {
+        if (_label_prefix && _label_prefix->label) {
+            _label_prefix->label->setTextColor(color);
+        }
+    }
+
+    // 设置后缀颜色
+    void setSuffixColor(lv_color_t color)
+    {
+        if (_label_suffix && _label_suffix->label) {
+            _label_suffix->label->setTextColor(color);
+        }
+    }
+
+    // 设置数字颜色
+    void setDigitColor(lv_color_t color)
+    {
+        Widget::setTextColor(color);
+        for (auto& digit : _digits) {
+            if (digit.digitFlow) {
+                digit.digitFlow->setTextColor(color);
+            }
+        }
+        if (_label_sign && _label_sign->label) {
+            _label_sign->label->setTextColor(color);
+        }
     }
 
     void update()
@@ -340,11 +364,6 @@ protected:
                 _label_prefix = std::make_unique<Label_t>();
                 _label_prefix->label = std::make_unique<Label>(this->raw_ptr());
 
-                if (!prefixColor.empty()) {
-                    color::Rgb_t color = color::hex_to_rgb(prefixColor);
-                    _label_prefix->label->setTextColor(lv_color_hex(color.toHex()));
-                }
-
                 DigitFlow::setup_animation(_label_prefix->positionX, animationType);
                 DigitFlow::setup_animation(_label_prefix->opacity, animationType);
             }
@@ -371,11 +390,6 @@ protected:
             if (!_label_suffix) {
                 _label_suffix = std::make_unique<Label_t>();
                 _label_suffix->label = std::make_unique<Label>(this->raw_ptr());
-
-                if (!suffixColor.empty()) {
-                    color::Rgb_t color = color::hex_to_rgb(suffixColor);
-                    _label_suffix->label->setTextColor(lv_color_hex(color.toHex()));
-                }
 
                 DigitFlow::setup_animation(_label_suffix->positionX, animationType);
                 DigitFlow::setup_animation(_label_suffix->opacity, animationType);

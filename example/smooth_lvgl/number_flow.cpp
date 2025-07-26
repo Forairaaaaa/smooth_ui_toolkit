@@ -40,6 +40,8 @@ int main()
     // 设置最小位数，不足时前导补0
     // number_flow->minDigits = 6;
 
+    number_flow->init();
+
     auto flex_layout = new Container(lv_screen_active());
     flex_layout->setBorderWidth(0);
     flex_layout->setBgOpa(0);
