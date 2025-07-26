@@ -25,7 +25,7 @@ int main()
 
     auto number_flow = new NumberFlow(lv_screen_active());
     number_flow->setAlign(LV_ALIGN_CENTER);
-    number_flow->setPos(0, -110);
+    number_flow->setPos(0, -60);
     number_flow->setTextFont(&lv_font_rajdhani_bold_96);
     // number_flow->animationType = animation_type::easing;
     // number_flow->transparentBg = false;

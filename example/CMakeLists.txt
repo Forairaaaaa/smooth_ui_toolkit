@@ -19,7 +19,7 @@ add_subdirectory(dependencies/lvgl_fonts)
 
 # Examples
 add_executable(dev_zone ./dev_zone.cpp)
-target_link_libraries(dev_zone ${PROJECT_NAME} raylib mooncake_log lvgl lvgl_examples lvgl_demos ${SDL2_LIBRARIES})
+target_link_libraries(dev_zone ${PROJECT_NAME} raylib mooncake_log lvgl lvgl_examples lvgl_demos ${SDL2_LIBRARIES} lvgl_fonts)
 
 add_executable(ui_hal ./basic/ui_hal.cpp)
 target_link_libraries(ui_hal ${PROJECT_NAME} raylib mooncake_log)
@@ -50,6 +50,9 @@ target_link_libraries(signal ${PROJECT_NAME} pthread)
 
 add_executable(number_flow ./smooth_lvgl/number_flow.cpp)
 target_link_libraries(number_flow ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES} lvgl_fonts)
+
+add_executable(number_flow_ext ./smooth_lvgl/number_flow_ext.cpp)
+target_link_libraries(number_flow_ext ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES} lvgl_fonts)
 
 add_executable(lvgl_cpp ./smooth_lvgl/lvgl_cpp.cpp)
 target_link_libraries(lvgl_cpp ${PROJECT_NAME} mooncake_log lvgl ${SDL2_LIBRARIES})
