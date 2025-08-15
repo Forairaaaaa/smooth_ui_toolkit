@@ -19,3 +19,4 @@
 #include "utils/hal/hal.h"
 #include "utils/ring_buffer/ring_buffer.h"
 #include "utils/color/color.h"
+#include "utils/math/math.h"
