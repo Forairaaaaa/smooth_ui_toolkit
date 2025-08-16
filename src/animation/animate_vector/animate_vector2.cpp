@@ -9,6 +9,7 @@
  *
  */
 #include "animate_vector2.h"
+#include "utils/hal/hal.h"
 
 using namespace smooth_ui_toolkit;
 
@@ -84,4 +85,21 @@ Vector2 AnimateVector2::value()
 Vector2 AnimateVector2::directValue()
 {
     return Vector2(x.directValue(), y.directValue());
+}
+
+void AnimateVector2::update()
+{
+    auto currentTime = ui_hal::get_tick_s();
+    update(currentTime);
+}
+
+void AnimateVector2::update(const float& currentTime)
+{
+    x.update(currentTime);
+    y.update(currentTime);
+}
+
+bool AnimateVector2::done()
+{
+    return x.done() && y.done();
 }

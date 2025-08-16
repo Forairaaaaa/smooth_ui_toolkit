@@ -9,6 +9,7 @@
  *
  */
 #include "animate_vector4.h"
+#include "utils/hal/hal.h"
 
 using namespace smooth_ui_toolkit;
 
@@ -107,4 +108,23 @@ Vector4 AnimateVector4::value()
 Vector4 AnimateVector4::directValue()
 {
     return Vector4(x.directValue(), y.directValue(), z.directValue(), w.directValue());
+}
+
+void AnimateVector4::update()
+{
+    auto currentTime = ui_hal::get_tick_s();
+    update(currentTime);
+}
+
+void AnimateVector4::update(const float& currentTime)
+{
+    x.update(currentTime);
+    y.update(currentTime);
+    z.update(currentTime);
+    w.update(currentTime);
+}
+
+bool AnimateVector4::done()
+{
+    return x.done() && y.done() && z.done() && w.done();
 }

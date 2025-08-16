@@ -81,6 +81,27 @@ public:
      * @return Vector4
      */
     Vector4 directValue();
+
+    /**
+     * @brief Update animation
+     *
+     */
+    void update();
+
+    /**
+     * @brief Update animation with explicit current time, more efficient for batch updates
+     *
+     * @param currentTime Current time in seconds
+     */
+    void update(const float& currentTime);
+
+    /**
+     * @brief Is animation done
+     *
+     * @return true
+     * @return false
+     */
+    bool done();
 };
 
 } // namespace smooth_ui_toolkit
