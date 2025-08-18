@@ -64,13 +64,44 @@ struct Vector2Base {
  * @brief A 2D vector using floating-point coordinates.
  *
  */
-using Vector2 = Vector2Base<float>;
+struct Vector2 : public Vector2Base<float> {
+    Vector2() : Vector2Base<float>() {}
+    Vector2(float x, float y) : Vector2Base<float>(x, y) {}
+    Vector2(const Vector2Base<float>& other) : Vector2Base<float>(other) {}
+
+    // 从整数向量转换
+    Vector2(const Vector2Base<int>& other)
+        : Vector2Base<float>(static_cast<float>(other.x), static_cast<float>(other.y))
+    {
+    }
+
+    // 显式转换操作符
+    explicit operator Vector2Base<int>() const
+    {
+        return Vector2Base<int>(static_cast<int>(x), static_cast<int>(y));
+    }
+};
 
 /**
  * @brief A 2D vector using integer coordinates.
  *
  */
-using Vector2i = Vector2Base<int>;
+struct Vector2i : public Vector2Base<int> {
+    Vector2i() : Vector2Base<int>() {}
+    Vector2i(int x, int y) : Vector2Base<int>(x, y) {}
+    Vector2i(const Vector2Base<int>& other) : Vector2Base<int>(other) {}
+
+    // 从浮点向量转换
+    Vector2i(const Vector2Base<float>& other) : Vector2Base<int>(static_cast<int>(other.x), static_cast<int>(other.y))
+    {
+    }
+
+    // 显式转换操作符
+    explicit operator Vector2Base<float>() const
+    {
+        return Vector2Base<float>(static_cast<float>(x), static_cast<float>(y));
+    }
+};
 
 /**
  * @brief
@@ -132,12 +163,51 @@ struct Vector4Base {
  * @brief A 4D vector using floating-point coordinates.
  *
  */
-using Vector4 = Vector4Base<float>;
+struct Vector4 : public Vector4Base<float> {
+    Vector4() : Vector4Base<float>() {}
+    Vector4(float x, float y, float z, float w) : Vector4Base<float>(x, y, z, w) {}
+    Vector4(const Vector4Base<float>& other) : Vector4Base<float>(other) {}
+
+    // 从整数向量转换
+    Vector4(const Vector4Base<int>& other)
+        : Vector4Base<float>(static_cast<float>(other.x),
+                             static_cast<float>(other.y),
+                             static_cast<float>(other.z),
+                             static_cast<float>(other.w))
+    {
+    }
+
+    // 显式转换操作符
+    explicit operator Vector4Base<int>() const
+    {
+        return Vector4Base<int>(static_cast<int>(x), static_cast<int>(y), static_cast<int>(z), static_cast<int>(w));
+    }
+};
 
 /**
  * @brief A 4D vector using integer coordinates.
  *
  */
-using Vector4i = Vector4Base<int>;
+struct Vector4i : public Vector4Base<int> {
+    Vector4i() : Vector4Base<int>() {}
+    Vector4i(int x, int y, int z, int w) : Vector4Base<int>(x, y, z, w) {}
+    Vector4i(const Vector4Base<int>& other) : Vector4Base<int>(other) {}
+
+    // 从浮点向量转换
+    Vector4i(const Vector4Base<float>& other)
+        : Vector4Base<int>(static_cast<int>(other.x),
+                           static_cast<int>(other.y),
+                           static_cast<int>(other.z),
+                           static_cast<int>(other.w))
+    {
+    }
+
+    // 显式转换操作符
+    explicit operator Vector4Base<float>() const
+    {
+        return Vector4Base<float>(
+            static_cast<float>(x), static_cast<float>(y), static_cast<float>(z), static_cast<float>(w));
+    }
+};
 
 } // namespace smooth_ui_toolkit
