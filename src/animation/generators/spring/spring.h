@@ -25,7 +25,7 @@ struct SpringOptions_t {
     float restDelta = 0.1;      // 静止位置阈值
     float duration = 0.0;       // 动画持续时间 ms
     float bounce = 0.3;         // 反弹系数 0.05~1.0
-    float visualDuration = 0.0; // 可视化时间
+    float visualDuration = 0.0; // 可视化时间 s
 };
 
 class Spring : public KeyFrameGenerator {

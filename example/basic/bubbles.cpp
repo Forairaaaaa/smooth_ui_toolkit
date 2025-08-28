@@ -16,12 +16,11 @@
 using namespace smooth_ui_toolkit;
 
 struct Bubble {
-    AnimateValue x;
-    AnimateValue y;
+    AnimateVector2 pos;
     int radius;
     Color color;
 
-    Bubble(int x_, int y_, int r, Color c) : x(x_), y(y_), radius(r), color(c) {}
+    Bubble(int x_, int y_, int r, Color c) : pos(x_, y_), radius(r), color(c) {}
 };
 
 int main()
@@ -36,20 +35,18 @@ int main()
             // Move to mouse postion when click
             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
                 for (auto& bubble : bubbles) {
-                    bubble.x = GetMouseX();
-                    bubble.y = GetMouseY();
+                    bubble.pos.move(GetMouseX(), GetMouseY());
                 }
             } else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
                 for (auto& bubble : bubbles) {
-                    bubble.x = GetRandomValue(0, GetScreenWidth());
-                    bubble.y = GetRandomValue(0, GetScreenHeight());
+                    bubble.pos.move(GetRandomValue(0, GetScreenWidth()), GetRandomValue(0, GetScreenHeight()));
                 }
             }
 
             // Render
             ClearBackground(BLACK);
             for (int i = 0; i < bubbles.size(); i++) {
-                DrawCircle(bubbles[i].x, bubbles[i].y, bubbles[i].radius, bubbles[i].color);
+                DrawCircle(bubbles[i].pos.x, bubbles[i].pos.y, bubbles[i].radius, bubbles[i].color);
             }
         },
         [&]() {
@@ -58,11 +55,10 @@ int main()
                 bubbles.emplace_back(
                     (int)(GetScreenWidth() / 2), (int)(GetScreenHeight() / 2), GetRandomValue(3, 6), GetRandomColor());
 
-                bubbles.back().x.springOptions().stiffness = GetRandomValue(50, 150);
-                bubbles.back().x.springOptions().damping = GetRandomValue(5, 15);
-                bubbles.back().y.springOptions() = bubbles.back().x.springOptions();
-                bubbles.back().x = GetRandomValue(0, GetScreenWidth());
-                bubbles.back().y = GetRandomValue(0, GetScreenHeight());
+                bubbles.back().pos.x.springOptions().stiffness = GetRandomValue(50, 150);
+                bubbles.back().pos.x.springOptions().damping = GetRandomValue(5, 15);
+                bubbles.back().pos.y.springOptions() = bubbles.back().pos.x.springOptions();
+                bubbles.back().pos.move(GetRandomValue(0, GetScreenWidth()), GetRandomValue(0, GetScreenHeight()));
             }
         });
 

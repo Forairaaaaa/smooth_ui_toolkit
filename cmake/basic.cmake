@@ -3,6 +3,11 @@ project(smooth_ui_toolkit)
 set(CMAKE_CXX_STANDARD 17)
 cmake_policy(SET CMP0077 NEW)
 
+option(SMOOTH_UI_TOOLKIT_ENABLE_DEFAULT_HAL "Enable default HAL implementation using chrono/thread" ON)
+if(SMOOTH_UI_TOOLKIT_ENABLE_DEFAULT_HAL)
+    add_compile_definitions(SMOOTH_UI_TOOLKIT_ENABLE_DEFAULT_HAL)
+endif()
+
 # Src files
 file(GLOB_RECURSE SMOOTH_UI_TOOLKIT_SRCS
     ${SMOOTH_UI_TOOLKIT_ROOT_DIR}/src/*.c
