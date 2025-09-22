@@ -22,6 +22,7 @@
 #include "lvgl_cpp/roller.h"
 #include "lvgl_cpp/spinner.h"
 #include "lvgl_cpp/text_area.h"
+#include "lvgl_cpp/table.h"
 #include "number_flow/digit_flow.h"
 #include "number_flow/number_flow.h"
 #include "number_flow/number_flow_float.h"
