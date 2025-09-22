@@ -104,6 +104,26 @@ public:
     {
         return lv_table_get_cell_user_data(this->raw_ptr(), row, col);
     }
+
+    Signal<uint32_t, uint32_t>& onCellSelected(void)
+    {
+        if (!_on_cell_selected) {
+            _on_cell_selected = std::make_unique<Signal<uint32_t, uint32_t>>();
+            addEventCb(
+                [](lv_event_t* e) {
+                    auto on_cell_selected = (Signal<uint32_t, uint32_t>*)lv_event_get_user_data(e);
+                    uint32_t row, col;
+                    lv_table_get_selected_cell((lv_obj_t*)lv_event_get_target(e), &row, &col);
+                    on_cell_selected->emit(row, col);
+                },
+                LV_EVENT_VALUE_CHANGED,
+                _on_cell_selected.get());
+        }
+        return *_on_cell_selected;
+    }
+
+private:
+    std::unique_ptr<Signal<uint32_t, uint32_t>> _on_cell_selected;
 };
 
 } // namespace lvgl_cpp
