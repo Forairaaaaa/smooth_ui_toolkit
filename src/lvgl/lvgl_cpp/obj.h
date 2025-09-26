@@ -138,6 +138,46 @@ public:
         lv_obj_set_scrollbar_mode(this->raw_ptr(), mode);
     }
 
+    void setScrollDir(lv_dir_t dir)
+    {
+        lv_obj_set_scroll_dir(this->raw_ptr(), dir);
+    }
+
+    int32_t getScrollX()
+    {
+        return lv_obj_get_scroll_x(this->raw_ptr());
+    }
+
+    int32_t getScrollY()
+    {
+        return lv_obj_get_scroll_y(this->raw_ptr());
+    }
+
+    void scrollBy(int32_t dx, int32_t dy, lv_anim_enable_t anim_en)
+    {
+        lv_obj_scroll_by(this->raw_ptr(), dx, dy, anim_en);
+    }
+
+    void scrollByBounded(int32_t dx, int32_t dy, lv_anim_enable_t anim_en)
+    {
+        lv_obj_scroll_by_bounded(this->raw_ptr(), dx, dy, anim_en);
+    }
+
+    void scrollTo(int32_t x, int32_t y, lv_anim_enable_t anim_en)
+    {
+        lv_obj_scroll_to(this->raw_ptr(), x, y, anim_en);
+    }
+
+    void scrollToX(int32_t x, lv_anim_enable_t anim_en)
+    {
+        lv_obj_scroll_to_x(this->raw_ptr(), x, anim_en);
+    }
+
+    void scrollToY(int32_t y, lv_anim_enable_t anim_en)
+    {
+        lv_obj_scroll_to_y(this->raw_ptr(), y, anim_en);
+    }
+
     void setPadding(int32_t top,
                     int32_t bottom,
                     int32_t left,
@@ -379,7 +419,8 @@ public:
                     auto on_click = (Signal<void>*)lv_event_get_user_data(e);
                     on_click->emit();
                 },
-                LV_EVENT_CLICKED, _on_click.get());
+                LV_EVENT_CLICKED,
+                _on_click.get());
         }
         return *_on_click;
     }
