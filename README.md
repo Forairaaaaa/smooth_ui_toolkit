@@ -328,7 +328,7 @@ auto number_flow = new NumberFlowFloat(lv_screen_active());
 
 #### SmoothSelectorMenu
 
-基于选择器动画菜单抽象，选择器会平滑移动和变形，来匹配选中选项的关键帧
+基于选择器的菜单抽象，选择器会平滑移动和变形，来匹配选中选项的关键帧
 
 摄像机会自动平滑移动，保持选择器在摄像机范围内
 
@@ -338,48 +338,7 @@ auto number_flow = new NumberFlowFloat(lv_screen_active());
 
 ![Mix1](https://github.com/user-attachments/assets/01df49db-162e-428d-bce8-7bbc4f74702c)
 
-
-```cpp
-class Menu : public SmoothSelectorMenu {
-public:
-    void init() {
-        // 配置摄像机视口
-        setCameraSize(300, 260);
-        
-        // 配置选择器动画参数
-        getSelectorPostion().x.springOptions().visualDuration = 0.4;
-        getSelectorPostion().x.springOptions().bounce = 0.3;
-        
-        // 添加选项（定义关键帧位置和大小）
-        addOption({{50, 60, 120, 40}, nullptr});
-        addOption({{200, 80, 80, 120}, nullptr});
-        addOption({{320, 20, 150, 40}, nullptr});
-    }
-    
-    void onReadInput() override {
-        if (IsKeyPressed(KEY_A)) goLast();
-        else if (IsKeyPressed(KEY_D)) goNext();
-    }
-    
-    void onRender() override {
-        // 渲染选项
-        for (auto& option : getOptionList()) {
-            DrawRectangle(option.keyframe.x, option.keyframe.y, 
-                         option.keyframe.width, option.keyframe.height, BLUE);
-        }
-        // 渲染选择器
-        auto selector = getSelectorCurrentFrame();
-        DrawRectangle(selector.x, selector.y, 
-                     selector.width, selector.height, GREEN);
-    }
-};
-
-Menu menu;
-menu.init();
-while (1) {
-    menu.update();
-}
-```
+[简单例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_selector_menu.cpp)
 
 #### SmoothOptionsMenu
 
@@ -389,53 +348,7 @@ while (1) {
 
 ![SmoothMenuDemo2](https://github.com/user-attachments/assets/d151aac9-8995-4939-8110-3e4037e8f8da)
 
-```cpp
-class Menu : public SmoothOptionsMenu {
-public:
-    void init() {
-        // 添加 5 个选项
-        for (int i = 0; i < 5; i++) {
-            addOption(nullptr);
-        }
-        
-        // 配置每个选项的动画参数
-        for (auto& option : setOptionList()) {
-            option.position.x.springOptions().visualDuration = 0.5;
-            option.shape.x.springOptions().bounce = 0.3;
-        }
-        
-        // 设置圆形排列的关键帧
-        for (int i = 0; i < 5; i++) {
-            float angle = (i * 2.0f * M_PI / 5.0f) - M_PI / 2;
-            float x = centerX + radius * std::cos(angle);
-            float y = centerY + radius * std::sin(angle);
-            setKeyframe(i, {x, y, width, height});
-        }
-        
-        jumpTo(0);
-    }
-    
-    void onReadInput() override {
-        if (IsKeyPressed(KEY_A)) goLast();
-        else if (IsKeyPressed(KEY_D)) goNext();
-    }
-    
-    void onRender() override {
-        // 按关键帧顺序渲染选项
-        for (int i = 0; i < getKeyframeList().size(); i++) {
-            int option_idx = getMatchingOptionIndex(i);
-            auto frame = getOptionCurrentFrame(option_idx);
-            DrawRectangle(frame.x, frame.y, frame.width, frame.height, colors[option_idx]);
-        }
-    }
-};
-
-Menu menu;
-menu.init();
-while (1) {
-    menu.update();
-}
-```
+[简单例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_options_menu.cpp)
 
 ## UI HAL
 
