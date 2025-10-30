@@ -334,6 +334,11 @@ auto number_flow = new NumberFlowFloat(lv_screen_active());
 
 适合常见的列表菜单
 
+![SmoothMenuDemo1](https://github.com/user-attachments/assets/d7b30adb-936f-4e1c-9376-cad8c06913cd)
+
+![Mix1](https://github.com/user-attachments/assets/01df49db-162e-428d-bce8-7bbc4f74702c)
+
+
 ```cpp
 class Menu : public SmoothSelectorMenu {
 public:
@@ -381,6 +386,8 @@ while (1) {
 基于选项移动的菜单抽象，每个选项独立动画，循环轮换到关键帧位置
 
 适合圆形旋转菜单、卡片轮播等菜单
+
+![SmoothMenuDemo2](https://github.com/user-attachments/assets/d151aac9-8995-4939-8110-3e4037e8f8da)
 
 ```cpp
 class Menu : public SmoothOptionsMenu {
