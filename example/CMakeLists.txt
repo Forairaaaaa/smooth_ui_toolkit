@@ -65,3 +65,6 @@ target_link_libraries(animte_sequence ${PROJECT_NAME} mooncake_log lvgl ${SDL2_L
 
 add_executable(smooth_selector_menu ./widget/smooth_selector_menu.cpp)
 target_link_libraries(smooth_selector_menu ${PROJECT_NAME} mooncake_log raylib ${SDL2_LIBRARIES})
+
+add_executable(smooth_options_menu ./widget/smooth_options_menu.cpp)
+target_link_libraries(smooth_options_menu ${PROJECT_NAME} mooncake_log raylib ${SDL2_LIBRARIES})

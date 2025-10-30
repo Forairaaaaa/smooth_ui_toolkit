@@ -9,6 +9,7 @@
  *
  */
 #include "../utils/raylib_wrapper.h"
+#include "raylib.h"
 #include <smooth_ui_toolkit.h>
 #include <mooncake_log.h>
 
@@ -112,7 +113,7 @@ public:
         int index = 0;
         for (auto& i : getOptionList()) {
             DrawRectangle(i.keyframe.x, i.keyframe.y, i.keyframe.width, i.keyframe.height, BLUE);
-            DrawText(std::to_string(index).c_str(), i.keyframe.x, i.keyframe.y, 20, RED);
+            DrawText(std::to_string(index).c_str(), i.keyframe.x + 5, i.keyframe.y, 20, WHITE);
 
             index++;
         }
@@ -127,6 +128,10 @@ public:
         // Render camera
         DrawRectangleLines(
             getCameraOffset().x, getCameraOffset().y, getCameraSize().width, getCameraSize().height, BLACK);
+
+        // Instructions
+        DrawText("Press A/D to navigate", 10, 10, 20, BLACK);
+        DrawText("Click to select", 10, 35, 20, BLACK);
     }
 };
 

@@ -10,3 +10,4 @@
  */
 #pragma once
 #include "select_menu/smooth_selector.h"
+#include "select_menu/smooth_options.h"
