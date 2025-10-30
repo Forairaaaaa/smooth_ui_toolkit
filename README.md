@@ -1,6 +1,7 @@
 # Smooth UI Toolkit
 
 - Spring、Easing 动画插值，RGB 颜色过渡插值
+- SmoothSelector、SmoothOptions 动画菜单抽象
 - Lvgl C++ 封装，NumberFlow 风格控件
 - 颜色混合、signal、ringbuffer 等杂类工具
 
@@ -322,6 +323,36 @@ number_flow->onClick().connect([&]() {
 auto number_flow = new NumberFlowFloat(lv_screen_active());
 ...
 ```
+
+### 控件抽象
+
+#### SmoothSelectorMenu
+
+基于选择器的菜单抽象，选择器会平滑移动和变形，来匹配选中选项的关键帧
+
+摄像机会自动平滑移动，保持选择器在摄像机范围内
+
+适合常见的列表菜单
+
+![timerrelay](https://github.com/user-attachments/assets/988f5c44-8cc3-435a-a47a-603d92a20251)
+
+![SmoothMenuDemo1](https://github.com/user-attachments/assets/d7b30adb-936f-4e1c-9376-cad8c06913cd)
+
+![Mix1](https://github.com/user-attachments/assets/01df49db-162e-428d-bce8-7bbc4f74702c)
+
+[简单例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_selector_menu.cpp)
+
+#### SmoothOptionsMenu
+
+基于选项移动的菜单抽象，每个选项独立动画，循环轮换到关键帧位置
+
+适合圆形旋转菜单、卡片轮播等菜单
+
+![asdasda](https://github.com/user-attachments/assets/de8f281e-6e58-4c41-b7fa-33fb628b32e7)
+
+![SmoothMenuDemo2](https://github.com/user-attachments/assets/d151aac9-8995-4939-8110-3e4037e8f8da)
+
+[简单例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_options_menu.cpp)
 
 ## UI HAL
 
