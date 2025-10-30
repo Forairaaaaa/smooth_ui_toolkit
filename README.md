@@ -1,7 +1,7 @@
 # Smooth UI Toolkit
 
 - Spring、Easing 动画插值，RGB 颜色过渡插值
-- SmoothSelector、SmoothOptions 平滑菜单抽象
+- SmoothSelector、SmoothOptions 动画菜单抽象
 - Lvgl C++ 封装，NumberFlow 风格控件
 - 颜色混合、signal、ringbuffer 等杂类工具
 
