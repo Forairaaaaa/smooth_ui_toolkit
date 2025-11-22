@@ -300,6 +300,18 @@ public:
         return lv_obj_get_height(this->raw_ptr());
     }
 
+    int32_t getXAligned()
+    {
+        lv_obj_update_layout(this->raw_ptr());
+        return lv_obj_get_x_aligned(this->raw_ptr());
+    }
+
+    int32_t getYAligned()
+    {
+        lv_obj_update_layout(this->raw_ptr());
+        return lv_obj_get_y_aligned(this->raw_ptr());
+    }
+
     void setTextColor(lv_color_t color, lv_style_selector_t selector = LV_PART_MAIN)
     {
         lv_obj_set_style_text_color(this->raw_ptr(), color, selector);
