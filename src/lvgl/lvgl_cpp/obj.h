@@ -387,6 +387,16 @@ public:
         lv_obj_set_style_arc_image_src(this->raw_ptr(), value, selector);
     }
 
+    void setImageRecolor(lv_color_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_image_recolor(this->raw_ptr(), value, selector);
+    }
+
+    void setImageRecolorOpa(lv_opa_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_image_recolor_opa(this->raw_ptr(), value, selector);
+    }
+
     void addState(lv_state_t state)
     {
         lv_obj_add_state(this->raw_ptr(), state);
