@@ -37,4 +37,14 @@ constexpr auto clamp(const T m_a, const T2 m_min, const T3 m_max)
     return m_a < m_min ? m_min : (m_a > m_max ? m_max : m_a);
 }
 
+template <typename T, typename T2, typename T3, typename T4, typename T5>
+constexpr auto map_range(const T m_val, const T2 m_in_min, const T3 m_in_max, const T4 m_out_min, const T5 m_out_max)
+{
+    if (m_in_max == m_in_min) {
+        return m_out_min;
+    }
+
+    return m_out_min + ((m_val - m_in_min) * (m_out_max - m_out_min)) / (m_in_max - m_in_min);
+}
+
 } // namespace smooth_ui_toolkit
