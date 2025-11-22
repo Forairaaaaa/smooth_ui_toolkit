@@ -332,6 +332,11 @@ public:
         return lv_obj_get_style_text_font(this->raw_ptr(), selector);
     }
 
+    void setTextAlign(lv_text_align_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_text_align(this->raw_ptr(), value, selector);
+    }
+
     void setFlexFlow(lv_flex_flow_t flow)
     {
         lv_obj_set_flex_flow(this->raw_ptr(), flow);
