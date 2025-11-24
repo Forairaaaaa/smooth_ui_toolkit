@@ -300,6 +300,18 @@ public:
         return lv_obj_get_height(this->raw_ptr());
     }
 
+    int32_t getXAligned()
+    {
+        lv_obj_update_layout(this->raw_ptr());
+        return lv_obj_get_x_aligned(this->raw_ptr());
+    }
+
+    int32_t getYAligned()
+    {
+        lv_obj_update_layout(this->raw_ptr());
+        return lv_obj_get_y_aligned(this->raw_ptr());
+    }
+
     void setTextColor(lv_color_t color, lv_style_selector_t selector = LV_PART_MAIN)
     {
         lv_obj_set_style_text_color(this->raw_ptr(), color, selector);
@@ -318,6 +330,11 @@ public:
     const lv_font_t* getTextFont(lv_style_selector_t selector = LV_PART_MAIN)
     {
         return lv_obj_get_style_text_font(this->raw_ptr(), selector);
+    }
+
+    void setTextAlign(lv_text_align_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_text_align(this->raw_ptr(), value, selector);
     }
 
     void setFlexFlow(lv_flex_flow_t flow)
@@ -368,6 +385,16 @@ public:
     void setArcImageSrc(const void* value, lv_style_selector_t selector = LV_PART_MAIN)
     {
         lv_obj_set_style_arc_image_src(this->raw_ptr(), value, selector);
+    }
+
+    void setImageRecolor(lv_color_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_image_recolor(this->raw_ptr(), value, selector);
+    }
+
+    void setImageRecolorOpa(lv_opa_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_image_recolor_opa(this->raw_ptr(), value, selector);
     }
 
     void addState(lv_state_t state)
