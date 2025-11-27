@@ -3,7 +3,9 @@
 - Spring、Easing 动画插值，RGB 颜色过渡插值
 - SmoothSelector、SmoothOptions 动画菜单抽象
 - Lvgl C++ 封装，NumberFlow 风格控件
-- 颜色混合、signal、ringbuffer 等杂类工具
+- 颜色类型定义，颜色混合、转换方法
+- Signal、RingBuffer 等常用模板类
+- Vector 类型，clamp、map_range 等数学工具
 
 ![Jul-26-2025 01-00-39](https://github.com/user-attachments/assets/1930f5e6-4a72-47e3-aa1e-e54335e3b4c2)
 
