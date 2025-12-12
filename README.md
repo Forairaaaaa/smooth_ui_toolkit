@@ -387,7 +387,7 @@ void delay(uint32_t ms);
 ```cpp
 // 比如 Arduino，性能应该比 chrono 好
 
-ui_hal::on_get_tick_ms([]() {
+ui_hal::on_get_tick([]() {
     return millis();
 });
 
