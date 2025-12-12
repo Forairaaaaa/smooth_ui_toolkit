@@ -380,7 +380,13 @@ void delay(uint32_t ms);
 } // namespace ui_hal
 ```
 
-默认实现为 chrono 和 thread，cmake 里 OFF `SMOOTH_UI_TOOLKIT_ENABLE_DEFAULT_HAL` 可以关闭这个实现
+默认实现为 chrono 和 thread
+
+cmake 里 OFF `SMOOTH_UI_TOOLKIT_ENABLE_DEFAULT_HAL` 
+
+或者添加全局宏 `SMOOTH_UI_TOOLKIT_ENABLE_DEFAULT_HAL=0`
+
+可以关闭这个默认实现
 
 自定义实现方式：
 
