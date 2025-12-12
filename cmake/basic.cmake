@@ -4,9 +4,9 @@ set(CMAKE_CXX_STANDARD 17)
 cmake_policy(SET CMP0077 NEW)
 
 option(SMOOTH_UI_TOOLKIT_ENABLE_DEFAULT_HAL "Enable default HAL implementation using chrono/thread" ON)
-if(SMOOTH_UI_TOOLKIT_ENABLE_DEFAULT_HAL)
-    add_compile_definitions(SMOOTH_UI_TOOLKIT_ENABLE_DEFAULT_HAL)
-endif()
+add_compile_definitions(
+  SMOOTH_UI_TOOLKIT_ENABLE_DEFAULT_HAL=$<IF:$<BOOL:${SMOOTH_UI_TOOLKIT_ENABLE_DEFAULT_HAL}>,1,0>
+)
 
 # Src files
 file(GLOB_RECURSE SMOOTH_UI_TOOLKIT_SRCS
