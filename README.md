@@ -420,8 +420,9 @@ ui_hal::on_delay([](uint32_t ms) {
 所有类均定义在命名空间 `smooth_ui_toolkit` 下
 
 ```cpp
-smooth_ui_toolkit::clamp(...)
-smooth_ui_toolkit::AnimateValue()
+smooth_ui_toolkit::clamp(...);
+smooth_ui_toolkit::AnimateValue();
+smooth_ui_toolkit::lvgl_cpp::Button(...);
 ...
 ```
 
@@ -431,8 +432,9 @@ smooth_ui_toolkit::AnimateValue()
 #include <smooth_ui_toolkit.hpp>
 #include <uitk/short_namespace.hpp>
 
-uitk::clamp(...)
-uitk::AnimateValue()
+uitk::clamp(...);
+uitk::AnimateValue();
+uitk::lvgl_cpp::Button(...);
 ...
 ```
 
