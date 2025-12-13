@@ -1,9 +1,9 @@
 /**
- * @file smooth_selector_menu.cpp
+ * @file horizontal_stack_menu.cpp
  * @author Forairaaaaa
  * @brief
  * @version 0.1
- * @date 2025-08-16
+ * @date 2025-12-13
  *
  * @copyright Copyright (c) 2025
  *
@@ -14,6 +14,8 @@
 
 using namespace smooth_ui_toolkit;
 
+static const Vector2i _screen_size = {320, 240};
+
 class Menu : public SmoothSelectorMenu {
 public:
     /**
@@ -22,16 +24,14 @@ public:
      */
     void init()
     {
-        setCameraSize(300, 260);
+        // Set camera to screen size
+        setCameraSize(_screen_size.width, _screen_size.height);
 
         // Quicker selector movement
         getSelectorPostion().x.springOptions().visualDuration = 0.4;
         getSelectorPostion().x.springOptions().bounce = 0.3;
         getSelectorPostion().y.springOptions() = getSelectorPostion().x.springOptions();
-
-        // A bit slower selector reshaping
-        getSelectorShape().x.springOptions().visualDuration = 0.5;
-        getSelectorShape().x.springOptions().bounce = 0.3;
+        getSelectorShape().x.springOptions() = getSelectorPostion().x.springOptions();
         getSelectorShape().y.springOptions() = getSelectorShape().x.springOptions();
 
         // Slower camera movement
@@ -42,13 +42,10 @@ public:
         setConfig().renderInterval = 0;
         setConfig().readInputInterval = 0;
 
-        // Add dummy options
-        addOption({{50, 60, 120, 40}, nullptr});
-        addOption({{200, 80, 80, 120}, nullptr});
-        addOption({{320, 20, 150, 40}, nullptr});
-        addOption({{50, 320, 160, 80}, nullptr});
-        addOption({{400, 220, 100, 80}, nullptr});
-        addOption({{600, 120, 120, 140}, nullptr});
+        // Add dummy options in horizontal stack
+        for (int i = 0; i < 6; i++) {
+            addOption({{(float)i * 100, 100, 72, 72}, nullptr});
+        }
     }
 
     void onGoLast() override
@@ -92,7 +89,7 @@ public:
         // Press and release selector
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             // Squeeze selector
-            auto pressed_keyframe = shape::scale<float>(getSelectorCurrentFrame(), anchor_center, {1.6, 0.5});
+            auto pressed_keyframe = shape::scale<float>(getSelectorCurrentFrame(), anchor_center, {1.5, 0.5});
             press(pressed_keyframe);
         } else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
             release();
@@ -108,25 +105,35 @@ public:
         // Clear
         ClearBackground(WHITE);
 
+        // A camera offset for options and selector to apply
+        // To keep their render position inside of the screen size
+        int camera_x_offset = -getCameraOffset().x;
+
+        // // You can disable this offset and enable render camera section below to see how camera works
+        // camera_x_offset = 0;
+
         // Redner options
         int index = 0;
         for (auto& i : getOptionList()) {
-            DrawRectangle(i.keyframe.x, i.keyframe.y, i.keyframe.width, i.keyframe.height, BLUE);
-            DrawText(std::to_string(index).c_str(), i.keyframe.x + 5, i.keyframe.y, 20, WHITE);
+            DrawRectangle(i.keyframe.x + camera_x_offset, i.keyframe.y, i.keyframe.width, i.keyframe.height, BLUE);
+            DrawText(std::to_string(index).c_str(), i.keyframe.x + camera_x_offset + 5, i.keyframe.y, 20, WHITE);
 
             index++;
         }
 
         // Render selector
-        DrawRectangle(getSelectorCurrentFrame().x,
+        DrawRectangle(getSelectorCurrentFrame().x + camera_x_offset,
                       getSelectorCurrentFrame().y,
                       getSelectorCurrentFrame().width,
                       getSelectorCurrentFrame().height,
                       GREEN);
 
-        // Render camera
-        DrawRectangleLines(
-            getCameraOffset().x, getCameraOffset().y, getCameraSize().width, getCameraSize().height, BLACK);
+        // // Render camera
+        // DrawRectangleLines(
+        //     getCameraOffset().x, getCameraOffset().y, getCameraSize().width, getCameraSize().height, LIGHTGRAY);
+
+        // Render screen frame
+        DrawRectangleLines(0, 0, _screen_size.width, _screen_size.height, RED);
 
         // Instructions
         DrawText("Press A/D to navigate", 10, 10, 20, BLACK);

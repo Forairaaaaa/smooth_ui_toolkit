@@ -466,4 +466,4 @@ clone 仓库，直接丢到 `libs` 目录里就行
 
 ### Arduino 工程
 
-clone 仓库，直接丢到 `xxx` 目录里就行（我不记得那个 library 目录叫什么了）
+clone 仓库，直接丢到 `libraries` 目录里就行

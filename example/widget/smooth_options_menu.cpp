@@ -9,7 +9,6 @@
  *
  */
 #include "../utils/raylib_wrapper.h"
-#include "raylib.h"
 #include <smooth_ui_toolkit.h>
 #include <mooncake_log.h>
 #include <cmath>
@@ -24,7 +23,7 @@ public:
      */
     void init()
     {
-        // Must update in every frame on raylib
+        // Update in every frame is required by raylib
         setConfig().renderInterval = 0;
         setConfig().readInputInterval = 0;
 
