@@ -31,14 +31,14 @@ public:
     DigitFlow& operator=(const DigitFlow&) = delete;
 
     // Spring will feels more natural
-    animation_type::Type_t animationType = animation_type::spring;
+    AnimationType animationType = AnimationType::Spring;
 
-    static void setup_animation(AnimateValue& animateValue, animation_type::Type_t animationType)
+    static void setup_animation(AnimateValue& animateValue, AnimationType animationType)
     {
-        if (animationType == animation_type::spring) {
+        if (animationType == AnimationType::Spring) {
             animateValue.springOptions().visualDuration = 0.6;
             animateValue.springOptions().bounce = 0.05;
-        } else if (animationType == animation_type::easing) {
+        } else if (animationType == AnimationType::Easing) {
             animateValue.easingOptions().duration = 0.6;
             animateValue.easingOptions().easingFunction = ease::ease_out_quad;
         }

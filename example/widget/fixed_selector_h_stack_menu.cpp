@@ -91,7 +91,7 @@ public:
             // Squeeze selector
             // Use anchor_top_left to avoid position shift,
             // since options' redner offset is based on selector's postion
-            auto pressed_keyframe = shape::scale<float>(getSelectorCurrentFrame(), anchor_top_left, {1.5, 0.5});
+            auto pressed_keyframe = shape::scale<float>(getSelectorCurrentFrame(), shape::Anchor::TopLeft, {1.5, 0.5});
             press(pressed_keyframe);
         } else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
             release();
@@ -125,7 +125,8 @@ public:
         uitk::Vector4 fixed_selector_kf = {
             _selector_pos.x, _selector_pos.y, getSelectorShape().x, getSelectorShape().y};
         // Convert shape anchor
-        auto selector_render_kf = shape::convert_anchor(fixed_selector_kf, anchor_top_left, anchor_center);
+        auto selector_render_kf =
+            shape::convert_anchor(fixed_selector_kf, shape::Anchor::TopLeft, shape::Anchor::Center);
         // Apply new anchor position offset
         selector_render_kf.x += _option_size.width / 2;
         selector_render_kf.y += _option_size.height / 2;

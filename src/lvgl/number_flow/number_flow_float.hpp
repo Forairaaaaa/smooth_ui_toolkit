@@ -29,7 +29,7 @@ public:
     NumberFlowFloat& operator=(const NumberFlowFloat&) = delete;
 
     // Spring will feels more natural
-    animation_type::Type_t animationType = animation_type::spring;
+    AnimationType animationType = AnimationType::Spring;
     bool transparentBg = true;
     bool showPositiveSign = false;
     int decimalPlaces = 2; // 小数位数

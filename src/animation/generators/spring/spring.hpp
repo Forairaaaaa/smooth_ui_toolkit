@@ -10,7 +10,6 @@
  */
 #pragma once
 #include "../generators.hpp"
-#include <functional>
 // 参考：
 // https://github.com/motiondivision/motion/blob/main/packages/framer-motion/src/animation/generators/spring
 
@@ -51,9 +50,9 @@ public:
     virtual void init() override;
     virtual void retarget(const float& start, const float& end) override;
     virtual bool next(const float& t) override;
-    virtual animation_type::Type_t type() const override
+    virtual AnimationType type() const override
     {
-        return animation_type::spring;
+        return AnimationType::Spring;
     }
 
 protected:

@@ -111,7 +111,7 @@ public:
             // Squeeze the selected option
             auto& selected = getSelectedOption();
             auto current_frame = getOptionCurrentFrame(getMatchingOptionIndex(0));
-            auto pressed_keyframe = shape::scale<float>(current_frame, anchor_center, {1.3, 0.6});
+            auto pressed_keyframe = shape::scale<float>(current_frame, shape::Anchor::Center, {1.3, 0.6});
             press(pressed_keyframe);
         } else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
             release();

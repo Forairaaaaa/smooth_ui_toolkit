@@ -46,7 +46,7 @@ public:
     };
 
     // 动画类型，默认 spring 更自然
-    animation_type::Type_t animationType = animation_type::spring;
+    AnimationType animationType = AnimationType::Spring;
     // 透明背景
     bool transparentBg = true;
     // 显示正负号

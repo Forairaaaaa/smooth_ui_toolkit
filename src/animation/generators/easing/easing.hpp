@@ -42,9 +42,9 @@ public:
     virtual void init() override;
     virtual void retarget(const float& start, const float& end) override;
     virtual bool next(const float& t) override;
-    virtual animation_type::Type_t type() const override
+    virtual AnimationType type() const override
     {
-        return animation_type::easing;
+        return AnimationType::Easing;
     }
 
 private:

@@ -104,7 +104,7 @@ void AnimateSequence::update()
                     _repeat_count--;
                 }
                 // Reset animation
-                if (repeatType == animate_repeat_type::reverse) {
+                if (repeatType == AnimateRepeatType::Reverse) {
                     std::reverse(_value_sequence.begin(), _value_sequence.end());
                 }
                 _current_index = 0;

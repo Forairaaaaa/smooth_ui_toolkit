@@ -12,12 +12,10 @@
 
 namespace smooth_ui_toolkit {
 
-namespace animation_type {
-enum Type_t {
-    spring = 0,
-    easing,
+enum class AnimationType {
+    Spring = 0,
+    Easing,
 };
-} // namespace animation_type
 
 class KeyFrameGenerator {
 public:
@@ -38,7 +36,7 @@ public:
         return done;
     }
 
-    virtual animation_type::Type_t type() const = 0;
+    virtual AnimationType type() const = 0;
 };
 
 } // namespace smooth_ui_toolkit

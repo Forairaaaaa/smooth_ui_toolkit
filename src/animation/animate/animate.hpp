@@ -17,24 +17,20 @@
 
 namespace smooth_ui_toolkit {
 
-namespace animate_repeat_type {
-enum Type_t {
-    loop = 0, // 循环播放
-    reverse,  // 反向播放
+enum class AnimateRepeatType {
+    Loop = 0, // 循环播放
+    Reverse,  // 反向播放
 };
-}
 
-namespace animate_state {
-enum State_t {
-    idle = 0,        // 空闲状态
-    delaying,        // 等待开始（delay阶段）
-    playing,         // 正在播放动画
-    paused,          // 暂停
-    repeat_delaying, // 重复等待阶段
-    completed,       // 完成
-    cancelled        // 取消
+enum class AnimateState {
+    Idle = 0,       // 空闲状态
+    Delaying,       // 等待开始（delay阶段）
+    Playing,        // 正在播放动画
+    Paused,         // 暂停
+    RepeatDelaying, // 重复等待阶段
+    Completed,      // 完成
+    Cancelled       // 取消
 };
-}
 
 class Animate {
 public:
@@ -60,11 +56,11 @@ public:
     // 重复次数，-1 表示无限循环
     int repeat = 0;
     // 重复类型
-    animate_repeat_type::Type_t repeatType = animate_repeat_type::loop;
+    AnimateRepeatType repeatType = AnimateRepeatType::Loop;
     // 重复间隔时间（秒）
     float repeatDelay = 0.0f;
     // 动画类型
-    animation_type::Type_t animationType = animation_type::spring;
+    AnimationType animationType = AnimationType::Spring;
     // easing 动画配置，调用此方法，动画类型将自动切换为 easing
     EasingOptions_t& easingOptions();
     // spring 动画配置，调用此方法，动画类型将自动切换为 spring
@@ -153,7 +149,7 @@ public:
         return get_key_frame_generator().value;
     }
 
-    inline animate_state::State_t currentPlayingState()
+    inline AnimateState currentPlayingState()
     {
         return _playing_state;
     }
@@ -163,7 +159,7 @@ protected:
     std::function<void()> _on_complete;
     std::unique_ptr<KeyFrameGenerator> _key_frame_generator;
     KeyFrameGenerator& get_key_frame_generator();
-    animate_state::State_t _playing_state = animate_state::idle;
+    AnimateState _playing_state = AnimateState::Idle;
     float _start_time = 0.0f;
     float _pause_time = 0.0f;
     int _repeat_count = 0;
