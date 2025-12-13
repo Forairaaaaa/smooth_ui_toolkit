@@ -9,16 +9,17 @@
  *
  */
 // Refs: https://number-flow.barvian.me
-#include "../utils/lvgl_wrapper.h"
+#include "../utils/lvgl_wrapper.hpp"
 #include <rajdhani/rajdhani_bold.h>
-#include <smooth_ui_toolkit.h>
-#include <smooth_lvgl.h>
+#include <smooth_ui_toolkit.hpp>
+#include <uitk/short_namespace.hpp>
+#include <smooth_lvgl.hpp>
 #include <mooncake_log.h>
 #include <random>
 #include <vector>
 
-using namespace smooth_ui_toolkit;
-using namespace smooth_ui_toolkit::lvgl_cpp;
+using namespace uitk;
+using namespace uitk::lvgl_cpp;
 
 NumberFlow* prefix_suffix_and_color()
 {

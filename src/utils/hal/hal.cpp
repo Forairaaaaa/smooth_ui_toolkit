@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "hal.h"
+#include "hal.hpp"
 
 #ifndef SMOOTH_UI_TOOLKIT_ENABLE_DEFAULT_HAL
 #define SMOOTH_UI_TOOLKIT_ENABLE_DEFAULT_HAL 1

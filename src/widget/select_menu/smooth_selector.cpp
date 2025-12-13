@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "smooth_selector.h"
-#include "utils/math/vector.h"
+#include "smooth_selector.hpp"
+#include "utils/math/vector.hpp"
 
 using namespace smooth_ui_toolkit;
 

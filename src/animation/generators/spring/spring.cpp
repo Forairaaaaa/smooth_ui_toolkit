@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "spring.h"
+#include "spring.hpp"
 #include <cmath>
 #include <algorithm>
 

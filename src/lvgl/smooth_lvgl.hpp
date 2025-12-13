@@ -1,0 +1,29 @@
+/**
+ * @file smooth_lvgl.hpp
+ * @author Forairaaaaa
+ * @brief
+ * @version 0.1
+ * @date 2025-03-22
+ *
+ * @copyright Copyright (c) 2025
+ *
+ */
+#pragma once
+#include "lvgl_cpp/obj.hpp"
+#include "lvgl_cpp/label.hpp"
+#include "lvgl_cpp/slider.hpp"
+#include "lvgl_cpp/button.hpp"
+#include "lvgl_cpp/switch.hpp"
+#include "lvgl_cpp/line.hpp"
+#include "lvgl_cpp/canvas.hpp"
+#include "lvgl_cpp/chart.hpp"
+#include "lvgl_cpp/image.hpp"
+#include "lvgl_cpp/calendar.hpp"
+#include "lvgl_cpp/roller.hpp"
+#include "lvgl_cpp/spinner.hpp"
+#include "lvgl_cpp/text_area.hpp"
+#include "lvgl_cpp/table.hpp"
+#include "lvgl_cpp/screen.hpp"
+#include "number_flow/digit_flow.hpp"
+#include "number_flow/number_flow.hpp"
+#include "number_flow/number_flow_float.hpp"

@@ -8,15 +8,16 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "../utils/raylib_wrapper.h"
-#include <smooth_ui_toolkit.h>
+#include "../utils/raylib_wrapper.hpp"
+#include <smooth_ui_toolkit.hpp>
+#include <uitk/short_namespace.hpp>
 #include <mooncake_log.h>
 
-using namespace smooth_ui_toolkit;
+using namespace uitk;
 
-static const smooth_ui_toolkit::Vector2 _screen_size = {320, 320};
-static const smooth_ui_toolkit::Vector2 _option_size = {360, 28};
-static const smooth_ui_toolkit::Vector2 _selector_pos = {16, _screen_size.height / 2 - _option_size.height / 2};
+static const uitk::Vector2 _screen_size = {320, 320};
+static const uitk::Vector2 _option_size = {360, 28};
+static const uitk::Vector2 _selector_pos = {16, _screen_size.height / 2 - _option_size.height / 2};
 
 class Menu : public SmoothSelectorMenu {
 public:
@@ -131,7 +132,7 @@ public:
         }
 
         // Get the fixed selector shape
-        smooth_ui_toolkit::Vector4 fixed_selector_kf = {
+        uitk::Vector4 fixed_selector_kf = {
             _selector_pos.x, _selector_pos.y, getSelectorShape().x, getSelectorShape().y};
         // Convert shape anchor
         auto selector_render_kf = shape::convert_anchor(fixed_selector_kf, anchor_top_left, anchor_center);

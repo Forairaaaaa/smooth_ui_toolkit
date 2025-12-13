@@ -8,11 +8,12 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "../utils/raylib_wrapper.h"
-#include <smooth_ui_toolkit.h>
+#include "../utils/raylib_wrapper.hpp"
+#include <smooth_ui_toolkit.hpp>
+#include <uitk/short_namespace.hpp>
 #include <mooncake_log.h>
 
-using namespace smooth_ui_toolkit;
+using namespace uitk;
 
 class Menu : public SmoothSelectorMenu {
 public:

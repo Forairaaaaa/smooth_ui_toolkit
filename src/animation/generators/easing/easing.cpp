@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "easing.h"
+#include "easing.hpp"
 
 using namespace smooth_ui_toolkit;
 

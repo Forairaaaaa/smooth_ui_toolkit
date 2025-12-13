@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "animate.h"
-#include "utils/hal/hal.h"
+#include "animate.hpp"
+#include "utils/hal/hal.hpp"
 #include <functional>
 #include <memory>
 

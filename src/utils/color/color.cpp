@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "color.h"
+#include "color.hpp"
 
 namespace smooth_ui_toolkit {
 namespace color {

@@ -199,7 +199,7 @@ Lvgl 控件智能指针封装
 ![Jul-26-2025 00-56-19](https://github.com/user-attachments/assets/4aa17149-6a3c-4b78-87cc-38150f12dcf2)
 
 ```cpp
-#include <smooth_lvgl.h>
+#include <smooth_lvgl.hpp>
 // lvgl cpp 封装为 header only
 // 需要工程已满足 #include <lvgl.h> 依赖
 // 当前目标版本为 v9.3.0
@@ -353,7 +353,7 @@ auto number_flow = new NumberFlowFloat(lv_screen_active());
 
 ![vstack-curved-menu](https://github.com/user-attachments/assets/b6699639-6968-4a5d-a6f6-aa03694f56e3)
 
-可以看这个[例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_selector_menu.cpp)理解具体的实现和功能：
+可以看这个[例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_selector_menu.cpp)来了解具体的实现功能：
 
 ![timerrelay](https://github.com/user-attachments/assets/988f5c44-8cc3-435a-a47a-603d92a20251)
 
@@ -365,7 +365,7 @@ auto number_flow = new NumberFlowFloat(lv_screen_active());
 
 ![SmoothMenuDemo2](https://github.com/user-attachments/assets/d151aac9-8995-4939-8110-3e4037e8f8da)
 
-可以看这个[例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_options_menu.cpp)具体的实现和功能：
+可以看这个[例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_options_menu.cpp)来了解具体的实现功能：
 
 ![asdasda](https://github.com/user-attachments/assets/de8f281e-6e58-4c41-b7fa-33fb628b32e7)
 
@@ -413,6 +413,29 @@ ui_hal::on_get_tick([]() {
 ui_hal::on_delay([](uint32_t ms) {
     delay(ms);
 });
+```
+
+## 命名空间
+
+所有类和方法均定义在命名空间 `smooth_ui_toolkit` 下
+
+```cpp
+smooth_ui_toolkit::clamp(...);
+smooth_ui_toolkit::AnimateValue();
+smooth_ui_toolkit::lvgl_cpp::Button(...);
+...
+```
+
+可以引用 `<uitk/short_namespace.hpp>` 来获得一个更简短的重命名 `uitk`
+
+```cpp
+#include <smooth_ui_toolkit.hpp>
+#include <uitk/short_namespace.hpp>
+
+uitk::clamp(...);
+uitk::AnimateValue();
+uitk::lvgl_cpp::Button(...);
+...
 ```
 
 ## 编译例程

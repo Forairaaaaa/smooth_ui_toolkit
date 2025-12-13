@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "animate_sequence.h"
+#include "animate_sequence.hpp"
 #include <algorithm>
 #include <memory>
 
