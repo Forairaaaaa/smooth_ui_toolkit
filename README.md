@@ -17,9 +17,7 @@
 
 ### Animate
 
-基础动画插值类，默认动画类型为 **spring**
-
-插值类抽象参考 [Motion](https://motion.dev/) ，多谢 Motion 哥
+基础动画插值类，抽象设计参考 [Motion](https://github.com/motiondivision/motion) ～
 
 ![](https://pic1.imgdb.cn/item/680c58b458cb8da5c8ce1f57.gif)
 
@@ -56,8 +54,6 @@ while (1) {
 
 Animate 的派生类，简化取值赋值操作，使用起来更接近于普通变量
 
-适合控件的坐标、长宽等参数的过渡插值，来实现动画效果：[视频](https://www.bilibili.com/video/BV1RZcTegEUu)
-
 ![Jul-26-2025 01-24-37](https://github.com/user-attachments/assets/9ef569b6-5226-4365-bb20-2c16208866e4)
 
 ```cpp
@@ -65,11 +61,11 @@ AnimateValue x = 100;
 AnimateValue y = 225;
 
 while (1) {
-    // 赋值时自动适应新目标
+    // 直接赋值即可，动画会自动适应新目标
     x = get_mouse_x();
     y = get_mouse_y();
   
-    // 取值时自动更新、类型转换
+    // 直接取值即可，动画会自动更新
     draw_ball(x, y);
 });
 ```
@@ -93,7 +89,7 @@ Lvgl 控件智能指针封装
 
 指针管理参考：*https://github.com/vpaeder/lvglpp*
 
-添加了类似 Godot Signal 的观察者来简化事件处理
+简化了控件 API，并添加了信号 `Signal` 来简化事件回调处理
 
 ![Jul-26-2025 00-56-19](https://github.com/user-attachments/assets/4aa17149-6a3c-4b78-87cc-38150f12dcf2)
 
@@ -159,42 +155,23 @@ auto number_flow = new NumberFlow(lv_screen_active());
 
 ...
 btn_random->onClick().connect([&]() {
+  	// 设置数值
     number_flow->setValue(randomNum);
 });
 
 while (1) {
+  	// 更新
     number_flow->update();
 }
-
 ```
+
+[完整例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/smooth_lvgl/number_flow.cpp)
 
 #### 前后缀文本、颜色设置：
 
 ![Jul-26-2025 21-41-14](https://github.com/user-attachments/assets/edecc1ab-6f64-4b59-b3ba-2eb406cc390a)
 
-```cpp
-...
-// 设置前缀颜色
-number_flow->setPrefixColor(lv_color_hex(0x00b894));
-
-// 设置数字颜色
-number_flow->setDigitColor(lv_color_hex(0xa29bfe));
-
-// 设置后缀颜色
-number_flow->setSuffixColor(lv_color_hex(0xff4757));
-
-number_flow->onClick().connect([&]() {
-
-    // 设置前缀
-    number_flow->setPrefix(get_random_prefix());
-
-    // 设置后缀
-    number_flow->setSuffix(get_random_suffix());
-
-    ...
-});
-...
-```
+[完整例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/smooth_lvgl/number_flow_ext.cpp)
 
 #### 小数支持：
 
@@ -207,6 +184,16 @@ auto number_flow = new NumberFlowFloat(lv_screen_active());
 ```
 
 ## 控件抽象
+
+把控件的一些共性行为抽离出来作为基类，使用时可以根据实际需求派生
+
+例如一个带动画的选项菜单抽象：
+
+重写 `onReadInput()` 来读取按键或者是编码器输入，以控制选项的切换
+
+重写 `onRender()` 来实现实际的画面渲染
+
+非常底层～
 
 ### SmoothSelectorMenu
 
