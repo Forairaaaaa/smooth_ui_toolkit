@@ -13,8 +13,9 @@
 #include <thread>
 #include <chrono>
 #include <smooth_ui_toolkit.hpp>
+#include <uitk/short_namespace.hpp>
 
-using namespace smooth_ui_toolkit;
+using namespace uitk;
 
 void consumer(int id, Signal<std::string, int>& signal)
 {

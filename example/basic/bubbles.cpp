@@ -10,10 +10,11 @@
  */
 #include "../utils/raylib_wrapper.hpp"
 #include <smooth_ui_toolkit.hpp>
+#include <uitk/short_namespace.hpp>
 #include <mooncake_log.h>
 #include <vector>
 
-using namespace smooth_ui_toolkit;
+using namespace uitk;
 
 struct Bubble {
     AnimateVector2 pos;

@@ -10,7 +10,7 @@
  */
 #include "../utils/lvgl_wrapper.hpp"
 #include <smooth_ui_toolkit.hpp>
-#include <uitk/short_namespaces.hpp>
+#include <uitk/short_namespace.hpp>
 #include <smooth_lvgl.hpp>
 #include <mooncake_log.h>
 #include <random>

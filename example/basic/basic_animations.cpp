@@ -10,10 +10,11 @@
  */
 // Refs: https://motion.dev/docs/react-animation#basic-animations
 #include "../utils/lvgl_wrapper.hpp"
-#include <mooncake_log.h>
 #include <smooth_ui_toolkit.hpp>
+#include <uitk/short_namespace.hpp>
+#include <mooncake_log.h>
 
-using namespace smooth_ui_toolkit;
+using namespace uitk;
 
 struct Position {
     AnimateValue x = 0;

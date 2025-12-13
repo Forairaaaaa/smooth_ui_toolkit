@@ -10,10 +10,11 @@
  */
 #include "../utils/raylib_wrapper.hpp"
 #include <smooth_ui_toolkit.hpp>
+#include <uitk/short_namespace.hpp>
 #include <mooncake_log.h>
 #include <cmath>
 
-using namespace smooth_ui_toolkit;
+using namespace uitk;
 
 class Menu : public SmoothOptionsMenu {
 public:

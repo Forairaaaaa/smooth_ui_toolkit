@@ -9,9 +9,10 @@
  *
  */
 #include <smooth_ui_toolkit.hpp>
+#include <uitk/short_namespace.hpp>
 #include <mooncake_log.h>
 
-using namespace smooth_ui_toolkit;
+using namespace uitk;
 
 int main()
 {

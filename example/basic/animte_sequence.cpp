@@ -10,11 +10,12 @@
  */
 #include "../utils/lvgl_wrapper.hpp"
 #include <smooth_ui_toolkit.hpp>
+#include <uitk/short_namespace.hpp>
 #include <smooth_lvgl.hpp>
 #include <mooncake_log.h>
 
-using namespace smooth_ui_toolkit;
-using namespace smooth_ui_toolkit::lvgl_cpp;
+using namespace uitk;
+using namespace uitk::lvgl_cpp;
 
 std::vector<double> generate_damping_sine_sequence(double start_amp, double end_amp, int num_extremes)
 {
