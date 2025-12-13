@@ -30,7 +30,7 @@ int main()
     number_flow->setTextFont(&lv_font_rajdhani_bold_96);
 
     // 使用 easing 动画，效果会比 spring 差些
-    // number_flow->animationType = animation_type::easing;
+    // number_flow->animationType = AnimationType::Easing;
 
     // 透明背景
     // number_flow->transparentBg = false;

@@ -60,7 +60,7 @@ public:
     // 重复间隔时间（秒）
     float repeatDelay = 0.0f;
     // 动画类型
-    animation_type::Type_t animationType = animation_type::spring;
+    AnimationType animationType = AnimationType::Spring;
     // easing 动画配置，调用此方法，动画类型将自动切换为 easing
     EasingOptions_t& easingOptions();
     // spring 动画配置，调用此方法，动画类型将自动切换为 spring

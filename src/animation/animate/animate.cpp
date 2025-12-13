@@ -17,8 +17,8 @@ using namespace smooth_ui_toolkit;
 
 EasingOptions_t& Animate::easingOptions()
 {
-    if (animationType != animation_type::easing) {
-        animationType = animation_type::easing;
+    if (animationType != AnimationType::Easing) {
+        animationType = AnimationType::Easing;
         _generator_dirty = true;
     }
     return static_cast<Easing&>(get_key_frame_generator()).easingOptions;
@@ -26,8 +26,8 @@ EasingOptions_t& Animate::easingOptions()
 
 SpringOptions_t& Animate::springOptions()
 {
-    if (animationType != animation_type::spring) {
-        animationType = animation_type::spring;
+    if (animationType != AnimationType::Spring) {
+        animationType = AnimationType::Spring;
         _generator_dirty = true;
     }
     return static_cast<Spring&>(get_key_frame_generator()).springOptions;
@@ -199,9 +199,9 @@ KeyFrameGenerator& Animate::get_key_frame_generator()
 {
     if (_generator_dirty || !_key_frame_generator) {
         _key_frame_generator.reset();
-        if (animationType == animation_type::spring) {
+        if (animationType == AnimationType::Spring) {
             _key_frame_generator = std::make_unique<Spring>();
-        } else if (animationType == animation_type::easing) {
+        } else if (animationType == AnimationType::Easing) {
             _key_frame_generator = std::make_unique<Easing>();
         }
         _generator_dirty = false;
