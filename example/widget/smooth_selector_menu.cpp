@@ -93,7 +93,7 @@ public:
         // Press and release selector
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             // Squeeze selector
-            auto pressed_keyframe = shape::scale<float>(getSelectorCurrentFrame(), anchor_center, {1.6, 0.5});
+            auto pressed_keyframe = shape::scale<float>(getSelectorCurrentFrame(), shape::Anchor::Center, {1.6, 0.5});
             press(pressed_keyframe);
         } else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
             release();

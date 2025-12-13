@@ -13,39 +13,39 @@
 
 namespace smooth_ui_toolkit {
 
-enum Anchor_t {
-    anchor_top_left,
-    anchor_top_center,
-    anchor_top_right,
-    anchor_center_left,
-    anchor_center,
-    anchor_center_right,
-    anchor_bottom_left,
-    anchor_bottom_center,
-    anchor_bottom_right
-};
-
 namespace shape {
+
+enum class Anchor {
+    TopLeft,
+    TopCenter,
+    TopRight,
+    CenterLeft,
+    Center,
+    CenterRight,
+    BottomLeft,
+    BottomCenter,
+    BottomRight
+};
 
 /**
  * @brief Get anchor offset relative to top_left
  */
 template <typename T>
-Vector2Base<T> get_anchor_offset(const Vector4Base<T>& rect, Anchor_t anchor)
+Vector2Base<T> get_anchor_offset(const Vector4Base<T>& rect, Anchor anchor)
 {
     Vector2Base<T> offset{0, 0};
 
     // X offset
-    if (anchor == anchor_top_center || anchor == anchor_center || anchor == anchor_bottom_center) {
+    if (anchor == Anchor::TopCenter || anchor == Anchor::Center || anchor == Anchor::BottomCenter) {
         offset.x = rect.width / 2;
-    } else if (anchor == anchor_top_right || anchor == anchor_center_right || anchor == anchor_bottom_right) {
+    } else if (anchor == Anchor::TopRight || anchor == Anchor::CenterRight || anchor == Anchor::BottomRight) {
         offset.x = rect.width;
     }
 
     // Y offset
-    if (anchor == anchor_center_left || anchor == anchor_center || anchor == anchor_center_right) {
+    if (anchor == Anchor::CenterLeft || anchor == Anchor::Center || anchor == Anchor::CenterRight) {
         offset.y = rect.height / 2;
-    } else if (anchor == anchor_bottom_left || anchor == anchor_bottom_center || anchor == anchor_bottom_right) {
+    } else if (anchor == Anchor::BottomLeft || anchor == Anchor::BottomCenter || anchor == Anchor::BottomRight) {
         offset.y = rect.height;
     }
 
@@ -62,7 +62,7 @@ Vector2Base<T> get_anchor_offset(const Vector4Base<T>& rect, Anchor_t anchor)
  * @return Vector4Base<T>
  */
 template <typename T>
-Vector4Base<T> convert_anchor(const Vector4Base<T>& rect, Anchor_t from, Anchor_t to)
+Vector4Base<T> convert_anchor(const Vector4Base<T>& rect, Anchor from, Anchor to)
 {
     Vector4Base<T> result = rect;
 
@@ -85,7 +85,7 @@ Vector4Base<T> convert_anchor(const Vector4Base<T>& rect, Anchor_t from, Anchor_
  * @return Vector4Base<T>
  */
 template <typename T>
-Vector4Base<T> scale(const Vector4Base<T>& rect, const Anchor_t& anchor, const Vector2Base<T>& scaleFactor)
+Vector4Base<T> scale(const Vector4Base<T>& rect, const Anchor& anchor, const Vector2Base<T>& scaleFactor)
 {
     // 计算锚点在原矩形中的绝对位置
     auto anchor_offset = get_anchor_offset(rect, anchor);
