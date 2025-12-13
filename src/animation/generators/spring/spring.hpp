@@ -10,11 +10,10 @@
  */
 #pragma once
 #include "../generators.hpp"
-// 参考：
-// https://github.com/motiondivision/motion/blob/main/packages/framer-motion/src/animation/generators/spring
 
 namespace smooth_ui_toolkit {
 
+// 更详细参数含义可以参考：https://motion.dev/docs/spring#options
 struct SpringOptions_t {
     float stiffness = 100.0;    // 弹性系数
     float damping = 10.0;       // 阻尼系数

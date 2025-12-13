@@ -1,8 +1,8 @@
 # Smooth UI Toolkit
 
 - Spring、Easing 动画插值，RGB 颜色过渡插值
-- SmoothSelector、SmoothOptions 动画菜单抽象
 - Lvgl C++ 封装，NumberFlow 风格控件
+- 动画菜单抽象
 - 颜色类型定义，颜色混合、转换方法
 - Signal、RingBuffer 等常用模板类
 - Vector 类型，clamp、map_range 等数学工具
@@ -26,16 +26,18 @@
 ```cpp
 Animate animation;
 
+// 动画参数配置
 animation.start = 200;
 animation.end = 600;
 animation.repeat = -1;
-animation.repeatType = animate_repeat_type::reverse;
+animation.repeatType = AnimateRepeatType::Reverse;
 
-// 这里调用 spring option ，则动画类型为 spring
+// spring 动画参数配置
+// 这里调用 springOptions() ，动画类型自动适应为 spring
 animation.springOptions().bounce = 0.4;
 animation.springOptions().visualDuration = 0.6;
 
-// 如想要 easing 动画，调用 easing option 即可
+// 如想要 easing 动画，调用 easingOptions() 即可
 // animation.easingOptions().easingFunction = ease::ease_out_quad;
 // animation.easingOptions().duration = 0.3;
 
@@ -48,64 +50,6 @@ while (1) {
     // 取值
     draw_ball(animation.value(), 233);
 }
-```
-
-#### 可配置参数：
-
-```cpp
-// 开始值
-float start = 0.0f;
-
-// 结束值
-float end = 0.0f;
-
-// 动画开始前延迟（秒）
-float delay = 0.0f;
-
-// 重复次数，-1 表示无限循环
-int repeat = 0;
-
-// 重复类型
-animate_repeat_type::Type_t repeatType = animate_repeat_type::loop;
-
-// 重复间隔时间（秒）
-float repeatDelay = 0.0f;
-
-// 动画类型
-animation_type::Type_t animationType = animation_type::spring;
-
-// easing 动画配置，调用此方法，动画类型将自动切换为 easing
-EasingOptions_t& easingOptions();
-
-// spring 动画配置，调用此方法，动画类型将自动切换为 spring
-SpringOptions_t& springOptions();
-```
-
-#### Spring 动画参数：
-
-```cpp
-struct SpringOptions_t {
-    float stiffness = 100.0;    // 弹性系数
-    float damping = 10.0;       // 阻尼系数
-    float mass = 1.0;           // 质量
-    float velocity = 0.0;       // 初始速度
-    float restSpeed = 0.1;      // 静止速度阈值
-    float restDelta = 0.1;      // 静止位置阈值
-    float duration = 0.0;       // 动画持续时间 ms
-    float bounce = 0.3;         // 反弹系数 0.05~1.0
-    float visualDuration = 0.0; // 可视化时间
-};
-```
-
-具体参数含义可以参考 [Motion 文档](https://motion.dev/docs/animate#spring)
-
-#### Easing 动画参数：
-
-```cpp
-struct EasingOptions_t {
-    float duration = 1.0f;                                               // 动画持续时间，单位 s
-    std::function<float(float)> easingFunction = ease::ease_in_out_quad; // 缓动函数
-};
 ```
 
 ### AnimateValue
@@ -130,61 +74,16 @@ while (1) {
 });
 ```
 
-配合 [spring 参数](https://motion.dev/docs/animate#spring) 可以实现不同的动画效果
+配合 [spring 参数](https://motion.dev/docs/spring#options) 可以实现不同的动画效果：
 
 ![Jul-26-2025 00-54-17](https://github.com/user-attachments/assets/1a63077a-6536-4081-a97a-fa9bf7c82faf)
 
 ```cpp
 for (int i = 0; i < cursors.size(); i++) {
-    ...
+    // 弹簧刚度逐渐增加
     cursors[i].x.springOptions().stiffness = 55 + i * 25;
+  	// 阻尼系数逐渐减小
     cursors[i].x.springOptions().damping = 13 - i;
-    ...
-}
-```
-
-### 颜色转换、混合
-```cpp
-// 0xffffff -> rgb(255, 255, 255)
-Rgb_t hex_to_rgb(const uint32_t& hex);
-
-// "#ffffff" -> rgb(255, 255, 255)
-Rgb_t hex_to_rgb(const std::string& hex);
-
-// rgb(255, 255, 255) -> 0xffffff
-uint32_t rgb_to_hex(const Rgb_t& rgb);
-
-// rgb(255, 255, 255) -> "#ffffff"
-std::string rgb_to_hex_string(const Rgb_t& rgb);
-
-// 差值混合
-Rgb_t blend_in_difference(Rgb_t bg, Rgb_t fg);
-
-// 透明度混合
-Rgb_t blend_in_opacity(Rgb_t bg, Rgb_t fg, float opacity);
-```
-
-### 颜色过渡
-
-RGB 颜色的变换过渡插值
-
-![Jul-26-2025 01-03-01](https://github.com/user-attachments/assets/0c4e521e-4fff-4423-926f-7eb9d288b4b8)
-
-```cpp
-std::vector<uint32_t> color_list = {...}
-
-AnimateRgb_t bg_color;
-bg_color.duration = 0.3;
-bg_color.begin();
-
-...
-btn_random.onClick().connect([&]() {
-    bg_color = color_list[random];
-});
-
-while (1) {
-    bg_color.update();
-    xxx.setBgColor(lv_color_hex(bg_color.toHex()));
 }
 ```
 
@@ -238,13 +137,6 @@ slider->onValueChanged().connect([&](int value) {
     label->setText(fmt::format("{}", value));
 });
 
-// Spinner
-auto spinner = new Spinner(screen);
-spinner->align(LV_ALIGN_CENTER, 0, -160);
-spinner->setArcWidth(3, LV_PART_MAIN);
-spinner->setArcWidth(3, LV_PART_INDICATOR);
-spinner->setSize(76, 76);
-
 // Roller
 auto roller = new Roller(screen);
 roller->align(LV_ALIGN_CENTER, 0, 0);
@@ -253,18 +145,7 @@ roller->onValueChanged().connect([&](uint32_t value) {
     label->setText(fmt::format("{}", roller->getSelectedStr()));
 });
 
-// Chart
-auto chart = new Chart(screen);
-chart->align(LV_ALIGN_CENTER, 250, 0);
-chart->setSize(250, 200);
-chart->setPointCount(256);
-chart->setStyleSize(0, 0, LV_PART_INDICATOR);
-chart->setUpdateMode(LV_CHART_UPDATE_MODE_SHIFT);
-chart->setRange(LV_CHART_AXIS_PRIMARY_Y, -1000, 1000);
-chart->addSeries(lv_color_hex(0x1e90ff), LV_CHART_AXIS_PRIMARY_Y);
-
 // ...
-
 ```
 
 ### NumberFlow
@@ -368,6 +249,58 @@ auto number_flow = new NumberFlowFloat(lv_screen_active());
 可以看这个[例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_options_menu.cpp)来了解具体的实现功能：
 
 ![asdasda](https://github.com/user-attachments/assets/de8f281e-6e58-4c41-b7fa-33fb628b32e7)
+
+## 颜色
+
+### 颜色转换、混合函数
+
+```cpp
+// 0xffffff -> rgb(255, 255, 255)
+Rgb_t hex_to_rgb(const uint32_t& hex);
+
+// "#ffffff" -> rgb(255, 255, 255)
+Rgb_t hex_to_rgb(const std::string& hex);
+
+// rgb(255, 255, 255) -> 0xffffff
+uint32_t rgb_to_hex(const Rgb_t& rgb);
+
+// rgb(255, 255, 255) -> "#ffffff"
+std::string rgb_to_hex_string(const Rgb_t& rgb);
+
+// 差值混合
+Rgb_t blend_in_difference(Rgb_t bg, Rgb_t fg);
+
+// 透明度混合
+Rgb_t blend_in_opacity(Rgb_t bg, Rgb_t fg, float opacity);
+```
+
+### AnimateRgb_t
+
+RGB 颜色的变换过渡插值
+
+![Jul-26-2025 01-03-01](https://github.com/user-attachments/assets/0c4e521e-4fff-4423-926f-7eb9d288b4b8)
+
+```cpp
+// 颜色列表
+std::vector<uint32_t> color_list = {...}
+
+AnimateRgb_t bg_color;
+bg_color.duration = 0.3;
+bg_color.begin();
+
+// 按钮事件
+btn_random.onClick().connect([&]() {
+  	// 直接赋值即可
+    bg_color = color_list[random];
+});
+
+while (1) {
+  	// 更新
+    bg_color.update();
+  	// 取值
+    xxx.setBgColor(lv_color_hex(bg_color.toHex()));
+}
+```
 
 ## UI HAL
 
@@ -473,7 +406,7 @@ mkdir build && cd build
 cmake .. && make -j8
 ```
 
-### 运行
+### 运行：
 
 执行 `./build/example/` 下对应例程，如：
 
