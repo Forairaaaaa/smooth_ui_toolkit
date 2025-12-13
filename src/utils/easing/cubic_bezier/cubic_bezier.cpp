@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "cubic_bezier.h"
+#include "cubic_bezier.hpp"
 #include <functional>
 #include <cmath>
 
@@ -45,11 +45,15 @@ std::function<float(float)> smooth_ui_toolkit::cubic_bezier(float mX1, float mY1
 {
     // 如果曲线是线性（控制点为直线），直接返回线性函数
     if (mX1 == mY1 && mX2 == mY2) {
-        return [](float t) { return t; };
+        return [](float t) {
+            return t;
+        };
     }
 
     // 计算给定 x 对应的 t
-    auto getTForX = [mX1, mX2](float aX) { return binarySubdivide(aX, 0.0, 1.0, mX1, mX2); };
+    auto getTForX = [mX1, mX2](float aX) {
+        return binarySubdivide(aX, 0.0, 1.0, mX1, mX2);
+    };
 
     // 返回贝塞尔缓动函数
     return [mX1, mY1, mX2, mY2, getTForX](float t) {

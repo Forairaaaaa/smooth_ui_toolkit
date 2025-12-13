@@ -12,7 +12,7 @@
 #include <string>
 #include <thread>
 #include <chrono>
-#include <smooth_ui_toolkit.h>
+#include <smooth_ui_toolkit.hpp>
 
 using namespace smooth_ui_toolkit;
 
@@ -34,8 +34,12 @@ int main()
 {
     Signal<std::string, int> signal;
 
-    std::thread consumer_1([&]() { consumer(1, signal); });
-    std::thread consumer_2([&]() { consumer(2, signal); });
+    std::thread consumer_1([&]() {
+        consumer(1, signal);
+    });
+    std::thread consumer_2([&]() {
+        consumer(2, signal);
+    });
 
     std::thread producer([&]() {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));

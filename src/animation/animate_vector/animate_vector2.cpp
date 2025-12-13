@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "animate_vector2.h"
-#include "utils/hal/hal.h"
+#include "animate_vector2.hpp"
+#include "utils/hal/hal.hpp"
 
 using namespace smooth_ui_toolkit;
 

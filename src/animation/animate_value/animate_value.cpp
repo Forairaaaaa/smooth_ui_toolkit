@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "animate_value.h"
+#include "animate_value.hpp"
 
 using namespace smooth_ui_toolkit;
 

@@ -12,7 +12,7 @@
 #include <string>
 #include <thread>
 #include <chrono>
-#include <smooth_ui_toolkit.h>
+#include <smooth_ui_toolkit.hpp>
 
 using namespace smooth_ui_toolkit;
 

@@ -9,9 +9,9 @@
  *
  */
 // Refs: https://motion.dev/docs/react-animation bottom Motion+: "Introducing Cursor"
-#include "../utils/raylib_wrapper.h"
+#include "../utils/raylib_wrapper.hpp"
 #include <mooncake_log.h>
-#include <smooth_ui_toolkit.h>
+#include <smooth_ui_toolkit.hpp>
 #include <vector>
 
 using namespace smooth_ui_toolkit;

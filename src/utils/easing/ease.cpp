@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "ease.h"
+#include "ease.hpp"
 #include <cmath>
 
 using namespace smooth_ui_toolkit;

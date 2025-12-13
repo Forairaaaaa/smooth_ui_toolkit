@@ -8,9 +8,9 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "../utils/lvgl_wrapper.h"
-#include <smooth_ui_toolkit.h>
-#include <smooth_lvgl.h>
+#include "../utils/lvgl_wrapper.hpp"
+#include <smooth_ui_toolkit.hpp>
+#include <smooth_lvgl.hpp>
 #include <mooncake_log.h>
 
 using namespace smooth_ui_toolkit;

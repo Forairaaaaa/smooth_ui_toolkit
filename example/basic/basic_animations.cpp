@@ -9,9 +9,9 @@
  *
  */
 // Refs: https://motion.dev/docs/react-animation#basic-animations
-#include "../utils/lvgl_wrapper.h"
+#include "../utils/lvgl_wrapper.hpp"
 #include <mooncake_log.h>
-#include <smooth_ui_toolkit.h>
+#include <smooth_ui_toolkit.hpp>
 
 using namespace smooth_ui_toolkit;
 
