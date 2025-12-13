@@ -1,9 +1,9 @@
 /**
- * @file smooth_selector_menu.cpp
+ * @file fixed_selector_h_stack_menu.cpp
  * @author Forairaaaaa
  * @brief
  * @version 0.1
- * @date 2025-08-16
+ * @date 2025-12-13
  *
  * @copyright Copyright (c) 2025
  *
@@ -14,6 +14,10 @@
 
 using namespace smooth_ui_toolkit;
 
+static const smooth_ui_toolkit::Vector2 _screen_size = {320, 240};
+static const smooth_ui_toolkit::Vector2 _option_size = {120, 120};
+static const smooth_ui_toolkit::Vector2 _selector_pos = {100, 100};
+
 class Menu : public SmoothSelectorMenu {
 public:
     /**
@@ -22,33 +26,25 @@ public:
      */
     void init()
     {
-        setCameraSize(300, 260);
+        // Camera is not needed in this senario normally
 
         // Quicker selector movement
         getSelectorPostion().x.springOptions().visualDuration = 0.4;
         getSelectorPostion().x.springOptions().bounce = 0.3;
         getSelectorPostion().y.springOptions() = getSelectorPostion().x.springOptions();
-
-        // A bit slower selector reshaping
-        getSelectorShape().x.springOptions().visualDuration = 0.5;
-        getSelectorShape().x.springOptions().bounce = 0.3;
+        getSelectorShape().x.springOptions() = getSelectorPostion().x.springOptions();
         getSelectorShape().y.springOptions() = getSelectorShape().x.springOptions();
-
-        // Slower camera movement
-        getCamera().x.springOptions().visualDuration = 0.8;
-        getCamera().y.springOptions() = getCamera().x.springOptions();
 
         // Update in every frame is required by raylib
         setConfig().renderInterval = 0;
         setConfig().readInputInterval = 0;
 
-        // Add dummy options
-        addOption({{50, 60, 120, 40}, nullptr});
-        addOption({{200, 80, 80, 120}, nullptr});
-        addOption({{320, 20, 150, 40}, nullptr});
-        addOption({{50, 320, 160, 80}, nullptr});
-        addOption({{400, 220, 100, 80}, nullptr});
-        addOption({{600, 120, 120, 140}, nullptr});
+        // Add dummy options in horizontal stack
+        for (int i = 0; i < 6; i++) {
+            addOption({{(float)i * 170, _selector_pos.y, _option_size.width, _option_size.height}, nullptr});
+        }
+
+        jumpTo(1);
     }
 
     void onGoLast() override
@@ -92,7 +88,9 @@ public:
         // Press and release selector
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             // Squeeze selector
-            auto pressed_keyframe = shape::scale<float>(getSelectorCurrentFrame(), anchor_center, {1.6, 0.5});
+            // Use anchor_top_left to avoid position shift,
+            // since options' redner offset is based on selector's postion
+            auto pressed_keyframe = shape::scale<float>(getSelectorCurrentFrame(), anchor_top_left, {1.5, 0.5});
             press(pressed_keyframe);
         } else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
             release();
@@ -108,25 +106,34 @@ public:
         // Clear
         ClearBackground(WHITE);
 
+        // Calculate selector offset
+        int selector_x_offset = -getSelectorPostion().x + _selector_pos.x;
+
         // Redner options
+        // Apply selector offset to options' render position
+        // so that options will move instead of selector
         int index = 0;
         for (auto& i : getOptionList()) {
-            DrawRectangle(i.keyframe.x, i.keyframe.y, i.keyframe.width, i.keyframe.height, BLUE);
-            DrawText(std::to_string(index).c_str(), i.keyframe.x + 5, i.keyframe.y, 20, WHITE);
+            DrawRectangle(i.keyframe.x + selector_x_offset, i.keyframe.y, i.keyframe.width, i.keyframe.height, BLUE);
+            DrawText(std::to_string(index).c_str(), i.keyframe.x + selector_x_offset + 5, i.keyframe.y, 20, WHITE);
 
             index++;
         }
 
+        // Get the fixed selector shape
+        smooth_ui_toolkit::Vector4 fixed_selector_kf = {
+            _selector_pos.x, _selector_pos.y, getSelectorShape().x, getSelectorShape().y};
+        // Convert shape anchor
+        auto selector_render_kf = shape::convert_anchor(fixed_selector_kf, anchor_top_left, anchor_center);
+        // Apply new anchor position offset
+        selector_render_kf.x += _option_size.width / 2;
+        selector_render_kf.y += _option_size.height / 2;
         // Render selector
-        DrawRectangle(getSelectorCurrentFrame().x,
-                      getSelectorCurrentFrame().y,
-                      getSelectorCurrentFrame().width,
-                      getSelectorCurrentFrame().height,
-                      GREEN);
+        DrawRectangle(
+            selector_render_kf.x, selector_render_kf.y, selector_render_kf.width, selector_render_kf.height, GREEN);
 
-        // Render camera
-        DrawRectangleLines(
-            getCameraOffset().x, getCameraOffset().y, getCameraSize().width, getCameraSize().height, BLACK);
+        // Render screen frame
+        DrawRectangleLines(0, 0, _screen_size.width, _screen_size.height, RED);
 
         // Instructions
         DrawText("Press A/D to navigate", 10, 10, 20, BLACK);

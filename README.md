@@ -13,7 +13,7 @@
 
 ![Jul-26-2025 01-07-33](https://github.com/user-attachments/assets/b47c41b4-8c73-4cc0-bb84-3efda0bda1ee)
 
-## 主要组件
+## 动画组件
 
 ### Animate
 
@@ -188,8 +188,7 @@ while (1) {
 }
 ```
 
-
-### Lvgl Cpp
+## Lvgl Cpp 封装
 
 Lvgl 控件智能指针封装
 
@@ -326,39 +325,53 @@ auto number_flow = new NumberFlowFloat(lv_screen_active());
 ...
 ```
 
-### 控件抽象
+## 控件抽象
 
-#### SmoothSelectorMenu
+### SmoothSelectorMenu
 
 基于选择器的菜单抽象，选择器会平滑移动和变形，来匹配选中选项的关键帧
 
 摄像机会自动平滑移动，保持选择器在摄像机范围内
 
-适合常见的列表菜单
-
-![timerrelay](https://github.com/user-attachments/assets/988f5c44-8cc3-435a-a47a-603d92a20251)
-
-![SmoothMenuDemo1](https://github.com/user-attachments/assets/d7b30adb-936f-4e1c-9376-cad8c06913cd)
+适合常见的横向或纵向列表菜单：
 
 ![Mix1](https://github.com/user-attachments/assets/01df49db-162e-428d-bce8-7bbc4f74702c)
 
-[简单例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_selector_menu.cpp)
+![SmoothMenuDemo1](https://github.com/user-attachments/assets/d7b30adb-936f-4e1c-9376-cad8c06913cd)
 
-#### SmoothOptionsMenu
+简单横向菜单[例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/horizontal_stack_menu.cpp) ：
+
+![hstack-menu](https://github.com/user-attachments/assets/562f5da1-9a0d-4794-9a66-a590985f8782)
+
+也可以通过坐标变换实现选择器固定不动，而是选项滚动
+
+选择器固定的横向菜单[例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/fixed_selector_h_stack_menu.cpp) ：
+
+![fixed-selector-hstack-menu](https://github.com/user-attachments/assets/75a45977-9610-434a-8daf-f8a5e1eb262f)
+
+选择器固定的纵向带弧度菜单[例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/fixed_selector_v_stack_curved_menu.cpp) ：
+
+![vstack-curved-menu](https://github.com/user-attachments/assets/b6699639-6968-4a5d-a6f6-aa03694f56e3)
+
+可以看这个[例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_selector_menu.cpp)理解具体的实现和功能：
+
+![timerrelay](https://github.com/user-attachments/assets/988f5c44-8cc3-435a-a47a-603d92a20251)
+
+### SmoothOptionsMenu
 
 基于选项移动的菜单抽象，每个选项独立动画，循环轮换到关键帧位置
 
 适合圆形旋转菜单、卡片轮播等菜单
 
-![asdasda](https://github.com/user-attachments/assets/de8f281e-6e58-4c41-b7fa-33fb628b32e7)
-
 ![SmoothMenuDemo2](https://github.com/user-attachments/assets/d151aac9-8995-4939-8110-3e4037e8f8da)
 
-[简单例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_options_menu.cpp)
+可以看这个[例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_options_menu.cpp)具体的实现和功能：
+
+![asdasda](https://github.com/user-attachments/assets/de8f281e-6e58-4c41-b7fa-33fb628b32e7)
 
 ## UI HAL
 
-动画的更新以系统时间为参考基准，所使用的相关函数来自内部定义：
+动画的更新以系统 Tick 为参考基准，所使用的相关函数来自内部定义：
 
 ```cpp
 namespace ui_hal {
@@ -406,7 +419,7 @@ ui_hal::on_delay([](uint32_t ms) {
 
 例程用了 [lvgl](https://github.com/lvgl/lvgl) 和 [raylib](https://github.com/raysan5/raylib) 作为图形库，所以要安装 [SDL2](https://github.com/libsdl-org/SDL)
 
-### 工具链安装:
+### 工具链安装：
 
 - **macOS:**  `brew install sdl2 cmake make`  
 - **Ubuntu:**   `sudo apt install build-essential cmake libsdl2-dev`  
@@ -421,7 +434,7 @@ git clone https://github.com/Forairaaaaa/smooth_ui_toolkit.git
 cd smooth_ui_toolkit
 ```
 
-### 拉取依赖
+### 拉取依赖：
 
 ```bash
 python example/fetch_repos.py
@@ -435,6 +448,14 @@ mkdir build && cd build
 
 ```bash
 cmake .. && make -j8
+```
+
+### 运行
+
+执行 `./build/example/` 下对应例程，如：
+
+```shell
+./build/example/basic_animations
 ```
 
 ## 库引入
@@ -466,4 +487,4 @@ clone 仓库，直接丢到 `libs` 目录里就行
 
 ### Arduino 工程
 
-clone 仓库，直接丢到 `xxx` 目录里就行（我不记得那个 library 目录叫什么了）
+clone 仓库，直接丢到 `libraries` 目录里就行
