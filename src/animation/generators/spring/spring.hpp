@@ -10,7 +10,6 @@
  */
 #pragma once
 #include "../generators.hpp"
-#include <functional>
 // 参考：
 // https://github.com/motiondivision/motion/blob/main/packages/framer-motion/src/animation/generators/spring
 

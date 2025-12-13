@@ -24,7 +24,7 @@ int main()
     animation.start = 200;
     animation.end = 600;
     animation.repeat = -1;
-    animation.repeatType = animate_repeat_type::reverse;
+    animation.repeatType = AnimateRepeatType::Reverse;
 
     animation.springOptions().bounce = 0.4;
     animation.springOptions().visualDuration = 0.6;

@@ -157,7 +157,7 @@ void Animate::update_state_machine(const float& currentTime)
                     _start_time = currentTime;
                 } else {
                     // Reset animation immediately
-                    if (repeatType == animate_repeat_type::reverse) {
+                    if (repeatType == AnimateRepeatType::Reverse) {
                         std::swap(start, end);
                     }
                     init();
@@ -174,7 +174,7 @@ void Animate::update_state_machine(const float& currentTime)
         // Check repeat delay timeout
         if (currentTime - _start_time >= repeatDelay) {
             // Reset animation
-            if (repeatType == animate_repeat_type::reverse) {
+            if (repeatType == AnimateRepeatType::Reverse) {
                 std::swap(start, end);
             }
             init();

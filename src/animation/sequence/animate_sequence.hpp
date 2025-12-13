@@ -9,7 +9,6 @@
  *
  */
 #pragma once
-#include "../animate/animate.hpp"
 #include "../animate_value/animate_value.hpp"
 #include <memory>
 #include <vector>
@@ -68,7 +67,7 @@ public:
     }
 
     int repeat = 0;
-    animate_repeat_type::Type_t repeatType = animate_repeat_type::loop;
+    AnimateRepeatType repeatType = AnimateRepeatType::Loop;
     std::vector<float>& sequence()
     {
         return _value_sequence;

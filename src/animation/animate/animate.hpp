@@ -17,12 +17,10 @@
 
 namespace smooth_ui_toolkit {
 
-namespace animate_repeat_type {
-enum Type_t {
-    loop = 0, // 循环播放
-    reverse,  // 反向播放
+enum class AnimateRepeatType {
+    Loop,    // 循环播放
+    Reverse, // 反向播放
 };
-}
 
 namespace animate_state {
 enum State_t {
@@ -60,7 +58,7 @@ public:
     // 重复次数，-1 表示无限循环
     int repeat = 0;
     // 重复类型
-    animate_repeat_type::Type_t repeatType = animate_repeat_type::loop;
+    AnimateRepeatType repeatType = AnimateRepeatType::Loop;
     // 重复间隔时间（秒）
     float repeatDelay = 0.0f;
     // 动画类型
