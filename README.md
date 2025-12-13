@@ -417,7 +417,7 @@ ui_hal::on_delay([](uint32_t ms) {
 
 ## 命名空间
 
-所有类均定义在命名空间 `smooth_ui_toolkit` 下
+所有类和方法均定义在命名空间 `smooth_ui_toolkit` 下
 
 ```cpp
 smooth_ui_toolkit::clamp(...);
