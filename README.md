@@ -13,7 +13,7 @@
 
 ![Jul-26-2025 01-07-33](https://github.com/user-attachments/assets/b47c41b4-8c73-4cc0-bb84-3efda0bda1ee)
 
-## 主要组件
+## 动画组件
 
 ### Animate
 
@@ -188,8 +188,7 @@ while (1) {
 }
 ```
 
-
-### Lvgl Cpp
+## Lvgl Cpp 封装
 
 Lvgl 控件智能指针封装
 
@@ -326,9 +325,9 @@ auto number_flow = new NumberFlowFloat(lv_screen_active());
 ...
 ```
 
-### 控件抽象
+## 控件抽象
 
-#### SmoothSelectorMenu
+### SmoothSelectorMenu
 
 基于选择器的菜单抽象，选择器会平滑移动和变形，来匹配选中选项的关键帧
 
@@ -358,7 +357,7 @@ auto number_flow = new NumberFlowFloat(lv_screen_active());
 
 ![timerrelay](https://github.com/user-attachments/assets/988f5c44-8cc3-435a-a47a-603d92a20251)
 
-#### SmoothOptionsMenu
+### SmoothOptionsMenu
 
 基于选项移动的菜单抽象，每个选项独立动画，循环轮换到关键帧位置
 
@@ -372,7 +371,7 @@ auto number_flow = new NumberFlowFloat(lv_screen_active());
 
 ## UI HAL
 
-动画的更新以系统时间为参考基准，所使用的相关函数来自内部定义：
+动画的更新以系统 Tick 为参考基准，所使用的相关函数来自内部定义：
 
 ```cpp
 namespace ui_hal {
@@ -420,7 +419,7 @@ ui_hal::on_delay([](uint32_t ms) {
 
 例程用了 [lvgl](https://github.com/lvgl/lvgl) 和 [raylib](https://github.com/raysan5/raylib) 作为图形库，所以要安装 [SDL2](https://github.com/libsdl-org/SDL)
 
-### 工具链安装:
+### 工具链安装：
 
 - **macOS:**  `brew install sdl2 cmake make`  
 - **Ubuntu:**   `sudo apt install build-essential cmake libsdl2-dev`  
@@ -435,7 +434,7 @@ git clone https://github.com/Forairaaaaa/smooth_ui_toolkit.git
 cd smooth_ui_toolkit
 ```
 
-### 拉取依赖
+### 拉取依赖：
 
 ```bash
 python example/fetch_repos.py
@@ -449,6 +448,14 @@ mkdir build && cd build
 
 ```bash
 cmake .. && make -j8
+```
+
+### 运行
+
+执行 `./build/example/` 下对应例程，如：
+
+```shell
+./build/example/basic_animations
 ```
 
 ## 库引入
