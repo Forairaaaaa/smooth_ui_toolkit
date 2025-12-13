@@ -71,3 +71,6 @@ target_link_libraries(smooth_options_menu ${PROJECT_NAME} mooncake_log raylib ${
 
 add_executable(horizontal_stack_menu ./widget/horizontal_stack_menu.cpp)
 target_link_libraries(horizontal_stack_menu ${PROJECT_NAME} mooncake_log raylib ${SDL2_LIBRARIES})
+
+add_executable(fixed_selector_h_stack_menu ./widget/fixed_selector_h_stack_menu.cpp)
+target_link_libraries(fixed_selector_h_stack_menu ${PROJECT_NAME} mooncake_log raylib ${SDL2_LIBRARIES})
