@@ -221,7 +221,7 @@ auto number_flow = new NumberFlowFloat(lv_screen_active());
 
 ![vstack-curved-menu](https://github.com/user-attachments/assets/b6699639-6968-4a5d-a6f6-aa03694f56e3)
 
-可以看这个[例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_selector_menu.cpp)来了解具体的实现功能：
+可以看这个[例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_selector_menu.cpp)来了解具体的基类设计：
 
 ![timerrelay](https://github.com/user-attachments/assets/988f5c44-8cc3-435a-a47a-603d92a20251)
 
@@ -233,7 +233,7 @@ auto number_flow = new NumberFlowFloat(lv_screen_active());
 
 ![SmoothMenuDemo2](https://github.com/user-attachments/assets/d151aac9-8995-4939-8110-3e4037e8f8da)
 
-可以看这个[例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_options_menu.cpp)来了解具体的实现功能：
+可以看这个[例程](https://github.com/Forairaaaaa/smooth_ui_toolkit/blob/main/example/widget/smooth_options_menu.cpp)来了解具体的基类设计：
 
 ![asdasda](https://github.com/user-attachments/assets/de8f281e-6e58-4c41-b7fa-33fb628b32e7)
 
