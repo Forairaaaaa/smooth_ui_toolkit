@@ -97,7 +97,7 @@ Lvgl 控件智能指针封装
 #include <smooth_lvgl.hpp>
 // lvgl cpp 封装为 header only
 // 需要工程已满足 #include <lvgl.h> 依赖
-// 当前目标版本为 v9.3.0
+// 当前支持 v9.3.0 以上的版本
 
 // Basic lvgl object
 auto obj = new Container(screen);

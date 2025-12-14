@@ -1,8 +1,8 @@
 {
     "name": "SmoothUIToolKit",
-    "version": "2.8.0",
-    "description": "带动画曲线插值的 UI 抽象工具集",
-    "keywords": "ui, smooth, easing path",
+    "version": "2.8.1",
+    "description": "UI 动画工具集",
+    "keywords": "ui, smooth, spring animation",
     "repository": {
       "type": "git",
       "url": "https://github.com/Forairaaaaa/smooth_ui_toolkit.git"

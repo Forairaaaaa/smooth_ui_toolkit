@@ -317,20 +317,34 @@ public:
         lv_obj_set_style_text_color(this->raw_ptr(), color, selector);
     }
 
+#if LVGL_VERSION_MAJOR >= 9 && LVGL_VERSION_MINOR >= 4
+    lv_color_t getTextColor(lv_part_t part = LV_PART_MAIN)
+    {
+        return lv_obj_get_style_text_color(this->raw_ptr(), part);
+    }
+#else
     lv_color_t getTextColor(lv_style_selector_t selector = LV_PART_MAIN)
     {
         return lv_obj_get_style_text_color(this->raw_ptr(), selector);
     }
+#endif
 
     void setTextFont(const lv_font_t* font, lv_style_selector_t selector = LV_PART_MAIN)
     {
         lv_obj_set_style_text_font(this->raw_ptr(), font, selector);
     }
 
+#if LVGL_VERSION_MAJOR >= 9 && LVGL_VERSION_MINOR >= 4
+    const lv_font_t* getTextFont(lv_part_t part = LV_PART_MAIN)
+    {
+        return lv_obj_get_style_text_font(this->raw_ptr(), part);
+    }
+#else
     const lv_font_t* getTextFont(lv_style_selector_t selector = LV_PART_MAIN)
     {
         return lv_obj_get_style_text_font(this->raw_ptr(), selector);
     }
+#endif
 
     void setTextAlign(lv_text_align_t value, lv_style_selector_t selector = LV_PART_MAIN)
     {
