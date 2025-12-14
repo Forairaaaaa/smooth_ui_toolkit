@@ -9,6 +9,10 @@
  *
  */
 #pragma once
+#include <lvgl.h>
+
+#if LVGL_VERSION_MAJOR >= 9 && LVGL_VERSION_MINOR >= 3
+
 #include "lvgl_cpp/obj.hpp"
 #include "lvgl_cpp/label.hpp"
 #include "lvgl_cpp/slider.hpp"
@@ -27,3 +31,7 @@
 #include "number_flow/digit_flow.hpp"
 #include "number_flow/number_flow.hpp"
 #include "number_flow/number_flow_float.hpp"
+
+#else
+#error "Require LVGL version 9.3.0 or higher."
+#endif

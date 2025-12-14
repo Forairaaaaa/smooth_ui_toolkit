@@ -12,7 +12,7 @@
   {
     "url": "https://github.com/lvgl/lvgl.git",
     "path": "dependencies/lvgl",
-    "branch": "v9.3.0"
+    "branch": "v9.4.0"
   },
   {
     "url": "https://github.com/Forairaaaaa/lvgl_fonts.git",
