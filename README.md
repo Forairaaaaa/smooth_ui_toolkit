@@ -431,3 +431,11 @@ clone 仓库，直接丢到 `libs` 目录里就行
 ### Arduino 工程
 
 clone 仓库，直接丢到 `libraries` 目录里就行
+
+## 常用图形库模拟器
+
+一些常用图形库的桌面端最简工程
+
+lvgl: https://github.com/Forairaaaaa/lvgl_simulator_cpp
+
+m5gfx: https://github.com/Forairaaaaa/m5gfx_simulator_cpp
