@@ -9,7 +9,7 @@
  *
  */
 #include "animate_vector2.hpp"
-#include "utils/hal/hal.hpp"
+#include "core/hal/hal.hpp"
 
 using namespace smooth_ui_toolkit;
 

@@ -9,7 +9,7 @@
  *
  */
 #include "smooth_options.hpp"
-#include "utils/math/vector.hpp"
+#include "core/math/vector.hpp"
 
 using namespace smooth_ui_toolkit;
 

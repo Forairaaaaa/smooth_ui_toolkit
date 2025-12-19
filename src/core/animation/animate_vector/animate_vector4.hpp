@@ -1,42 +1,44 @@
 /**
- * @file animate_vector2.hpp
+ * @file animate_vector4.hpp
  * @author Forairaaaaa
  * @brief
  * @version 0.1
- * @date 2025-08-15
+ * @date 2025-08-16
  *
  * @copyright Copyright (c) 2025
  *
  */
 #pragma once
-#include "utils/math/vector.hpp"
+#include "core/math/vector.hpp"
 #include "../animate_value/animate_value.hpp"
 
 namespace smooth_ui_toolkit {
 
-class AnimateVector2 {
+class AnimateVector4 {
 public:
     AnimateValue x;
     AnimateValue y;
+    AnimateValue z;
+    AnimateValue w;
 
-    AnimateVector2();
-    AnimateVector2(const Vector2& defaultValue);
-    AnimateVector2(float defaultX, float defaultY);
-    ~AnimateVector2() {}
+    AnimateVector4();
+    AnimateVector4(const Vector4& defaultValue);
+    AnimateVector4(float defaultX, float defaultY, float defaultZ, float defaultW);
+    ~AnimateVector4() {}
 
     // Enable move constructor and move assignment operator
-    AnimateVector2(AnimateVector2&& other) noexcept;
-    AnimateVector2& operator=(AnimateVector2&& other) noexcept;
+    AnimateVector4(AnimateVector4&& other) noexcept;
+    AnimateVector4& operator=(AnimateVector4&& other) noexcept;
 
     // Disable copy constructor and copy assignment operator
-    AnimateVector2(const AnimateVector2&) = delete;
-    AnimateVector2& operator=(const AnimateVector2&) = delete;
+    AnimateVector4(const AnimateVector4&) = delete;
+    AnimateVector4& operator=(const AnimateVector4&) = delete;
 
     // Override assignment operator
-    AnimateVector2& operator=(const Vector2& newValue);
+    AnimateVector4& operator=(const Vector4& newValue);
 
     // Override type conversion
-    operator Vector2();
+    operator Vector4();
 
     /**
      * @brief Begin vector animation
@@ -55,30 +57,30 @@ public:
      *
      * @param newValue
      */
-    void teleport(const Vector2& newValue);
-    void teleport(float newX, float newY);
+    void teleport(const Vector4& newValue);
+    void teleport(float newX, float newY, float newZ, float newW);
 
     /**
      * @brief Move to a new value
      *
      * @param newValue
      */
-    void move(const Vector2& newValue);
-    void move(float newX, float newY);
+    void move(const Vector4& newValue);
+    void move(float newX, float newY, float newZ, float newW);
 
     /**
      * @brief Current vector value
      *
-     * @return Vector2
+     * @return Vector4
      */
-    Vector2 value();
+    Vector4 value();
 
     /**
      * @brief Get current value without trigger auto update
      *
-     * @return Vector2
+     * @return Vector4
      */
-    Vector2 directValue();
+    Vector4 directValue();
 
     /**
      * @brief Update animation

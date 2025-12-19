@@ -11,7 +11,7 @@
 #include <iostream>
 #include <cassert>
 #include <vector>
-#include <utils/ring_buffer/ring_buffer.hpp>
+#include <tools/ring_buffer/ring_buffer.hpp>
 
 using namespace smooth_ui_toolkit;
 

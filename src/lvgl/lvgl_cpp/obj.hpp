@@ -11,7 +11,7 @@
 // Refs: https://github.com/vpaeder/lvglpp
 #pragma once
 #include "lv_wrapper.hpp"
-#include "utils/event/signal.hpp"
+#include "tools/event/signal.hpp"
 #include <lvgl.h>
 #include <memory>
 
