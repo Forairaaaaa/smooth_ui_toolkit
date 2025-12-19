@@ -15,7 +15,6 @@
 #include <uitk/short_namespace.hpp>
 #include <smooth_lvgl.hpp>
 #include <mooncake_log.h>
-#include <random>
 
 using namespace uitk;
 using namespace uitk::lvgl_cpp;
@@ -68,11 +67,9 @@ int main()
     auto btn_random = new Button(flex_layout->get());
     btn_random->label().setText("random");
     btn_random->onClick().connect([&]() {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<int> dist(-2147483648, 2147483647);
-        int randomNum = dist(gen);
-        number_flow->setValue(randomNum);
+        auto& random = Random::getInstance();
+        auto value = random.getInt(-2147483648, 2147483647);
+        number_flow->setValue(value);
     });
 
     int target_value = 0;
