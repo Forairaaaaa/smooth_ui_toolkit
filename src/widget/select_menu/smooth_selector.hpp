@@ -11,7 +11,7 @@
 #pragma once
 #include "core/hal/hal.hpp"
 #include "core/math/vector.hpp"
-#include "animation/animate_vector/animate_vector2.hpp"
+#include "core/animation/animate_vector/animate_vector2.hpp"
 #include <cstdint>
 #include <vector>
 
