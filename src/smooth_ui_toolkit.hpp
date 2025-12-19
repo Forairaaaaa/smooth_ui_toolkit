@@ -23,4 +23,5 @@
 #include "utils/color/color.hpp"
 #include "utils/math/math.hpp"
 #include "utils/random/random.hpp"
+#include "utils/object_pool/object_pool.hpp"
 #include "widget/widget.hpp"
