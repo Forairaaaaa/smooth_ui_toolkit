@@ -10,7 +10,7 @@
  */
 #pragma once
 #include "../generators.hpp"
-#include "../../../utils/easing/ease.hpp"
+#include "core/easing/ease.hpp"
 #include <functional>
 
 namespace smooth_ui_toolkit {

@@ -10,9 +10,9 @@
  */
 // Refs: https://number-flow.barvian.me
 #pragma once
-#include "../lvgl_cpp/obj.hpp"
-#include "../lvgl_cpp/label.hpp"
-#include "../../animation/animate_value/animate_value.hpp"
+#include "lvgl/lvgl_cpp/obj.hpp"
+#include "lvgl/lvgl_cpp/label.hpp"
+#include "core/animation/animate_value/animate_value.hpp"
 #include <lvgl.h>
 #include <vector>
 #include <memory>

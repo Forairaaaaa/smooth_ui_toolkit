@@ -9,7 +9,7 @@
  *
  */
 #include "animate.hpp"
-#include "utils/hal/hal.hpp"
+#include "core/hal/hal.hpp"
 #include <functional>
 #include <memory>
 

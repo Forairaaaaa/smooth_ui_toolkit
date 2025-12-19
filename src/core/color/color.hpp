@@ -9,8 +9,7 @@
  *
  */
 #pragma once
-#include "../../animation/animate_value/animate_value.hpp"
-#include "utils/easing/ease.hpp"
+#include "core/animation/animate_value/animate_value.hpp"
 #include <cstdint>
 #include <string>
 
