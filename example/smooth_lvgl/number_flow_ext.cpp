@@ -15,7 +15,6 @@
 #include <uitk/short_namespace.hpp>
 #include <smooth_lvgl.hpp>
 #include <mooncake_log.h>
-#include <random>
 #include <vector>
 
 using namespace uitk;
@@ -34,26 +33,20 @@ NumberFlow* prefix_suffix_and_color()
             "Weight: ",
             "Height: ",
         };
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<int> dist(0, prefix.size() - 1);
-        return prefix[dist(gen)];
+        auto& random = Random::getInstance();
+        return random.choice(prefix);
     };
 
     static auto get_random_suffix = []() {
         std::vector<std::string> suffix = {
             "", " )", " ]", " }", " C", " F", " K", " %", " $", " cm", " m", " kg", " mm"};
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<int> dist(0, suffix.size() - 1);
-        return suffix[dist(gen)];
+        auto& random = Random::getInstance();
+        return random.choice(suffix);
     };
 
     static auto get_random_value = []() {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<int> dist(-214748, 214748);
-        return dist(gen);
+        auto& random = Random::getInstance();
+        return random.getInt(-214748, 214748);
     };
 
     static auto number_flow = new NumberFlow(lv_screen_active());
@@ -102,11 +95,9 @@ NumberFlowFloat* number_flow_float()
     btn_random->align(LV_ALIGN_CENTER, -200, 150);
     btn_random->label().setText("Random");
     btn_random->onClick().connect([&]() {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_real_distribution<float> dist(-99999.99f, 99999.99f);
-        float randomValue = dist(gen);
-        number_flow->setValue(randomValue);
+        auto& random = Random::getInstance();
+        float value = random.getDouble(-99999.99f, 99999.99f);
+        number_flow->setValue(value);
     });
 
     auto btn_increment = new Button(lv_screen_active());

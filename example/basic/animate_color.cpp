@@ -13,7 +13,6 @@
 #include <uitk/short_namespace.hpp>
 #include <smooth_lvgl.hpp>
 #include <mooncake_log.h>
-#include <random>
 
 using namespace uitk;
 using namespace uitk::lvgl_cpp;
@@ -43,10 +42,8 @@ int main()
     // Switch color when label is clicked
     label.addFlag(LV_OBJ_FLAG_CLICKABLE);
     label.onClick().connect([&]() {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dis(0, color_list.size() - 1);
-        auto new_color = color_list[dis(gen)];
+        auto& random = Random::getInstance();
+        auto new_color = random.choice(color_list);
         label.setText(fmt::format("#{:06X}", new_color));
         bg_color = new_color;
     });

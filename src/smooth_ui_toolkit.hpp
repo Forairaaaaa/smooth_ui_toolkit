@@ -22,4 +22,5 @@
 #include "utils/ring_buffer/ring_buffer.hpp"
 #include "utils/color/color.hpp"
 #include "utils/math/math.hpp"
+#include "utils/random/random.hpp"
 #include "widget/widget.hpp"
