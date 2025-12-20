@@ -82,9 +82,58 @@ struct Vector2 : public Vector2Base<float> {
         return Vector2Base<int>(static_cast<int>(x), static_cast<int>(y));
     }
 
+    // Add
+    Vector2 operator+(const Vector2& other) const
+    {
+        return Vector2(x + other.x, y + other.y);
+    }
+
+    // Subtract
+    Vector2 operator-(const Vector2& other) const
+    {
+        return Vector2(x - other.x, y - other.y);
+    }
+
+    // Multiply by scalar
+    Vector2 operator*(float scalar) const
+    {
+        return Vector2(x * scalar, y * scalar);
+    }
+
+    // += operator
+    Vector2& operator+=(const Vector2& other)
+    {
+        x += other.x;
+        y += other.y;
+        return *this;
+    }
+
+    // -= operator
+    Vector2& operator-=(const Vector2& other)
+    {
+        x -= other.x;
+        y -= other.y;
+        return *this;
+    }
+
+    // Divide by scalar
+    Vector2 operator/(float scalar) const
+    {
+        return Vector2(x / scalar, y / scalar);
+    }
+
     float length() const
     {
         return std::sqrt(x * x + y * y);
+    }
+
+    Vector2 normalized() const
+    {
+        float len = length();
+        if (len == 0.0f) {
+            return Vector2(0.0f, 0.0f);
+        }
+        return Vector2(x / len, y / len);
     }
 };
 

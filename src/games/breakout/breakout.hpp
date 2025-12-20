@@ -10,6 +10,7 @@
  */
 #pragma once
 #include "core/math/vector.hpp"
+#include "games/core/components/shape.hpp"
 #include "games/core/core.h"
 #include "core/hal/hal.hpp"
 
@@ -30,13 +31,15 @@ enum class Group : int {
 
 class Ball : public GameObject {
 public:
-    Vector2 velocity{0, 0};
+    float speed = 0.0f;
+    Vector2 velocity;
     bool active = false;
 
     void onInit() override
     {
         groupId = static_cast<int>(Group::Ball);
         _transform = get<Transform>();
+        _shape = get<CircleShape>();
     }
 
     void onUpdate(float dt) override
@@ -44,52 +47,62 @@ public:
         if (!active) {
             return;
         }
-        _transform->position.x += velocity.x * dt;
-        _transform->position.y += velocity.y * dt;
+        _transform->position += velocity * speed * dt;
     }
 
-    void launch(Vector2 v)
+    void launch(Vector2 dir)
     {
-        velocity = v;
+        velocity = dir.normalized();
         active = true;
     }
 
     float radius()
     {
-        return get<CircleShape>()->radius;
+        return _shape->radius;
     }
 
 private:
     Transform* _transform = nullptr;
+    CircleShape* _shape = nullptr;
 };
 
 class Paddle : public GameObject {
 public:
-    float speed = 600.0f;
+    float speed = 0.0f;
+    float minX = 0.0f;
+    float maxX = 0.0f;
 
     void onInit() override
     {
         groupId = static_cast<int>(Group::Player);
         _transform = get<Transform>();
+        _shape = get<RectShape>();
     }
 
     void move(float dir, float dt)
     {
+        if (dir == 0.0f) {
+            return;
+        }
+
         _transform->position.x += dir * speed * dt;
+
+        float half = _shape->size.x * 0.5f;
+        _transform->position.x = std::clamp(_transform->position.x, minX + half, maxX - half);
     }
 
     Vector2 position() const
     {
         return _transform->position;
     }
-
-    Vector2 size()
+    Vector2 size() const
     {
-        return get<RectShape>()->size;
+        return _shape->size;
     }
 
 private:
     Transform* _transform = nullptr;
+    RectShape* _shape = nullptr;
 };
 
 class Breakout {
@@ -140,7 +153,7 @@ protected:
         wall->groupId = static_cast<int>(Group::Wall);
     }
 
-    void addPaddle(Vector2 pos, Vector2 size, float speed)
+    void addPaddle(Vector2 pos, Vector2 size, float speed, Vector2 xLimits)
     {
         auto paddle = _world.createObject(std::make_unique<Paddle>());
         paddle->add(std::make_unique<Transform>(pos));
@@ -148,15 +161,18 @@ protected:
         paddle->add(std::make_unique<Area>());
         _paddle = static_cast<Paddle*>(paddle);
         _paddle->speed = speed;
+        _paddle->minX = xLimits.x;
+        _paddle->maxX = xLimits.y;
     }
 
-    void addBall(Vector2 pos, float radius)
+    void addBall(Vector2 pos, float radius, float speed)
     {
         auto ball = _world.createObject(std::make_unique<Ball>());
         ball->add(std::make_unique<Transform>(pos));
         ball->add(std::make_unique<CircleShape>(radius));
         ball->add(std::make_unique<Area>());
         _ball = static_cast<Ball*>(ball);
+        _ball->speed = speed;
     }
 
     virtual void onBuildLevel()
@@ -167,10 +183,10 @@ protected:
         addWall({400, 6}, {800, 12});
 
         // Paddle
-        addPaddle({400, 420}, {100, 16}, 600);
+        addPaddle({400, 420}, {100, 16}, 600, {20, 800 - 20});
 
         // Ball
-        addBall({0, 0}, 8);
+        addBall({0, 0}, 8, 600);
 
         setup_ball_collision();
     }
@@ -227,30 +243,32 @@ protected:
         float hit = (ballPos.x - padPos.x) / (padSize.x * 0.5f);
         hit = std::clamp(hit, -1.0f, 1.0f);
 
-        float speed = _ball->velocity.length();
-        _ball->velocity = {hit * speed, -std::abs(_ball->velocity.y)};
+        Vector2 dir = {hit, -1.0f};
+        _ball->velocity = dir.normalized();
     }
 
     void reflect_from_wall(GameObject& wall)
     {
+        auto& dir = _ball->velocity;
+
         auto ballPos = _ball->get<Transform>()->position;
+        auto wallPos = wall.get<Transform>()->position;
+        auto wallSize = wall.get<RectShape>()->size;
 
-        auto wall_pos = wall.get<Transform>()->position;
-        auto wall_size = wall.get<RectShape>()->size;
+        float dx = ballPos.x - wallPos.x;
+        float dy = ballPos.y - wallPos.y;
 
-        float dx = ballPos.x - wall_pos.x;
-        float dy = ballPos.y - wall_pos.y;
-
-        float px = (wall_size.x * 0.5f) - std::abs(dx);
-        float py = (wall_size.y * 0.5f) - std::abs(dy);
+        float px = (wallSize.x * 0.5f) - std::abs(dx);
+        float py = (wallSize.y * 0.5f) - std::abs(dy);
 
         if (px < py) {
-            // 撞在左右边
-            _ball->velocity.x *= -1;
+            dir.x *= -1.0f;
         } else {
-            // 撞在上下边
-            _ball->velocity.y *= -1;
+            dir.y *= -1.0f;
         }
+
+        dir = dir.normalized();
     }
 };
+
 } // namespace smooth_ui_toolkit::games::breakout
