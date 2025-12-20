@@ -110,8 +110,7 @@ private:
 
     void setup_collision()
     {
-        auto* area = get<Area>();
-
+        auto area = get<Area>();
         area->onEntered.connect([this](GameObject& other) {
             auto g = static_cast<Group>(other.groupId);
 

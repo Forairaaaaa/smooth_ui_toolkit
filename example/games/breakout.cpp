@@ -112,6 +112,11 @@ protected:
         mclog::info("game over! rebuilding level...");
         resetGame();
     }
+
+    void onBallCollide(Group targetGroup) override
+    {
+        // mclog::info("ball collided with group {}", static_cast<int>(targetGroup));
+    }
 };
 
 } // namespace smooth_ui_toolkit::games::breakout
@@ -123,7 +128,7 @@ int main()
 
     raylib::create_window(800, 450, "你好", [&]() {
         game.update();
-        // ui_hal::delay_s(1.0f / 30.0f);
+        // ui_hal::delay_s(1.0f / 30.0f); // Simulate low framerate
     });
     return 0;
 }

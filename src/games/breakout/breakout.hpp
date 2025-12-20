@@ -9,6 +9,7 @@
  *
  */
 #pragma once
+#include "games/core/components/area.hpp"
 #include "types.hpp"
 #include "paddle.hpp"
 #include "brick.hpp"
@@ -48,6 +49,7 @@ protected:
     virtual bool onReadAction(Action action) = 0;
     virtual void onRender() = 0;
     virtual void onGameOver() {}
+    virtual void onBallCollide(Group targetGroup) {}
 
     World& getWorld()
     {
@@ -78,6 +80,13 @@ protected:
     {
         auto ball = _world.createObject(std::make_unique<Ball>(pos, radius, speed));
         _ball = static_cast<Ball*>(ball);
+        _ball->get<Area>()->onEntered.connect([this](GameObject& other) {
+            if (_ball->active == false) {
+                return;
+            }
+            auto g = static_cast<Group>(other.groupId);
+            onBallCollide(g);
+        });
     }
 
     void addBrick(Vector2 pos, Vector2 size)
