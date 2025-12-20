@@ -28,44 +28,6 @@ enum class Group : int {
     Brick,
 };
 
-class Ball : public GameObject {
-public:
-    float speed = 0.0f;
-    Vector2 velocity;
-    bool active = false;
-    int damage = 1;
-
-    void onInit() override
-    {
-        groupId = static_cast<int>(Group::Ball);
-        _transform = get<Transform>();
-        _shape = get<CircleShape>();
-    }
-
-    void onUpdate(float dt) override
-    {
-        if (!active) {
-            return;
-        }
-        _transform->position += velocity * speed * dt;
-    }
-
-    void launch(Vector2 dir)
-    {
-        velocity = dir.normalized();
-        active = true;
-    }
-
-    float radius()
-    {
-        return _shape->radius;
-    }
-
-private:
-    Transform* _transform = nullptr;
-    CircleShape* _shape = nullptr;
-};
-
 class Paddle : public GameObject {
 public:
     float speed = 0.0f;
@@ -125,6 +87,108 @@ public:
 
 private:
     Area* _area = nullptr;
+};
+
+class Ball : public GameObject {
+public:
+    float speed = 0.0f;
+    Vector2 direction;
+    bool active = false;
+    int damage = 1;
+
+    void onInit() override
+    {
+        groupId = static_cast<int>(Group::Ball);
+        _transform = get<Transform>();
+        _shape = get<CircleShape>();
+
+        setup_collision();
+    }
+
+    void onUpdate(float dt) override
+    {
+        if (!active) {
+            return;
+        }
+
+        _transform->position += direction * speed * dt;
+    }
+
+    void launch(Vector2 dir)
+    {
+        direction = dir.normalized();
+        active = true;
+    }
+
+    float radius()
+    {
+        return _shape->radius;
+    }
+
+private:
+    Transform* _transform = nullptr;
+    CircleShape* _shape = nullptr;
+
+    void reflect_from_paddle(GameObject& paddle)
+    {
+        auto ball_pos = _transform->position;
+        auto pad_os = paddle.get<Transform>()->position;
+        auto pad_size = paddle.get<RectShape>()->size;
+
+        float hit = (ball_pos.x - pad_os.x) / (pad_size.x * 0.5f);
+        hit = std::clamp(hit, -1.0f, 1.0f);
+
+        direction = {hit, -1.0f};
+        direction = direction.normalized();
+    }
+
+    void reflect_from_wall(GameObject& wall)
+    {
+        auto ball_pos = _transform->position;
+        auto wall_pos = wall.get<Transform>()->position;
+        auto wall_size = wall.get<RectShape>()->size;
+
+        float dx = ball_pos.x - wall_pos.x;
+        float dy = ball_pos.y - wall_pos.y;
+
+        float px = (wall_size.x * 0.5f) - std::abs(dx);
+        float py = (wall_size.y * 0.5f) - std::abs(dy);
+
+        if (px < py) {
+            direction.x *= -1.0f;
+        } else {
+            direction.y *= -1.0f;
+        }
+
+        direction = direction.normalized();
+    }
+
+    void reflect_from_brick(GameObject& brick)
+    {
+        reflect_from_wall(brick);
+        static_cast<Brick*>(&brick)->damage(damage);
+    }
+
+    void setup_collision()
+    {
+        auto* area = get<Area>();
+
+        area->onEntered.connect([this](GameObject& other) {
+            auto g = static_cast<Group>(other.groupId);
+
+            if (g == Group::Wall) {
+                reflect_from_wall(other);
+            }
+
+            if (g == Group::Player) {
+                reflect_from_paddle(other);
+            }
+
+            if (g == Group::Brick) {
+                reflect_from_brick(other);
+            }
+        });
+    }
 };
 
 class Breakout {
@@ -232,8 +296,6 @@ protected:
                 addBrick(pos, brickSize);
             }
         }
-
-        setup_ball_collision();
     }
     virtual bool onReadAction(Action action) = 0;
     virtual void onRender() = 0;
@@ -260,83 +322,6 @@ protected:
             auto p = _paddle->position();
             _ball->get<Transform>()->position = {p.x, p.y - _ball->radius() - (_paddle->size().y / 2)};
         }
-    }
-
-    void setup_ball_collision()
-    {
-        auto* area = _ball->get<Area>();
-
-        area->onEntered.connect([this](GameObject& other) {
-            auto g = static_cast<Group>(other.groupId);
-
-            if (g == Group::Wall) {
-                reflect_from_wall(other);
-            }
-
-            if (g == Group::Player) {
-                reflect_from_paddle(other);
-            }
-
-            if (g == Group::Brick) {
-                reflect_from_brick(other);
-            }
-        });
-    }
-
-    void prevent_stuck_ball(Vector2& dir)
-    {
-        if (std::abs(dir.y) < 0.2f) {
-            dir.y = dir.y > 0 ? 0.2f : -0.2f;
-            dir = dir.normalized();
-        }
-    }
-
-    void reflect_from_paddle(GameObject& paddle)
-    {
-        auto ball_pos = _ball->get<Transform>()->position;
-        auto pad_os = paddle.get<Transform>()->position;
-        auto pad_size = paddle.get<RectShape>()->size;
-
-        float hit = (ball_pos.x - pad_os.x) / (pad_size.x * 0.5f);
-        hit = std::clamp(hit, -1.0f, 1.0f);
-
-        Vector2 dir = {hit, -1.0f};
-        dir = dir.normalized();
-
-        prevent_stuck_ball(dir);
-
-        _ball->velocity = dir;
-    }
-
-    void reflect_from_wall(GameObject& wall)
-    {
-        auto& dir = _ball->velocity;
-
-        auto ball_pos = _ball->get<Transform>()->position;
-        auto wall_pos = wall.get<Transform>()->position;
-        auto wall_size = wall.get<RectShape>()->size;
-
-        float dx = ball_pos.x - wall_pos.x;
-        float dy = ball_pos.y - wall_pos.y;
-
-        float px = (wall_size.x * 0.5f) - std::abs(dx);
-        float py = (wall_size.y * 0.5f) - std::abs(dy);
-
-        if (px < py) {
-            dir.x *= -1.0f;
-        } else {
-            dir.y *= -1.0f;
-        }
-
-        prevent_stuck_ball(dir);
-
-        dir = dir.normalized();
-    }
-
-    void reflect_from_brick(GameObject& brick)
-    {
-        reflect_from_wall(brick);
-        static_cast<Brick*>(&brick)->damage(_ball->damage);
     }
 };
 
