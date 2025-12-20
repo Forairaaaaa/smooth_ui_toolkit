@@ -15,10 +15,12 @@
 #include <vector>
 #include <memory>
 
-namespace smooth_ui_toolkit::games::engine {
+namespace smooth_ui_toolkit::games {
 
 class GameObject : public Poolable {
 public:
+    int groupId = 0;
+
     template <typename T>
     T* get()
     {
@@ -50,4 +52,4 @@ private:
     std::vector<std::unique_ptr<Component>> components;
 };
 
-} // namespace smooth_ui_toolkit::games::engine
+} // namespace smooth_ui_toolkit::games

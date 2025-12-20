@@ -13,7 +13,7 @@
 #include "component.hpp"
 #include <unordered_set>
 
-namespace smooth_ui_toolkit::games::engine {
+namespace smooth_ui_toolkit::games {
 
 class Area : public Component {
 public:
@@ -28,4 +28,4 @@ public:
     std::unordered_set<GameObject*> overlaps;
 };
 
-} // namespace smooth_ui_toolkit::games::engine
+} // namespace smooth_ui_toolkit::games

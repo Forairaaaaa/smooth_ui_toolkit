@@ -13,7 +13,7 @@
 #include "games/core/game_object.hpp"
 #include "collision.hpp"
 
-namespace smooth_ui_toolkit::games::engine {
+namespace smooth_ui_toolkit::games {
 
 void AreaSystem::update(const std::vector<GameObject*>& objects)
 {
@@ -75,4 +75,4 @@ void AreaSystem::handle_overlap(Area* self, Area* other, bool colliding)
     }
 }
 
-} // namespace smooth_ui_toolkit::games::engine
+} // namespace smooth_ui_toolkit::games

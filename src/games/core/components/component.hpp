@@ -11,7 +11,7 @@
 #pragma once
 #include <cstdint>
 
-namespace smooth_ui_toolkit::games::engine {
+namespace smooth_ui_toolkit::games {
 
 class GameObject;
 
@@ -35,4 +35,4 @@ protected:
     ComponentType _type;
 };
 
-} // namespace smooth_ui_toolkit::games::engine
+} // namespace smooth_ui_toolkit::games

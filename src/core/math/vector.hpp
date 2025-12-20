@@ -11,6 +11,7 @@
 // ref: https://github.com/godotengine/godot/blob/master/core/math/vector2.h
 #pragma once
 #include "base.hpp"
+#include <cmath>
 
 namespace smooth_ui_toolkit {
 
@@ -79,6 +80,11 @@ struct Vector2 : public Vector2Base<float> {
     explicit operator Vector2Base<int>() const
     {
         return Vector2Base<int>(static_cast<int>(x), static_cast<int>(y));
+    }
+
+    float length() const
+    {
+        return std::sqrt(x * x + y * y);
     }
 };
 

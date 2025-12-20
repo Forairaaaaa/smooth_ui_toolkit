@@ -14,7 +14,7 @@
 #include "component.hpp"
 #include <cstdint>
 
-namespace smooth_ui_toolkit::games::engine {
+namespace smooth_ui_toolkit::games {
 
 /**
  * @brief
@@ -62,4 +62,4 @@ public:
     Vector2 size;
 };
 
-} // namespace smooth_ui_toolkit::games::engine
+} // namespace smooth_ui_toolkit::games

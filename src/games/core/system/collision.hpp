@@ -16,7 +16,7 @@
 #include "games/core/game_object.hpp"
 #include <algorithm>
 
-namespace smooth_ui_toolkit::games::engine {
+namespace smooth_ui_toolkit::games {
 
 /**
  * @brief
@@ -124,4 +124,4 @@ inline static bool is_colliding(const Shape& a, const Shape& b)
 
 } // namespace collision
 
-} // namespace smooth_ui_toolkit::games::engine
+} // namespace smooth_ui_toolkit::games

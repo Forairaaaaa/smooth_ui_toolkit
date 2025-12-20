@@ -13,7 +13,7 @@
 #include "components/shape.hpp"
 #include <cassert>
 
-namespace smooth_ui_toolkit::games::engine {
+namespace smooth_ui_toolkit::games {
 
 void GameObject::add(std::unique_ptr<Component> comp)
 {
@@ -29,4 +29,4 @@ void GameObject::add(std::unique_ptr<Component> comp)
     components.push_back(std::move(comp));
 }
 
-} // namespace smooth_ui_toolkit::games::engine
+} // namespace smooth_ui_toolkit::games

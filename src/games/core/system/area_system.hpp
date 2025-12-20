@@ -12,7 +12,7 @@
 #include "games/core/components/area.hpp"
 #include "tools/object_pool/object_pool.hpp"
 
-namespace smooth_ui_toolkit::games::engine {
+namespace smooth_ui_toolkit::games {
 
 class AreaSystem {
 public:
@@ -24,4 +24,4 @@ private:
     void handle_overlap(Area* self, Area* other, bool colliding);
 };
 
-} // namespace smooth_ui_toolkit::games::engine
+} // namespace smooth_ui_toolkit::games

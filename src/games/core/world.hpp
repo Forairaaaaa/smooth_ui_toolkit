@@ -11,9 +11,8 @@
 #pragma once
 #include "game_object.hpp"
 #include "system/area_system.hpp"
-#include "core/hal/hal.hpp"
 
-namespace smooth_ui_toolkit::games::engine {
+namespace smooth_ui_toolkit::games {
 
 class World {
 public:
@@ -25,12 +24,9 @@ public:
         return go;
     }
 
-    void init()
-    {
-        _last_tick = ui_hal::get_tick_s();
-    }
+    void init() {}
 
-    void update()
+    void update(float dt)
     {
         // Init pending objects
         if (!_pending_init.empty()) {
@@ -41,11 +37,8 @@ public:
         }
 
         // Update objects
-        _current_tick = ui_hal::get_tick_s();
-        _delta_time = _current_tick - _last_tick;
-        _last_tick = _current_tick;
         _objects.forEach([&](GameObject* obj, int) {
-            obj->update(_delta_time);
+            obj->update(dt);
         });
 
         // Update systems
@@ -55,11 +48,14 @@ public:
         cleanup();
     }
 
-private:
-    float _current_tick = 0.0f;
-    float _last_tick = 0.0f;
-    float _delta_time = 0.0f;
+    void forEach(const std::function<void(GameObject*)>& func)
+    {
+        _objects.forEach([&](GameObject* obj, int) {
+            func(obj);
+        });
+    }
 
+private:
     ObjectPool<GameObject> _objects;
     std::vector<GameObject*> _pending_init;
 
@@ -89,4 +85,4 @@ private:
     }
 };
 
-} // namespace smooth_ui_toolkit::games::engine
+} // namespace smooth_ui_toolkit::games

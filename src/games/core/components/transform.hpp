@@ -12,14 +12,15 @@
 #include "core/math/vector.hpp"
 #include "component.hpp"
 
-namespace smooth_ui_toolkit::games::engine {
+namespace smooth_ui_toolkit::games {
 
 class Transform : public Component {
 public:
     static constexpr ComponentType Type = ComponentType::Transform;
     Transform() : Component(Type) {}
+    Transform(Vector2 position) : Component(Type), position(position) {}
 
     Vector2 position{0, 0};
 };
 
-} // namespace smooth_ui_toolkit::games::engine
+} // namespace smooth_ui_toolkit::games

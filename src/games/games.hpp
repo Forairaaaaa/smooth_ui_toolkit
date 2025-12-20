@@ -9,9 +9,4 @@
  *
  */
 #pragma once
-// #include "core/shape.hpp"
-// #include "core/collision.hpp"
-// #include "core/node.hpp"
-// #include "core/area.hpp"
-// #include "core/game.hpp"
-// #include "arkanoid/arkanoid.hpp"
+#include "breakout/breakout.hpp"
