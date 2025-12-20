@@ -32,8 +32,10 @@ public:
         return _type;
     }
 
+    Vector2 position;
+
 protected:
-    explicit Shape(ShapeType type) : _type(type) {}
+    explicit Shape(ShapeType type, const Vector2& position) : _type(type), position(position) {}
     ShapeType _type;
 };
 
@@ -43,10 +45,9 @@ protected:
  */
 class CircleShape : public Shape {
 public:
-    CircleShape(Vector2i& position, int radius) : Shape(ShapeType::Circle), position(position), radius(radius) {}
+    CircleShape(const Vector2& position, float radius) : Shape(ShapeType::Circle, position), radius(radius) {}
 
-    Vector2i& position;
-    int radius = 0;
+    float radius;
 };
 
 /**
@@ -55,10 +56,9 @@ public:
  */
 class RectShape : public Shape {
 public:
-    RectShape(Vector2i& position, const Vector2i& size) : Shape(ShapeType::Rect), position(position), size(size) {}
+    RectShape(const Vector2& position, const Vector2& size) : Shape(ShapeType::Rect, position), size(size) {}
 
-    Vector2i& position;
-    Vector2i size;
+    Vector2 size;
 };
 
 } // namespace smooth_ui_toolkit::games

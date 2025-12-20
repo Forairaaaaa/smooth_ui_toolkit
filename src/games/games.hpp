@@ -11,3 +11,4 @@
 #pragma once
 #include "core/shape.hpp"
 #include "core/collision.hpp"
+#include "arkanoid/arkanoid.hpp"

@@ -12,6 +12,7 @@
 // https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
 #pragma once
 #include "shape.hpp"
+#include <algorithm>
 
 namespace smooth_ui_toolkit::games {
 
@@ -23,66 +24,50 @@ namespace collision {
 
 inline static bool collide_rect_rect_impl(const RectShape& a, const RectShape& b)
 {
-    const int ax_half = a.size.x >> 1;
-    const int ay_half = a.size.y >> 1;
-    const int bx_half = b.size.x >> 1;
-    const int by_half = b.size.y >> 1;
+    const float ax_half = a.size.x * 0.5f;
+    const float ay_half = a.size.y * 0.5f;
+    const float bx_half = b.size.x * 0.5f;
+    const float by_half = b.size.y * 0.5f;
 
-    // 分离轴判断
-    if (a.position.x + ax_half < b.position.x - bx_half) {
+    if (a.position.x + ax_half < b.position.x - bx_half)
         return false;
-    }
-    if (a.position.x - ax_half > b.position.x + bx_half) {
+    if (a.position.x - ax_half > b.position.x + bx_half)
         return false;
-    }
-    if (a.position.y + ay_half < b.position.y - by_half) {
+    if (a.position.y + ay_half < b.position.y - by_half)
         return false;
-    }
-    if (a.position.y - ay_half > b.position.y + by_half) {
+    if (a.position.y - ay_half > b.position.y + by_half)
         return false;
-    }
 
     return true;
 }
 
 inline static bool collide_circle_circle_impl(const CircleShape& a, const CircleShape& b)
 {
-    const int64_t dx = (int64_t)a.position.x - b.position.x;
-    const int64_t dy = (int64_t)a.position.y - b.position.y;
-    const int64_t r = (int64_t)a.radius + b.radius;
+    const float dx = a.position.x - b.position.x;
+    const float dy = a.position.y - b.position.y;
+    const float r = a.radius + b.radius;
 
     return dx * dx + dy * dy <= r * r;
 }
 
 inline static bool collide_circle_rect_impl(const CircleShape& c, const RectShape& r)
 {
-    const int rx_half = r.size.x >> 1;
-    const int ry_half = r.size.y >> 1;
+    const float rx_half = r.size.x * 0.5f;
+    const float ry_half = r.size.y * 0.5f;
 
-    const int rx_min = r.position.x - rx_half;
-    const int rx_max = r.position.x + rx_half;
-    const int ry_min = r.position.y - ry_half;
-    const int ry_max = r.position.y + ry_half;
+    const float rx_min = r.position.x - rx_half;
+    const float rx_max = r.position.x + rx_half;
+    const float ry_min = r.position.y - ry_half;
+    const float ry_max = r.position.y + ry_half;
 
     // clamp 圆心到矩形最近点
-    int closest_x = c.position.x;
-    if (closest_x < rx_min) {
-        closest_x = rx_min;
-    } else if (closest_x > rx_max) {
-        closest_x = rx_max;
-    }
+    float closest_x = std::clamp(c.position.x, rx_min, rx_max);
+    float closest_y = std::clamp(c.position.y, ry_min, ry_max);
 
-    int closest_y = c.position.y;
-    if (closest_y < ry_min) {
-        closest_y = ry_min;
-    } else if (closest_y > ry_max) {
-        closest_y = ry_max;
-    }
+    const float dx = c.position.x - closest_x;
+    const float dy = c.position.y - closest_y;
 
-    const int64_t dx = (int64_t)c.position.x - closest_x;
-    const int64_t dy = (int64_t)c.position.y - closest_y;
-
-    return dx * dx + dy * dy <= (int64_t)c.radius * c.radius;
+    return dx * dx + dy * dy <= c.radius * c.radius;
 }
 
 /* -------------------------------------------------------------------------- */
