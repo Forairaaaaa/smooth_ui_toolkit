@@ -11,9 +11,10 @@
 // https://github.com/godotengine/godot/tree/master/core/math
 #pragma once
 #include "core/math/vector.hpp"
+#include "component.hpp"
 #include <cstdint>
 
-namespace smooth_ui_toolkit::games {
+namespace smooth_ui_toolkit::games::engine {
 
 /**
  * @brief
@@ -25,18 +26,18 @@ enum class ShapeType : uint8_t { Circle = 0, Rect = 1, COUNT };
  * @brief
  *
  */
-class Shape {
+class Shape : public Component {
 public:
-    ShapeType type() const
+    static constexpr ComponentType Type = ComponentType::Shape;
+
+    ShapeType shapeType() const
     {
-        return _type;
+        return _shape_type;
     }
 
-    Vector2 position;
-
 protected:
-    explicit Shape(ShapeType type, const Vector2& position) : _type(type), position(position) {}
-    ShapeType _type;
+    explicit Shape(ShapeType type) : Component(Type), _shape_type(type) {}
+    ShapeType _shape_type;
 };
 
 /**
@@ -45,7 +46,7 @@ protected:
  */
 class CircleShape : public Shape {
 public:
-    CircleShape(const Vector2& position, float radius) : Shape(ShapeType::Circle, position), radius(radius) {}
+    CircleShape(float radius) : Shape(ShapeType::Circle), radius(radius) {}
 
     float radius;
 };
@@ -56,9 +57,9 @@ public:
  */
 class RectShape : public Shape {
 public:
-    RectShape(const Vector2& position, const Vector2& size) : Shape(ShapeType::Rect, position), size(size) {}
+    RectShape(const Vector2& size) : Shape(ShapeType::Rect), size(size) {}
 
     Vector2 size;
 };
 
-} // namespace smooth_ui_toolkit::games
+} // namespace smooth_ui_toolkit::games::engine
