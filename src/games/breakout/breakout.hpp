@@ -151,13 +151,17 @@ private:
         float dx = ball_pos.x - wall_pos.x;
         float dy = ball_pos.y - wall_pos.y;
 
-        float px = (wall_size.x * 0.5f) - std::abs(dx);
-        float py = (wall_size.y * 0.5f) - std::abs(dy);
+        float px = (wall_size.x * 0.5f + _shape->radius) - std::abs(dx);
+        float py = (wall_size.y * 0.5f + _shape->radius) - std::abs(dy);
 
         if (px < py) {
-            direction.x *= -1.0f;
+            float sign = dx > 0 ? 1.0f : -1.0f;
+            _transform->position.x += px * sign;
+            direction.x *= -1;
         } else {
-            direction.y *= -1.0f;
+            float sign = dy > 0 ? 1.0f : -1.0f;
+            _transform->position.y += py * sign;
+            direction.y *= -1;
         }
 
         direction = direction.normalized();
@@ -287,7 +291,7 @@ protected:
         const int cols = 10;
         Vector2 brickSize = {60, 20};
 
-        float startX = 400 - (cols * brickSize.x) * 0.5f + brickSize.x * 0.5f;
+        float startX = 400 - (cols * brickSize.x) * 0.5f + brickSize.x * 0.5f + 1;
         float startY = 60;
 
         for (int y = 0; y < rows; ++y) {
