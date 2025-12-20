@@ -55,6 +55,8 @@ struct LevelDesc {
     std::vector<BrickDesc> bricks;
     PaddleDesc paddle;
     BallDesc ball;
+    float screenHeight;
+    int lives;
 };
 
 } // namespace smooth_ui_toolkit::games::breakout
