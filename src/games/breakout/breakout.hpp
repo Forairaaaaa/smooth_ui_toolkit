@@ -9,7 +9,6 @@
  *
  */
 #pragma once
-#include "games/core/components/area.hpp"
 #include "types.hpp"
 #include "paddle.hpp"
 #include "brick.hpp"

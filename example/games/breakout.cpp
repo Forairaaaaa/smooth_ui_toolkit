@@ -10,7 +10,7 @@
  */
 #include "../utils/raylib_wrapper.hpp"
 #include <uitk/short_namespace.hpp>
-#include <games/games.hpp>
+#include <games/breakout/breakout.hpp>
 #include <mooncake_log.h>
 
 using namespace uitk;
