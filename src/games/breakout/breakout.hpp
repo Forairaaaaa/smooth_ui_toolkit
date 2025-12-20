@@ -24,6 +24,7 @@ public:
     {
         _world.init();
         onBuildLevel();
+        onInit();
         _clock.tick();
     }
 
@@ -45,6 +46,7 @@ public:
 
 protected:
     virtual void onBuildLevel() = 0;
+    virtual void onInit() {}
     virtual bool onReadAction(Action action) = 0;
     virtual void onRender(float dt) = 0;
     virtual void onGameOver() {}

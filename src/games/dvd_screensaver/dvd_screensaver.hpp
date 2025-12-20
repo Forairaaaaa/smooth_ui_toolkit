@@ -96,6 +96,7 @@ public:
     {
         _world.init();
         onBuildLevel();
+        onInit();
         _clock.tick();
     }
 
@@ -108,6 +109,7 @@ public:
 
 protected:
     virtual void onBuildLevel() = 0;
+    virtual void onInit() {}
     virtual void onRender(float dt) = 0;
 
     World& getWorld()
