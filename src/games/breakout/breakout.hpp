@@ -10,7 +10,6 @@
  */
 #pragma once
 #include "core/math/vector.hpp"
-#include "games/core/components/shape.hpp"
 #include "games/core/core.h"
 #include "core/hal/hal.hpp"
 
@@ -34,6 +33,7 @@ public:
     float speed = 0.0f;
     Vector2 velocity;
     bool active = false;
+    int damage = 1;
 
     void onInit() override
     {
@@ -103,6 +103,28 @@ public:
 private:
     Transform* _transform = nullptr;
     RectShape* _shape = nullptr;
+};
+
+class Brick : public GameObject {
+public:
+    int hp = 1;
+
+    void onInit() override
+    {
+        groupId = static_cast<int>(Group::Brick);
+        _area = get<Area>();
+    }
+
+    void damage(int v)
+    {
+        hp -= v;
+        if (hp <= 0) {
+            requestDestroy();
+        }
+    }
+
+private:
+    Area* _area = nullptr;
 };
 
 class Breakout {
@@ -175,6 +197,14 @@ protected:
         _ball->speed = speed;
     }
 
+    void addBrick(Vector2 pos, Vector2 size)
+    {
+        auto brick = _world.createObject(std::make_unique<Brick>());
+        brick->add(std::make_unique<Transform>(pos));
+        brick->add(std::make_unique<RectShape>(size));
+        brick->add(std::make_unique<Area>());
+    }
+
     virtual void onBuildLevel()
     {
         // Walls
@@ -187,6 +217,21 @@ protected:
 
         // Ball
         addBall({0, 0}, 8, 600);
+
+        // Bricks
+        const int rows = 5;
+        const int cols = 10;
+        Vector2 brickSize = {60, 20};
+
+        float startX = 400 - (cols * brickSize.x) * 0.5f + brickSize.x * 0.5f;
+        float startY = 60;
+
+        for (int y = 0; y < rows; ++y) {
+            for (int x = 0; x < cols; ++x) {
+                Vector2 pos = {startX + x * brickSize.x, startY + y * brickSize.y};
+                addBrick(pos, brickSize);
+            }
+        }
 
         setup_ball_collision();
     }
@@ -231,35 +276,51 @@ protected:
             if (g == Group::Player) {
                 reflect_from_paddle(other);
             }
+
+            if (g == Group::Brick) {
+                reflect_from_brick(other);
+            }
         });
+    }
+
+    void prevent_stuck_ball(Vector2& dir)
+    {
+        if (std::abs(dir.y) < 0.2f) {
+            dir.y = dir.y > 0 ? 0.2f : -0.2f;
+            dir = dir.normalized();
+        }
     }
 
     void reflect_from_paddle(GameObject& paddle)
     {
-        auto ballPos = _ball->get<Transform>()->position;
-        auto padPos = paddle.get<Transform>()->position;
-        auto padSize = paddle.get<RectShape>()->size;
+        auto ball_pos = _ball->get<Transform>()->position;
+        auto pad_os = paddle.get<Transform>()->position;
+        auto pad_size = paddle.get<RectShape>()->size;
 
-        float hit = (ballPos.x - padPos.x) / (padSize.x * 0.5f);
+        float hit = (ball_pos.x - pad_os.x) / (pad_size.x * 0.5f);
         hit = std::clamp(hit, -1.0f, 1.0f);
 
         Vector2 dir = {hit, -1.0f};
-        _ball->velocity = dir.normalized();
+        dir = dir.normalized();
+
+        prevent_stuck_ball(dir);
+
+        _ball->velocity = dir;
     }
 
     void reflect_from_wall(GameObject& wall)
     {
         auto& dir = _ball->velocity;
 
-        auto ballPos = _ball->get<Transform>()->position;
-        auto wallPos = wall.get<Transform>()->position;
-        auto wallSize = wall.get<RectShape>()->size;
+        auto ball_pos = _ball->get<Transform>()->position;
+        auto wall_pos = wall.get<Transform>()->position;
+        auto wall_size = wall.get<RectShape>()->size;
 
-        float dx = ballPos.x - wallPos.x;
-        float dy = ballPos.y - wallPos.y;
+        float dx = ball_pos.x - wall_pos.x;
+        float dy = ball_pos.y - wall_pos.y;
 
-        float px = (wallSize.x * 0.5f) - std::abs(dx);
-        float py = (wallSize.y * 0.5f) - std::abs(dy);
+        float px = (wall_size.x * 0.5f) - std::abs(dx);
+        float py = (wall_size.y * 0.5f) - std::abs(dy);
 
         if (px < py) {
             dir.x *= -1.0f;
@@ -267,7 +328,15 @@ protected:
             dir.y *= -1.0f;
         }
 
+        prevent_stuck_ball(dir);
+
         dir = dir.normalized();
+    }
+
+    void reflect_from_brick(GameObject& brick)
+    {
+        reflect_from_wall(brick);
+        static_cast<Brick*>(&brick)->damage(_ball->damage);
     }
 };
 
