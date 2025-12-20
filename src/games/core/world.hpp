@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2025
  *
  */
+// https://gafferongames.com/post/fix_your_timestep/
 #pragma once
 #include "game_object.hpp"
 #include "system/area_system.hpp"
@@ -26,7 +27,40 @@ public:
 
     void init() {}
 
-    void update(float dt)
+    void update(float frameDt)
+    {
+        _accumulator += frameDt;
+
+        // 防止极端情况（断点 / 切后台）
+        const float max_accum = 0.25f;
+        if (_accumulator > max_accum) {
+            _accumulator = max_accum;
+        }
+
+        while (_accumulator >= FIXED_DT) {
+            step(FIXED_DT);
+            _accumulator -= FIXED_DT;
+        }
+    }
+
+    void forEachObject(const std::function<void(GameObject*)>& func)
+    {
+        _objects.forEach([&](GameObject* obj, int) {
+            func(obj);
+        });
+    }
+
+private:
+    ObjectPool<GameObject> _objects;
+    std::vector<GameObject*> _pending_init;
+
+    std::vector<GameObject*> _system_object_list_cache;
+    AreaSystem _area_system;
+
+    static constexpr float FIXED_DT = 1.0f / 120.0f;
+    float _accumulator = 0.0f;
+
+    void step(float dt)
     {
         // Init pending objects
         if (!_pending_init.empty()) {
@@ -47,20 +81,6 @@ public:
         // Cleanup destroyed objects
         cleanup();
     }
-
-    void forEach(const std::function<void(GameObject*)>& func)
-    {
-        _objects.forEach([&](GameObject* obj, int) {
-            func(obj);
-        });
-    }
-
-private:
-    ObjectPool<GameObject> _objects;
-    std::vector<GameObject*> _pending_init;
-
-    std::vector<GameObject*> _system_object_list_cache;
-    AreaSystem _area_system;
 
     std::vector<GameObject*>& get_object_list()
     {

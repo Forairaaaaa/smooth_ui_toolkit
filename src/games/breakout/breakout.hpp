@@ -12,6 +12,7 @@
 #include "core/math/vector.hpp"
 #include "games/core/core.h"
 #include "core/hal/hal.hpp"
+#include "games/core/world.hpp"
 
 namespace smooth_ui_toolkit::games::breakout {
 
@@ -273,6 +274,11 @@ protected:
         brick->add(std::make_unique<Area>());
     }
 
+    World& world()
+    {
+        return _world;
+    }
+
     virtual void onBuildLevel()
     {
         // Walls
@@ -291,7 +297,7 @@ protected:
         const int cols = 10;
         Vector2 brickSize = {60, 20};
 
-        float startX = 400 - (cols * brickSize.x) * 0.5f + brickSize.x * 0.5f + 1;
+        float startX = 400 - (cols * brickSize.x) * 0.5f + brickSize.x * 0.5f;
         float startY = 60;
 
         for (int y = 0; y < rows; ++y) {
