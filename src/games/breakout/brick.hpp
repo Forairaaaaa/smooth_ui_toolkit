@@ -18,11 +18,7 @@ class Brick : public GameObject {
 public:
     int hp = 1;
 
-    void onInit() override
-    {
-        groupId = static_cast<int>(Group::Brick);
-        _area = get<Area>();
-    }
+    void onInit() override {}
 
     void damage(int v)
     {
@@ -31,9 +27,6 @@ public:
             requestDestroy();
         }
     }
-
-private:
-    Area* _area = nullptr;
 };
 
 } // namespace smooth_ui_toolkit::games::breakout

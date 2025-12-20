@@ -24,10 +24,6 @@ public:
 
     void onInit() override
     {
-        groupId = static_cast<int>(Group::Ball);
-        _transform = get<Transform>();
-        _shape = get<CircleShape>();
-
         setup_collision();
     }
 
@@ -37,7 +33,8 @@ public:
             return;
         }
 
-        _transform->position += direction * speed * dt;
+        auto transform = get<Transform>();
+        transform->position += direction * speed * dt;
     }
 
     void launch(Vector2 dir)
@@ -48,16 +45,13 @@ public:
 
     float radius()
     {
-        return _shape->radius;
+        return get<CircleShape>()->radius;
     }
 
 private:
-    Transform* _transform = nullptr;
-    CircleShape* _shape = nullptr;
-
     void reflect_from_paddle(GameObject& paddle)
     {
-        auto ball_pos = _transform->position;
+        auto ball_pos = get<Transform>()->position;
         auto pad_os = paddle.get<Transform>()->position;
         auto pad_size = paddle.get<RectShape>()->size;
 
@@ -70,23 +64,25 @@ private:
 
     void reflect_from_wall(GameObject& wall)
     {
-        auto ball_pos = _transform->position;
+        auto transform = get<Transform>();
+        auto ball_pos = transform->position;
+        auto ball_radius = get<CircleShape>()->radius;
         auto wall_pos = wall.get<Transform>()->position;
         auto wall_size = wall.get<RectShape>()->size;
 
         float dx = ball_pos.x - wall_pos.x;
         float dy = ball_pos.y - wall_pos.y;
 
-        float px = (wall_size.x * 0.5f + _shape->radius) - std::abs(dx);
-        float py = (wall_size.y * 0.5f + _shape->radius) - std::abs(dy);
+        float px = (wall_size.x * 0.5f + ball_radius) - std::abs(dx);
+        float py = (wall_size.y * 0.5f + ball_radius) - std::abs(dy);
 
         if (px < py) {
             float sign = dx > 0 ? 1.0f : -1.0f;
-            _transform->position.x += px * sign;
+            transform->position.x += px * sign;
             direction.x *= -1;
         } else {
             float sign = dy > 0 ? 1.0f : -1.0f;
-            _transform->position.y += py * sign;
+            transform->position.y += py * sign;
             direction.y *= -1;
         }
 

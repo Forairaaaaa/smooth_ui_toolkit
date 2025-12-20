@@ -21,12 +21,7 @@ public:
     float minX = 0.0f;
     float maxX = 0.0f;
 
-    void onInit() override
-    {
-        groupId = static_cast<int>(Group::Player);
-        _transform = get<Transform>();
-        _shape = get<RectShape>();
-    }
+    void onInit() override {}
 
     void move(float dir, float dt)
     {
@@ -34,24 +29,24 @@ public:
             return;
         }
 
-        _transform->position.x += dir * speed * dt;
+        auto transform = get<Transform>();
+        auto shape = get<RectShape>();
 
-        float half = _shape->size.x * 0.5f;
-        _transform->position.x = std::clamp(_transform->position.x, minX + half, maxX - half);
+        transform->position.x += dir * speed * dt;
+
+        float half = shape->size.x * 0.5f;
+        transform->position.x = std::clamp(transform->position.x, minX + half, maxX - half);
     }
 
-    Vector2 position() const
+    Vector2 position()
     {
-        return _transform->position;
-    }
-    Vector2 size() const
-    {
-        return _shape->size;
+        return get<Transform>()->position;
     }
 
-private:
-    Transform* _transform = nullptr;
-    RectShape* _shape = nullptr;
+    Vector2 size()
+    {
+        return get<RectShape>()->size;
+    }
 };
 
 } // namespace smooth_ui_toolkit::games::breakout

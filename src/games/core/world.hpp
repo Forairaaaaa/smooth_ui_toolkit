@@ -50,6 +50,18 @@ public:
         });
     }
 
+    void clear()
+    {
+        _objects.forEach([&](GameObject* obj, int) {
+            obj->requestDestroy();
+            obj->onDestroy();
+        });
+
+        _area_system.handlePreDestroy(_objects);
+
+        _objects.cleanup();
+    }
+
 private:
     ObjectPool<GameObject> _objects;
     std::vector<GameObject*> _pending_init;

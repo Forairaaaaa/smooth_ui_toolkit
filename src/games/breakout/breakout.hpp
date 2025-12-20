@@ -29,6 +29,13 @@ public:
 
     void update()
     {
+        if (_going_reset) {
+            _going_reset = false;
+            _world.clear();
+            onBuildLevel();
+            resetBall();
+        }
+
         tick();
         _world.update(_frame_dt);
         handle_input(_frame_dt);
@@ -67,6 +74,7 @@ protected:
         paddle->add(std::make_unique<Transform>(pos));
         paddle->add(std::make_unique<RectShape>(size));
         paddle->add(std::make_unique<Area>());
+        paddle->groupId = static_cast<int>(Group::Player);
         _paddle = static_cast<Paddle*>(paddle);
         _paddle->speed = speed;
         _paddle->minX = xLimits.x;
@@ -79,6 +87,7 @@ protected:
         ball->add(std::make_unique<Transform>(pos));
         ball->add(std::make_unique<CircleShape>(radius));
         ball->add(std::make_unique<Area>());
+        ball->groupId = static_cast<int>(Group::Ball);
         _ball = static_cast<Ball*>(ball);
         _ball->speed = speed;
     }
@@ -89,6 +98,7 @@ protected:
         brick->add(std::make_unique<Transform>(pos));
         brick->add(std::make_unique<RectShape>(size));
         brick->add(std::make_unique<Area>());
+        brick->groupId = static_cast<int>(Group::Brick);
     }
 
     void loadLevel(const LevelDesc& level)
@@ -133,6 +143,11 @@ protected:
         _waiting_for_launch = true;
     }
 
+    void resetGame()
+    {
+        _going_reset = true;
+    }
+
 protected:
     World _world;
 
@@ -146,6 +161,8 @@ protected:
     int _lives = 3;
     float _screen_height = 1000.0f;
     bool _waiting_for_launch = true;
+
+    bool _going_reset = false;
 
     void tick()
     {
