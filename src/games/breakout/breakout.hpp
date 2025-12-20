@@ -13,7 +13,6 @@
 #include "paddle.hpp"
 #include "brick.hpp"
 #include "ball.hpp"
-#include "core/hal/hal.hpp"
 
 namespace smooth_ui_toolkit::games::breakout {
 
@@ -25,6 +24,7 @@ public:
     {
         _world.init();
         onBuildLevel();
+        _clock.tick();
     }
 
     void update()
@@ -36,9 +36,9 @@ public:
             resetBall();
         }
 
-        tick();
-        _world.update(_frame_dt);
-        handle_input(_frame_dt);
+        _clock.tick();
+        _world.update(_clock.dt());
+        handle_input(_clock.dt());
         check_ball_out_of_bounds();
         onRender();
     }
@@ -142,26 +142,16 @@ protected:
 
 protected:
     World _world;
+    FrameClock _clock;
 
     Paddle* _paddle = nullptr;
     Ball* _ball = nullptr;
-
-    float _current_tick = 0.0f;
-    float _last_tick = 0.0f;
-    float _frame_dt = 0.0f;
 
     int _lives = 3;
     float _screen_height = 1000.0f;
     bool _waiting_for_launch = true;
 
     bool _going_reset = false;
-
-    void tick()
-    {
-        _current_tick = ui_hal::get_tick_s();
-        _frame_dt = _current_tick - _last_tick;
-        _last_tick = _current_tick;
-    }
 
     void handle_input(float dt)
     {

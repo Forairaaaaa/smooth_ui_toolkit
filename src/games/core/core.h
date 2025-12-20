@@ -15,3 +15,4 @@
 #include "components/area.hpp"
 #include "game_object.hpp"
 #include "world.hpp"
+#include "frame_clock.hpp"

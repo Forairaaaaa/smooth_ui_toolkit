@@ -13,8 +13,8 @@
 #include "games/core/components/shape.hpp"
 #include "games/core/components/transform.hpp"
 #include "games/core/world.hpp"
+#include "games/core/frame_clock.hpp"
 #include "tools/random/random.hpp"
-#include "core/hal/hal.hpp"
 #include <memory>
 
 namespace smooth_ui_toolkit::games::dvd_screensaver {
@@ -96,12 +96,13 @@ public:
     {
         _world.init();
         onBuildLevel();
+        _clock.tick();
     }
 
     void update()
     {
-        tick();
-        _world.update(_frame_dt);
+        _clock.tick();
+        _world.update(_clock.dt());
         onRender();
     }
 
@@ -153,17 +154,7 @@ protected:
 
 protected:
     World _world;
-
-    float _current_tick = 0.0f;
-    float _last_tick = 0.0f;
-    float _frame_dt = 0.0f;
-
-    void tick()
-    {
-        _current_tick = ui_hal::get_tick_s();
-        _frame_dt = _current_tick - _last_tick;
-        _last_tick = _current_tick;
-    }
+    FrameClock _clock;
 };
 
 } // namespace smooth_ui_toolkit::games::dvd_screensaver
