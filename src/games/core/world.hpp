@@ -20,21 +20,27 @@ public:
     GameObject* createObject(std::unique_ptr<GameObject> obj)
     {
         int id = _objects.create(std::move(obj));
-        return _objects.get(id);
+        GameObject* go = _objects.get(id);
+        _pending_init.push_back(go);
+        return go;
     }
 
     void init()
     {
-        _objects.forEach([](GameObject* obj, int) {
-            obj->onInit();
-        });
-
         _last_tick = ui_hal::get_tick_s();
     }
 
     void update()
     {
-        // 1. GameObject update
+        // Init pending objects
+        if (!_pending_init.empty()) {
+            for (auto* obj : _pending_init) {
+                obj->onInit();
+            }
+            _pending_init.clear();
+        }
+
+        // Update objects
         _current_tick = ui_hal::get_tick_s();
         _delta_time = _current_tick - _last_tick;
         _last_tick = _current_tick;
@@ -42,10 +48,10 @@ public:
             obj->update(_delta_time);
         });
 
-        // 2. 系统更新（Area）
+        // Update systems
         _area_system.update(get_object_list());
 
-        // 3. 帧末清理（destroy）
+        // Cleanup destroyed objects
         cleanup();
     }
 
@@ -53,11 +59,13 @@ private:
     float _current_tick = 0.0f;
     float _last_tick = 0.0f;
     float _delta_time = 0.0f;
-    ObjectPool<GameObject> _objects;
-    AreaSystem _area_system;
-    std::vector<GameObject*> _system_object_list_cache;
 
-    // 提供给 system 用的“只读视图”
+    ObjectPool<GameObject> _objects;
+    std::vector<GameObject*> _pending_init;
+
+    std::vector<GameObject*> _system_object_list_cache;
+    AreaSystem _area_system;
+
     std::vector<GameObject*>& get_object_list()
     {
         _system_object_list_cache.clear();
