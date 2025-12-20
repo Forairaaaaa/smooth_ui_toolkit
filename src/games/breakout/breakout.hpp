@@ -62,43 +62,27 @@ protected:
     void addWall(Vector2 pos, Vector2 size)
     {
         auto wall = _world.createObject(std::make_unique<GameObject>());
+        wall->groupId = static_cast<int>(Group::Wall);
         wall->add(std::make_unique<Transform>(pos));
         wall->add(std::make_unique<RectShape>(size));
         wall->add(std::make_unique<Area>());
-        wall->groupId = static_cast<int>(Group::Wall);
     }
 
     void addPaddle(Vector2 pos, Vector2 size, float speed, Vector2 xLimits)
     {
-        auto paddle = _world.createObject(std::make_unique<Paddle>());
-        paddle->add(std::make_unique<Transform>(pos));
-        paddle->add(std::make_unique<RectShape>(size));
-        paddle->add(std::make_unique<Area>());
-        paddle->groupId = static_cast<int>(Group::Player);
+        auto paddle = _world.createObject(std::make_unique<Paddle>(pos, size, speed, xLimits));
         _paddle = static_cast<Paddle*>(paddle);
-        _paddle->speed = speed;
-        _paddle->minX = xLimits.x;
-        _paddle->maxX = xLimits.y;
     }
 
     void addBall(Vector2 pos, float radius, float speed)
     {
-        auto ball = _world.createObject(std::make_unique<Ball>());
-        ball->add(std::make_unique<Transform>(pos));
-        ball->add(std::make_unique<CircleShape>(radius));
-        ball->add(std::make_unique<Area>());
-        ball->groupId = static_cast<int>(Group::Ball);
+        auto ball = _world.createObject(std::make_unique<Ball>(pos, radius, speed));
         _ball = static_cast<Ball*>(ball);
-        _ball->speed = speed;
     }
 
     void addBrick(Vector2 pos, Vector2 size)
     {
-        auto brick = _world.createObject(std::make_unique<Brick>());
-        brick->add(std::make_unique<Transform>(pos));
-        brick->add(std::make_unique<RectShape>(size));
-        brick->add(std::make_unique<Area>());
-        brick->groupId = static_cast<int>(Group::Brick);
+        _world.createObject(std::make_unique<Brick>(pos, size));
     }
 
     void loadLevel(const LevelDesc& level)

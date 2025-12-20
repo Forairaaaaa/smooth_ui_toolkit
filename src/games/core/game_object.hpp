@@ -44,7 +44,7 @@ public:
     }
 
     // Lifecycle
-    virtual void onInit() {}
+    virtual void onReady() {}
     virtual void onUpdate(float dt) {}
     virtual void onDestroy() {}
 

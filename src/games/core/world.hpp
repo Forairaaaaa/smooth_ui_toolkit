@@ -21,7 +21,7 @@ public:
     {
         int id = _objects.create(std::move(obj));
         GameObject* go = _objects.get(id);
-        _pending_init.push_back(go);
+        _pending_ready.push_back(go);
         return go;
     }
 
@@ -64,7 +64,7 @@ public:
 
 private:
     ObjectPool<GameObject> _objects;
-    std::vector<GameObject*> _pending_init;
+    std::vector<GameObject*> _pending_ready;
 
     std::vector<GameObject*> _system_object_list_cache;
     AreaSystem _area_system;
@@ -75,11 +75,11 @@ private:
     void step(float dt)
     {
         // Init pending objects
-        if (!_pending_init.empty()) {
-            for (auto* obj : _pending_init) {
-                obj->onInit();
+        if (!_pending_ready.empty()) {
+            for (auto* obj : _pending_ready) {
+                obj->onReady();
             }
-            _pending_init.clear();
+            _pending_ready.clear();
         }
 
         // Update objects

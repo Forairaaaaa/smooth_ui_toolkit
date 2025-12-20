@@ -17,11 +17,24 @@ namespace smooth_ui_toolkit::games::breakout {
 
 class Paddle : public GameObject {
 public:
-    float speed = 0.0f;
-    float minX = 0.0f;
-    float maxX = 0.0f;
+    Paddle(Vector2 pos, Vector2 size, float speed, Vector2 xLimits)
+    {
+        groupId = static_cast<int>(Group::Player);
 
-    void onInit() override {}
+        add(std::make_unique<Transform>(pos));
+        add(std::make_unique<RectShape>(size));
+        add(std::make_unique<Area>());
+
+        this->speed = speed;
+        this->minX = xLimits.x;
+        this->maxX = xLimits.y;
+    }
+
+    float speed;
+    float minX;
+    float maxX;
+
+    void onReady() override {}
 
     void move(float dir, float dt)
     {

@@ -16,9 +16,20 @@ namespace smooth_ui_toolkit::games::breakout {
 
 class Brick : public GameObject {
 public:
-    int hp = 1;
+    Brick(Vector2 pos, Vector2 size, int hp = 1)
+    {
+        groupId = static_cast<int>(Group::Brick);
 
-    void onInit() override {}
+        add(std::make_unique<Transform>(pos));
+        add(std::make_unique<RectShape>(size));
+        add(std::make_unique<Area>());
+
+        this->hp = hp;
+    }
+
+    int hp;
+
+    void onReady() override {}
 
     void damage(int v)
     {

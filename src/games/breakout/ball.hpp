@@ -17,12 +17,25 @@ namespace smooth_ui_toolkit::games::breakout {
 
 class Ball : public GameObject {
 public:
-    float speed = 0.0f;
-    Vector2 direction;
-    bool active = false;
-    int damage = 1;
+    Ball(Vector2 pos, float radius, float speed, int damage = 1)
+    {
+        groupId = static_cast<int>(Group::Ball);
 
-    void onInit() override
+        add(std::make_unique<Transform>(pos));
+        add(std::make_unique<CircleShape>(radius));
+        add(std::make_unique<Area>());
+
+        this->speed = speed;
+        this->damage = damage;
+    }
+
+    float speed;
+    Vector2 direction;
+    int damage;
+
+    bool active = false;
+
+    void onReady() override
     {
         setup_collision();
     }
