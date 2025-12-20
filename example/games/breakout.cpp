@@ -80,7 +80,7 @@ protected:
     }
 
     // Render the game objects
-    void onRender() override
+    void onRender(float dt) override
     {
         ClearBackground(WHITE);
 

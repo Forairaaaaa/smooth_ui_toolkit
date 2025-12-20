@@ -103,12 +103,12 @@ public:
     {
         _clock.tick();
         _world.update(_clock.dt());
-        onRender();
+        onRender(_clock.dt());
     }
 
 protected:
     virtual void onBuildLevel() = 0;
-    virtual void onRender() = 0;
+    virtual void onRender(float dt) = 0;
 
     World& getWorld()
     {

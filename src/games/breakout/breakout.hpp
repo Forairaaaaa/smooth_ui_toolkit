@@ -40,13 +40,13 @@ public:
         _world.update(_clock.dt());
         handle_input(_clock.dt());
         check_ball_out_of_bounds();
-        onRender();
+        onRender(_clock.dt());
     }
 
 protected:
     virtual void onBuildLevel() = 0;
     virtual bool onReadAction(Action action) = 0;
-    virtual void onRender() = 0;
+    virtual void onRender(float dt) = 0;
     virtual void onGameOver() {}
     virtual void onBallCollide(Group targetGroup) {}
 

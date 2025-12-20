@@ -38,7 +38,7 @@ protected:
         }
     }
 
-    void onRender() override
+    void onRender(float dt) override
     {
         ClearBackground(WHITE);
 
