@@ -93,7 +93,7 @@ void AnimateVector2::update()
     update(currentTime);
 }
 
-void AnimateVector2::update(const float& currentTime)
+void AnimateVector2::update(float currentTime)
 {
     x.update(currentTime);
     y.update(currentTime);

@@ -91,7 +91,7 @@ public:
      *
      * @param currentTime Current time in seconds
      */
-    void update(const float& currentTime);
+    void update(float currentTime);
 
     /**
      * @brief Is animation done

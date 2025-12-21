@@ -12,7 +12,7 @@
 #include "obj.hpp"
 #include <lvgl.h>
 #include <cstdint>
-#include <string>
+#include <string_view>
 
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
@@ -30,9 +30,9 @@ public:
         lv_table_set_cell_value(this->raw_ptr(), row, col, txt);
     }
 
-    void setCellValue(uint32_t row, uint32_t col, const std::string& txt)
+    void setCellValue(uint32_t row, uint32_t col, std::string_view txt)
     {
-        lv_table_set_cell_value(this->raw_ptr(), row, col, txt.c_str());
+        lv_table_set_cell_value(this->raw_ptr(), row, col, txt.data());
     }
 
     void setRowCount(uint32_t row_cnt)

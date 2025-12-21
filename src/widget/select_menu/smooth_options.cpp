@@ -120,7 +120,7 @@ void SmoothOptionsMenu::close()
     _data.is_opening = false;
 }
 
-void SmoothOptionsMenu::update(const uint32_t& currentTime)
+void SmoothOptionsMenu::update(uint32_t currentTime)
 {
     // No option, no talk
     if (_data.option_list.size() == 0) {
@@ -171,7 +171,7 @@ void SmoothOptionsMenu::update(const uint32_t& currentTime)
     }
 }
 
-int SmoothOptionsMenu::getMatchingOptionIndex(const int& keyframeIndex)
+int SmoothOptionsMenu::getMatchingOptionIndex(int keyframeIndex)
 {
     int matched_option_index = keyframeIndex + _data.selected_option_index;
     // If out of limit, connect to back
@@ -200,7 +200,7 @@ void SmoothOptionsMenu::_update_option_keyframe(bool isJump)
     }
 }
 
-void SmoothOptionsMenu::_invoke_option_update(const uint32_t& currentTime)
+void SmoothOptionsMenu::_invoke_option_update(uint32_t currentTime)
 {
     // Invoke transition update
     float current_time_s = currentTime / 1000.0f;

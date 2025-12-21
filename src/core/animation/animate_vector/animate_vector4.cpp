@@ -116,7 +116,7 @@ void AnimateVector4::update()
     update(currentTime);
 }
 
-void AnimateVector4::update(const float& currentTime)
+void AnimateVector4::update(float currentTime)
 {
     x.update(currentTime);
     y.update(currentTime);

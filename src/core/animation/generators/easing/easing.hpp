@@ -40,8 +40,8 @@ public:
     }
 
     virtual void init() override;
-    virtual void retarget(const float& start, const float& end) override;
-    virtual bool next(const float& t) override;
+    virtual void retarget(float start, float end) override;
+    virtual bool next(float t) override;
     virtual AnimationType type() const override
     {
         return AnimationType::Easing;

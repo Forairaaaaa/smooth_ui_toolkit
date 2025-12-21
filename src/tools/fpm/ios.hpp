@@ -11,8 +11,7 @@
 #include <ios>
 #include <vector>
 
-namespace fpm
-{
+namespace fpm {
 
 template <typename CharT, typename B, typename I, unsigned int F, bool R>
 std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, fixed<B, I, F, R> x) noexcept
@@ -30,8 +29,7 @@ std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, fixed<B, I,
     auto use_significant_digits = false;
 
     // Invalid precision? Reset to the default
-    if (precision < 0)
-    {
+    if (precision < 0) {
         precision = 6;
     }
 
@@ -57,95 +55,88 @@ std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, fixed<B, I,
     // The value of the number is: raw / divisor * (10|2) ^ exponent
     // The base of the exponent is 2 in hexfloat mode, or 10 otherwise.
     struct number_t {
-        I raw;          // raw fixed-point value
-        I divisor;      // the divisor indicating the place of the decimal point
-        int exponent;   // the exponent applied
+        I raw;        // raw fixed-point value
+        I divisor;    // the divisor indicating the place of the decimal point
+        int exponent; // the exponent applied
     };
 
     // Convert a value without exponent to scientific representation
     // where the part before the decimal point is less than 10.
     const auto as_scientific = [](number_t value) {
         assert(value.exponent == 0);
-        if (value.raw > 0)
-        {
+        if (value.raw > 0) {
             while (value.raw / 10 >= value.divisor) {
                 value.divisor *= 10;
                 ++value.exponent;
             }
             while (value.raw < value.divisor) {
-                 value.raw *= 10;
+                value.raw *= 10;
                 --value.exponent;
             }
         }
         return value;
     };
 
-    number_t value = { x.raw_value(), I{1} << F, 0};
+    number_t value = {x.raw_value(), I{1} << F, 0};
 
     auto base = B{10};
 
     // First write the sign
-    if (value.raw < 0)
-    {
+    if (value.raw < 0) {
         *end++ = ctype.widen('-');
         value.raw = -value.raw;
         internal_pad = end;
-    }
-    else if (os.flags() & std::ios_base::showpos)
-    {
+    } else if (os.flags() & std::ios_base::showpos) {
         *end++ = ctype.widen('+');
         internal_pad = end;
     }
     assert(value.raw >= 0);
 
-    switch (floatfield)
-    {
-    case std::ios_base::fixed | std::ios_base::scientific:
-        // Hexadecimal mode: figure out the hexadecimal exponent and write "0x"
-        if (value.raw > 0)
-        {
-            auto bit  = detail::find_highest_bit(value.raw);
-            value.exponent = bit - F;    // exponent is applied to base 2
-            value.divisor = I{1} << bit; // divisor is at the highest bit, ensuring it starts with "1."
-            precision = (bit + 3) / 4;   // precision is number of nibbles, so we show all of them
+    switch (floatfield) {
+        case std::ios_base::fixed | std::ios_base::scientific:
+            // Hexadecimal mode: figure out the hexadecimal exponent and write "0x"
+            if (value.raw > 0) {
+                auto bit = detail::find_highest_bit(value.raw);
+                value.exponent = bit - F;    // exponent is applied to base 2
+                value.divisor = I{1} << bit; // divisor is at the highest bit, ensuring it starts with "1."
+                precision = (bit + 3) / 4;   // precision is number of nibbles, so we show all of them
+            }
+            base = 16;
+            show_trailing_zeros = false; // Always strip trailing zeros in hexfloat mode
+
+            *end++ = ctype.widen('0');
+            *end++ = ctype.widen(uppercase ? 'X' : 'x');
+            break;
+
+        case std::ios_base::scientific:
+            // Scientific mode, normalize value to scientific notation
+            value = as_scientific(value);
+            break;
+
+        case std::ios_base::fixed:
+            // Fixed mode. Nothing to do.
+            break;
+
+        default: {
+            // "auto" mode: figure out the exponent
+            const number_t sci_value = as_scientific(value);
+
+            // Now `precision` indicates the number of *significant digits* (not fractional digits).
+            use_significant_digits = true;
+            precision = std::max<std::streamsize>(precision, 1);
+
+            if (sci_value.exponent >= precision || sci_value.exponent < -4) {
+                // Display as scientific format
+                floatfield = std::ios_base::scientific;
+                value = sci_value;
+            } else {
+                // Display as fixed format.
+                // "showpoint" indicates whether or not we show trailing zeros
+                floatfield = std::ios_base::fixed;
+                show_trailing_zeros = showpoint;
+            }
+            break;
         }
-        base = 16;
-        show_trailing_zeros = false; // Always strip trailing zeros in hexfloat mode
-
-        *end++ = ctype.widen('0');
-        *end++ = ctype.widen(uppercase ? 'X' : 'x');
-        break;
-
-    case std::ios_base::scientific:
-        // Scientific mode, normalize value to scientific notation
-        value = as_scientific(value);
-        break;
-
-    case std::ios_base::fixed:
-        // Fixed mode. Nothing to do.
-        break;
-
-    default:
-    {
-        // "auto" mode: figure out the exponent
-        const number_t sci_value = as_scientific(value);
-
-        // Now `precision` indicates the number of *significant digits* (not fractional digits).
-        use_significant_digits = true;
-        precision = std::max<std::streamsize>(precision, 1);
-
-        if (sci_value.exponent >= precision || sci_value.exponent < -4) {
-            // Display as scientific format
-            floatfield = std::ios_base::scientific;
-            value = sci_value;
-        } else {
-            // Display as fixed format.
-            // "showpoint" indicates whether or not we show trailing zeros
-            floatfield = std::ios_base::fixed;
-            show_trailing_zeros = showpoint;
-        }
-        break;
-    }
     };
 
     // If we didn't write a sign, any internal padding starts here
@@ -184,8 +175,7 @@ std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, fixed<B, I,
         significant_digits = true;
     }
 
-    if (use_significant_digits && significant_digits)
-    {
+    if (use_significant_digits && significant_digits) {
         // Apparently the integral part was significant; subtract its
         // length from the remaining significant digits.
         precision -= (end - digits_start);
@@ -205,15 +195,12 @@ std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, fixed<B, I,
     typename buffer_t::iterator trailing_zeros_start = buffer.end();
     std::streamsize trailing_zeros_count = 0;
 
-    if (precision > 0)
-    {
+    if (precision > 0) {
         // Print the fractional part
         *(point = end++) = numpunct.decimal_point();
 
-        for (int i = 0; i < precision; ++i)
-        {
-            if (value.raw == 0)
-            {
+        for (int i = 0; i < precision; ++i) {
+            if (value.raw == 0) {
                 // The rest of the digits are all zeros, mark them
                 // to be printed in this spot.
                 trailing_zeros_start = end;
@@ -244,9 +231,7 @@ std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, fixed<B, I,
                 }
             }
         }
-    }
-    else if (showpoint)
-    {
+    } else if (showpoint) {
         // No fractional part to print, but we still want the point
         *(point = end++) = numpunct.decimal_point();
     }
@@ -275,8 +260,7 @@ std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, fixed<B, I,
         increment = ((last_digit % 2) == 1);
     }
 
-    if (increment)
-    {
+    if (increment) {
         auto p = end - 1;
         // Increment all digits backwards while we see "9"
         while (p >= digits_start) {
@@ -296,8 +280,7 @@ std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, fixed<B, I,
             assert(p == digits_start - 1);
             insert_character(++p, ctype.widen('1'));
 
-            if (floatfield == std::ios::scientific)
-            {
+            if (floatfield == std::ios::scientific) {
                 // We just made the integral part equal to 10, so we shift the decimal point
                 // back one place (if any) and tweak the exponent, so that we keep the integer part
                 // less than 10.
@@ -321,10 +304,8 @@ std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, fixed<B, I,
         }
     }
 
-    if (point != buffer.end())
-    {
-        if (!show_trailing_zeros)
-        {
+    if (point != buffer.end()) {
+        if (!show_trailing_zeros) {
             // Remove trailing zeros
             while (*(end - 1) == ctype.widen('0')) {
                 --end;
@@ -343,8 +324,7 @@ std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, fixed<B, I,
 
     // Apply thousands grouping
     const auto& grouping = numpunct.grouping();
-    if (!grouping.empty())
-    {
+    if (!grouping.empty()) {
         // Step backwards from the end or decimal point, inserting the
         // thousands separator at every group interval.
         const CharT thousands_sep = ctype.widen(numpunct.thousands_sep());
@@ -362,8 +342,7 @@ std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, fixed<B, I,
 
     // Print the exponent if required
     assert(floatfield != 0);
-    if (floatfield & std::ios_base::scientific)
-    {
+    if (floatfield & std::ios_base::scientific) {
         // Hexadecimal (%a/%A) or decimal (%e/%E) scientific notation
         if (floatfield & std::ios_base::fixed) {
             *end++ = ctype.widen(uppercase ? 'P' : 'p');
@@ -388,15 +367,16 @@ std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, fixed<B, I,
         const auto exponent_start = end;
         if (value.exponent == 0) {
             *end++ = ctype.widen('0');
-        } else while (value.exponent > 0) {
-            *end++ = ctype.widen(digits[value.exponent % 10]);
-            value.exponent /= 10;
-        }
+        } else
+            while (value.exponent > 0) {
+                *end++ = ctype.widen(digits[value.exponent % 10]);
+                value.exponent /= 10;
+            }
         std::reverse(exponent_start, end);
     }
 
     // Write character `ch` `count` times to the stream
-    const auto sputcn = [&](CharT ch, std::streamsize count){
+    const auto sputcn = [&](CharT ch, std::streamsize count) {
         // Fill a buffer to output larger chunks
         constexpr std::streamsize chunk_size = 64;
         std::array<CharT, chunk_size> fill_buffer;
@@ -427,33 +407,29 @@ std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, fixed<B, I,
     // Pad the buffer if necessary.
     // Note that the length of trailing zeros is counted towards the length of the content.
     const auto content_size = end - buffer.begin() + trailing_zeros_count;
-    if (content_size >= width)
-    {
+    if (content_size >= width) {
         // Buffer needs no padding, output as-is
         put_range(buffer.begin(), end);
-    }
-    else
-    {
+    } else {
         const auto pad_size = width - content_size;
-        switch (adjustfield)
-        {
-        case std::ios_base::left:
-            // Content is left-aligned, so output the buffer, followed by the padding
-            put_range(buffer.begin(), end);
-            sputcn(os.fill(), pad_size);
-            break;
-        case std::ios_base::internal:
-            // Content is internally aligned, so output the buffer up to the "internal pad"
-            // point, followed by the padding, followed by the remainder of the buffer.
-            put_range(buffer.begin(), internal_pad);
-            sputcn(os.fill(), pad_size);
-            put_range(internal_pad, end);
-            break;
-        default:
-            // Content is right-aligned, so output the padding, followed by the buffer
-            sputcn(os.fill(), pad_size);
-            put_range(buffer.begin(), end);
-            break;
+        switch (adjustfield) {
+            case std::ios_base::left:
+                // Content is left-aligned, so output the buffer, followed by the padding
+                put_range(buffer.begin(), end);
+                sputcn(os.fill(), pad_size);
+                break;
+            case std::ios_base::internal:
+                // Content is internally aligned, so output the buffer up to the "internal pad"
+                // point, followed by the padding, followed by the remainder of the buffer.
+                put_range(buffer.begin(), internal_pad);
+                sputcn(os.fill(), pad_size);
+                put_range(internal_pad, end);
+                break;
+            default:
+                // Content is right-aligned, so output the padding, followed by the buffer
+                sputcn(os.fill(), pad_size);
+                put_range(buffer.begin(), end);
+                break;
         }
     }
 
@@ -463,13 +439,11 @@ std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, fixed<B, I,
     return os;
 }
 
-
 template <typename CharT, class Traits, typename B, typename I, unsigned int F, bool R>
 std::basic_istream<CharT, Traits>& operator>>(std::basic_istream<CharT, Traits>& is, fixed<B, I, F, R>& x)
 {
     typename std::basic_istream<CharT, Traits>::sentry sentry(is);
-    if (!sentry)
-    {
+    if (!sentry) {
         return is;
     }
 
@@ -480,17 +454,15 @@ std::basic_istream<CharT, Traits>& operator>>(std::basic_istream<CharT, Traits>&
     const bool supports_thousands_separators = !numpunct.grouping().empty();
 
     const auto& is_valid_character = [](char ch) {
-        // Note: allowing ['p', 'i', 'n', 't', 'y'] is technically in violation of the spec (we are emulating std::num_get),
-        // but otherwise we cannot parse hexfloats and "infinity". This is a known issue with the spec (LWG #2381).
-        return std::isxdigit(ch) ||
-            ch == 'x' || ch == 'X' || ch == 'p' || ch == 'P' ||
-            ch == 'i' || ch == 'I' || ch == 'n' || ch == 'N' ||
-            ch == 't' || ch == 'T' || ch == 'y' || ch == 'Y' ||
-            ch == '-' || ch == '+';
+        // Note: allowing ['p', 'i', 'n', 't', 'y'] is technically in violation of the spec (we are emulating
+        // std::num_get), but otherwise we cannot parse hexfloats and "infinity". This is a known issue with the spec
+        // (LWG #2381).
+        return std::isxdigit(ch) || ch == 'x' || ch == 'X' || ch == 'p' || ch == 'P' || ch == 'i' || ch == 'I' ||
+               ch == 'n' || ch == 'N' || ch == 't' || ch == 'T' || ch == 'y' || ch == 'Y' || ch == '-' || ch == '+';
     };
 
     const auto& peek = [&]() {
-        for(;;) {
+        for (;;) {
             auto ch = is.rdbuf()->sgetc();
             if (ch == Traits::eof()) {
                 is.setstate(std::ios::eofbit);
@@ -499,8 +471,7 @@ std::basic_istream<CharT, Traits>& operator>>(std::basic_istream<CharT, Traits>&
             if (ch == numpunct.decimal_point()) {
                 return '.';
             }
-            if (ch == numpunct.thousands_sep())
-            {
+            if (ch == numpunct.thousands_sep()) {
                 if (!supports_thousands_separators || !thousands_separator_allowed) {
                     return '\0';
                 }
@@ -612,8 +583,7 @@ std::basic_istream<CharT, Traits>& operator>>(std::basic_istream<CharT, Traits>&
     bool exponent_overflow = false;
     std::size_t exponent = 0;
     bool exponent_negate = false;
-    if (std::tolower(ch) == exponent_char)
-    {
+    if (std::tolower(ch) == exponent_char) {
         ch = next();
         if (ch == '-') {
             exponent_negate = true;
@@ -642,7 +612,9 @@ std::basic_istream<CharT, Traits>& operator>>(std::basic_istream<CharT, Traits>&
     // We've parsed all we need. Construct the value.
     if (exponent_overflow) {
         // Absolute exponent is too large
-        if (std::all_of(significand.begin(), significand.end(), [](unsigned char x){ return x == 0; })) {
+        if (std::all_of(significand.begin(), significand.end(), [](unsigned char x) {
+                return x == 0;
+            })) {
             // Significand is zero. Exponent doesn't matter.
             x = fixed<B, I, F, R>(0);
         } else if (exponent_negate) {
@@ -657,7 +629,7 @@ std::basic_istream<CharT, Traits>& operator>>(std::basic_istream<CharT, Traits>&
 
     // Shift the fraction offset according to exponent
     {
-        const auto exponent_mult = (base == 10) ? 1: 4;
+        const auto exponent_mult = (base == 10) ? 1 : 4;
         if (exponent_negate) {
             const auto adjust = std::min(exponent / exponent_mult, fraction_start);
             fraction_start -= adjust;
@@ -724,7 +696,8 @@ std::basic_istream<CharT, Traits>& operator>>(std::basic_istream<CharT, Traits>&
             for (std::size_t e = 0; e < exponent; ++e) {
                 if (raw_value > MaxValue / 10) {
                     // Overflow
-                    x = negate ? std::numeric_limits<fixed<B, I, F, R>>::min() : std::numeric_limits<fixed<B, I, F, R>>::max();
+                    x = negate ? std::numeric_limits<fixed<B, I, F, R>>::min()
+                               : std::numeric_limits<fixed<B, I, F, R>>::max();
                     return is;
                 }
                 raw_value *= 10;
@@ -735,6 +708,6 @@ std::basic_istream<CharT, Traits>& operator>>(std::basic_istream<CharT, Traits>&
     return is;
 }
 
-}
+} // namespace fpm
 
 #endif

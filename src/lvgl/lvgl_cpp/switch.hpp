@@ -48,7 +48,8 @@ public:
                     auto on_value_changed = (Signal<bool>*)lv_event_get_user_data(e);
                     on_value_changed->emit(lv_obj_has_state((lv_obj_t*)lv_event_get_target(e), LV_STATE_CHECKED));
                 },
-                LV_EVENT_VALUE_CHANGED, _on_value_changed.get());
+                LV_EVENT_VALUE_CHANGED,
+                _on_value_changed.get());
         }
         return *_on_value_changed;
     }

@@ -89,7 +89,8 @@ public:
                     auto on_value_changed = (Signal<uint32_t>*)lv_event_get_user_data(e);
                     on_value_changed->emit(lv_roller_get_selected((lv_obj_t*)lv_event_get_target(e)));
                 },
-                LV_EVENT_VALUE_CHANGED, _on_value_changed.get());
+                LV_EVENT_VALUE_CHANGED,
+                _on_value_changed.get());
         }
         return *_on_value_changed;
     }

@@ -81,7 +81,7 @@ void Spring::init()
     }
 }
 
-void Spring::retarget(const float& start, const float& end)
+void Spring::retarget(float start, float end)
 {
     springOptions.velocity = -_current_velocity;
     this->start = start;
@@ -89,7 +89,7 @@ void Spring::retarget(const float& start, const float& end)
     init();
 }
 
-bool Spring::next(const float& t)
+bool Spring::next(float t)
 {
     if (done) {
         return done;
@@ -107,7 +107,7 @@ bool Spring::next(const float& t)
     return done;
 }
 
-void Spring::calc_velocity_analytical(const float& t)
+void Spring::calc_velocity_analytical(float t)
 {
     if (_damping_ratio < 1) {
         // 欠阻尼解析速度公式
@@ -142,7 +142,7 @@ float Spring::calc_angular_freq(float undampedFreq, float dampingRatio)
     return undampedFreq * std::sqrt(1 - dampingRatio * dampingRatio);
 }
 
-float Spring::calc_position(const float& t)
+float Spring::calc_position(float t)
 {
     switch (_damping_type) {
         case DampingType::Underdamped: {
