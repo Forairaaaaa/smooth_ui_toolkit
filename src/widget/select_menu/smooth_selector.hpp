@@ -53,7 +53,7 @@ public:
     virtual void onRelease() {}
     virtual void onClick() {}
     virtual void onOpenEnd() {}
-    virtual void onUpdate(const uint32_t& currentTime) {}
+    virtual void onUpdate(uint32_t currentTime) {}
     virtual void onReadInput() {}
     virtual void onRender() {}
 
@@ -209,7 +209,7 @@ public:
     {
         update(ui_hal::get_tick());
     }
-    virtual void update(const uint32_t& currentTime);
+    virtual void update(uint32_t currentTime);
 
 protected:
     struct Data_t {

@@ -29,9 +29,9 @@ public:
 
     virtual void init() {}
 
-    virtual void retarget(const float& start, const float& end) {}
+    virtual void retarget(float start, float end) {}
 
-    virtual bool next(const float& t)
+    virtual bool next(float t)
     {
         return done;
     }

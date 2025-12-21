@@ -16,6 +16,7 @@
 #include <memory>
 #include <cmath>
 #include <string>
+#include <string_view>
 
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
@@ -129,7 +130,7 @@ public:
         updateLayout();
     }
 
-    void setPrefix(const std::string& newPrefix)
+    void setPrefix(std::string_view newPrefix)
     {
         _prefix = newPrefix;
         if (_integer_flow) {
@@ -137,7 +138,7 @@ public:
         }
     }
 
-    void setSuffix(const std::string& newSuffix)
+    void setSuffix(std::string_view newSuffix)
     {
         _suffix = newSuffix;
         if (_decimal_flow) {

@@ -109,7 +109,7 @@ void SmoothSelectorMenu::close()
     _data.is_opening = false;
 }
 
-void SmoothSelectorMenu::update(const uint32_t& currentTime)
+void SmoothSelectorMenu::update(uint32_t currentTime)
 {
     // No option, no talk
     if (_data.option_list.size() == 0) {

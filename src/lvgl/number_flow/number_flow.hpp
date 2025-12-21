@@ -19,6 +19,7 @@
 #include <cmath>
 #include <algorithm>
 #include <string>
+#include <string_view>
 
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
@@ -74,14 +75,14 @@ public:
     }
 
     // 设置前缀
-    void setPrefix(const std::string& newPrefix)
+    void setPrefix(std::string_view newPrefix)
     {
         _prefix = newPrefix;
         handle_prefix_changed();
     }
 
     // 设置后缀
-    void setSuffix(const std::string& newSuffix)
+    void setSuffix(std::string_view newSuffix)
     {
         _suffix = newSuffix;
         handle_suffix_changed();
@@ -189,7 +190,7 @@ protected:
         return std::max(get_actual_digits(num), minDigits);
     }
 
-    int get_text_width(const std::string& text)
+    int get_text_width(std::string_view text)
     {
         int width = 0;
         for (char c : text) {

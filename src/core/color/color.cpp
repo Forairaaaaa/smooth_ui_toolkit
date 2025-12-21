@@ -9,16 +9,18 @@
  *
  */
 #include "color.hpp"
+#include <cstdlib>
+#include <cstdio>
 
 namespace smooth_ui_toolkit {
 namespace color {
 
-Rgb_t hex_to_rgb(const uint32_t& hex)
+Rgb_t hex_to_rgb(uint32_t hex)
 {
     return Rgb_t((hex >> 16) & 0x0000FF, (hex >> 8) & 0x0000FF, hex & 0x0000FF);
 }
 
-Rgb_t hex_to_rgb(const std::string& hex)
+Rgb_t hex_to_rgb(std::string_view hex)
 {
     Rgb_t rgb;
 
@@ -26,7 +28,7 @@ Rgb_t hex_to_rgb(const std::string& hex)
         return rgb;
     }
 
-    std::sscanf(hex.c_str(), "#%2hhx%2hhx%2hhx", &rgb.r, &rgb.g, &rgb.b);
+    std::sscanf(hex.data(), "#%2hhx%2hhx%2hhx", &rgb.r, &rgb.g, &rgb.b);
     return rgb;
 }
 

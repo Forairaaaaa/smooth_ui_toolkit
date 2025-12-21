@@ -49,7 +49,7 @@ public:
     virtual void onRelease() {}
     virtual void onClick() {}
     virtual void onOpenEnd() {}
-    virtual void onUpdate(const uint32_t& currentTime) {}
+    virtual void onUpdate(uint32_t currentTime) {}
     virtual void onReadInput() {}
     virtual void onRender() {}
 
@@ -72,7 +72,7 @@ public:
     {
         return _data.keyframe_list;
     }
-    inline const Vector4& getKeyframe(const int& index)
+    inline const Vector4& getKeyframe(int index)
     {
         return _data.keyframe_list[index];
     }
@@ -103,7 +103,7 @@ public:
     {
         return _data.option_list;
     }
-    inline Option_t& getOption(const int& index)
+    inline Option_t& getOption(int index)
     {
         return _data.option_list[index];
     }
@@ -115,7 +115,7 @@ public:
     {
         return getMatchingOptionIndex(0);
     }
-    inline Vector4 getOptionCurrentFrame(const int& index)
+    inline Vector4 getOptionCurrentFrame(int index)
     {
         return {getOption(index).position.x,
                 getOption(index).position.y,
@@ -130,7 +130,7 @@ public:
      * @param keyframeIndex
      * @return int matched option index
      */
-    int getMatchingOptionIndex(const int& keyframeIndex);
+    int getMatchingOptionIndex(int keyframeIndex);
 
     /**
      * @brief Select last one
@@ -215,7 +215,7 @@ public:
     {
         update(ui_hal::get_tick());
     }
-    virtual void update(const uint32_t& currentTime);
+    virtual void update(uint32_t currentTime);
 
 protected:
     struct Data_t {
@@ -233,7 +233,7 @@ protected:
     Data_t _data;
     Config_t _config;
     virtual void _update_option_keyframe(bool isJump = false);
-    virtual void _invoke_option_update(const uint32_t& currentTime);
+    virtual void _invoke_option_update(uint32_t currentTime);
 };
 
 } // namespace smooth_ui_toolkit

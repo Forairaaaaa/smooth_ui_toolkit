@@ -12,6 +12,7 @@
 #include "core/animation/animate_value/animate_value.hpp"
 #include <cstdint>
 #include <string>
+#include <string_view>
 
 namespace smooth_ui_toolkit {
 namespace color {
@@ -24,7 +25,7 @@ class Rgb_t;
  * @param hex
  * @return Rgb_t
  */
-Rgb_t hex_to_rgb(const uint32_t& hex);
+Rgb_t hex_to_rgb(uint32_t hex);
 
 /**
  * @brief Convert a hex color to a rgb color, e.g. #ffffff -> rgb(255, 255, 255)
@@ -32,7 +33,7 @@ Rgb_t hex_to_rgb(const uint32_t& hex);
  * @param hex
  * @return Rgb_t
  */
-Rgb_t hex_to_rgb(const std::string& hex);
+Rgb_t hex_to_rgb(std::string_view hex);
 
 /**
  * @brief Convert a rgb color to a hex color, e.g. rgb(255, 255, 255) -> 0xffffff
@@ -84,7 +85,7 @@ struct Rgb_t {
     {
         *this = hex_to_rgb(hex);
     }
-    Rgb_t(const std::string& hex)
+    Rgb_t(std::string_view hex)
     {
         *this = hex_to_rgb(hex);
     }
@@ -94,7 +95,7 @@ struct Rgb_t {
         *this = hex_to_rgb(hex);
         return *this;
     }
-    Rgb_t& operator=(const std::string& hex)
+    Rgb_t& operator=(std::string_view hex)
     {
         *this = hex_to_rgb(hex);
         return *this;
@@ -152,7 +153,7 @@ struct AnimateRgb_t : public Rgb_t {
     {
         teleport(hex_to_rgb(hex));
     }
-    inline void teleport(const std::string& hex)
+    inline void teleport(std::string_view hex)
     {
         teleport(hex_to_rgb(hex));
     }
@@ -171,7 +172,7 @@ struct AnimateRgb_t : public Rgb_t {
     {
         move(hex_to_rgb(hex));
     }
-    inline void move(const std::string& hex)
+    inline void move(std::string_view hex)
     {
         move(hex_to_rgb(hex));
     }
@@ -186,7 +187,7 @@ struct AnimateRgb_t : public Rgb_t {
         move(hex);
         return *this;
     }
-    AnimateRgb_t& operator=(const std::string& hex)
+    AnimateRgb_t& operator=(std::string_view hex)
     {
         move(hex);
         return *this;

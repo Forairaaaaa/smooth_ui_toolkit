@@ -77,3 +77,9 @@ target_link_libraries(fixed_selector_h_stack_menu ${PROJECT_NAME} mooncake_log r
 
 add_executable(fixed_selector_v_stack_curved_menu ./widget/fixed_selector_v_stack_curved_menu.cpp)
 target_link_libraries(fixed_selector_v_stack_curved_menu ${PROJECT_NAME} mooncake_log raylib ${SDL2_LIBRARIES})
+
+add_executable(breakout ./games/breakout.cpp)
+target_link_libraries(breakout ${PROJECT_NAME} mooncake_log raylib ${SDL2_LIBRARIES})
+
+add_executable(dvd_screensaver ./games/dvd_screensaver.cpp)
+target_link_libraries(dvd_screensaver ${PROJECT_NAME} mooncake_log raylib ${SDL2_LIBRARIES})

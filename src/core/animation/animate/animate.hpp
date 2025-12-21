@@ -66,7 +66,7 @@ public:
     // spring 动画配置，调用此方法，动画类型将自动切换为 spring
     SpringOptions_t& springOptions();
     // 值更新回调
-    void onUpdate(std::function<void(const float&)> callback)
+    void onUpdate(std::function<void(float)> callback)
     {
         _on_update = callback;
     }
@@ -113,7 +113,7 @@ public:
      * @param start
      * @param end
      */
-    void retarget(const float& start, const float& end);
+    void retarget(float start, float end);
 
     /**
      * @brief Update animation, keep calling this method to update animation, callbacks will be invoked in this method
@@ -126,7 +126,7 @@ public:
      *
      * @param currentTime Current time in seconds
      */
-    void update(const float& currentTime);
+    void update(float currentTime);
 
     /**
      * @brief Is key frame generator done
@@ -155,7 +155,7 @@ public:
     }
 
 protected:
-    std::function<void(const float&)> _on_update;
+    std::function<void(float)> _on_update;
     std::function<void()> _on_complete;
     std::unique_ptr<KeyFrameGenerator> _key_frame_generator;
     KeyFrameGenerator& get_key_frame_generator();
@@ -165,7 +165,7 @@ protected:
     int _repeat_count = 0;
     bool _generator_dirty = true;
 
-    void update_state_machine(const float& currentTime);
+    void update_state_machine(float currentTime);
 };
 
 } // namespace smooth_ui_toolkit

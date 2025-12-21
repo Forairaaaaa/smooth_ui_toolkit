@@ -66,7 +66,6 @@ private:
 };
 
 template <>
-class Signal<void> : public Signal<> {
-};
+class Signal<void> : public Signal<> {};
 
 } // namespace smooth_ui_toolkit

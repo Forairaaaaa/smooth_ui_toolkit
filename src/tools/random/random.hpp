@@ -9,6 +9,7 @@
  *
  */
 #pragma once
+#include "core/color/color.hpp"
 #include <mutex>
 #include <random>
 #include <vector>
@@ -37,6 +38,15 @@ public:
         return std::uniform_int_distribution<int>{a, b}(_rng);
     }
 
+    float getFloat(float a, float b)
+    {
+        std::lock_guard<std::mutex> lock(_mutex);
+        if (a > b) {
+            std::swap(a, b);
+        }
+        return std::uniform_real_distribution<float>{a, b}(_rng);
+    }
+
     double getDouble(double a, double b)
     {
         std::lock_guard<std::mutex> lock(_mutex);
@@ -44,6 +54,15 @@ public:
             std::swap(a, b);
         }
         return std::uniform_real_distribution<double>{a, b}(_rng);
+    }
+
+    color::Rgb_t getRgbColor()
+    {
+        color::Rgb_t color;
+        color.r = static_cast<uint8_t>(getInt(0, 255));
+        color.g = static_cast<uint8_t>(getInt(0, 255));
+        color.b = static_cast<uint8_t>(getInt(0, 255));
+        return color;
     }
 
     template <typename T>

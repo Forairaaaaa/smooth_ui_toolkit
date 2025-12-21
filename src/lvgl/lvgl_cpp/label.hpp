@@ -11,7 +11,7 @@
 #pragma once
 #include "obj.hpp"
 #include <lvgl.h>
-#include <string>
+#include <string_view>
 
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
@@ -24,9 +24,9 @@ class Label : public Widget<lv_label_create> {
 public:
     using Widget::Widget;
 
-    void setText(const std::string& text)
+    void setText(std::string_view text)
     {
-        lv_label_set_text(this->raw_ptr(), text.c_str());
+        lv_label_set_text(this->raw_ptr(), text.data());
     }
 
     const char* getText()

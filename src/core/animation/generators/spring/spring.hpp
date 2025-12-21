@@ -47,8 +47,8 @@ public:
     }
 
     virtual void init() override;
-    virtual void retarget(const float& start, const float& end) override;
-    virtual bool next(const float& t) override;
+    virtual void retarget(float start, float end) override;
+    virtual bool next(float t) override;
     virtual AnimationType type() const override
     {
         return AnimationType::Spring;
@@ -70,12 +70,12 @@ protected:
     // 速度计算相关常量
     float _velocity_c1, _velocity_c2; // 速度公式系数
 
-    void calc_velocity(const float& t);
-    void calc_velocity_analytical(const float& t);
+    void calc_velocity(float t);
+    void calc_velocity_analytical(float t);
     float calc_angular_freq(float undampedFreq, float dampingRatio);
 
     // 内联位置计算函数
-    inline float calc_position(const float& t);
+    inline float calc_position(float t);
 };
 
 } // namespace smooth_ui_toolkit

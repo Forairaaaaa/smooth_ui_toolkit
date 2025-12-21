@@ -20,7 +20,7 @@ void Easing::init()
     _inv_duration = 1.0f / easingOptions.duration; // 预计算持续时间倒数
 }
 
-void Easing::retarget(const float& start, const float& end)
+void Easing::retarget(float start, float end)
 {
     this->start = start;
     this->end = end;
@@ -28,7 +28,7 @@ void Easing::retarget(const float& start, const float& end)
     done = false;
 }
 
-bool Easing::next(const float& t)
+bool Easing::next(float t)
 {
     if (done) {
         return done;

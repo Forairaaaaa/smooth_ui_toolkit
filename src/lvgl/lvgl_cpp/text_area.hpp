@@ -11,7 +11,7 @@
 #pragma once
 #include "obj.hpp"
 #include <lvgl.h>
-#include <string>
+#include <string_view>
 
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
@@ -29,9 +29,9 @@ public:
         lv_textarea_add_char(this->raw_ptr(), c);
     }
 
-    void addText(const std::string& text)
+    void addText(std::string_view text)
     {
-        lv_textarea_add_text(this->raw_ptr(), text.c_str());
+        lv_textarea_add_text(this->raw_ptr(), text.data());
     }
 
     void deleteChar()
@@ -44,14 +44,14 @@ public:
         lv_textarea_delete_char_forward(this->raw_ptr());
     }
 
-    void setText(const std::string& text)
+    void setText(std::string_view text)
     {
-        lv_textarea_set_text(this->raw_ptr(), text.c_str());
+        lv_textarea_set_text(this->raw_ptr(), text.data());
     }
 
-    void setPlaceholderText(const std::string& text)
+    void setPlaceholderText(std::string_view text)
     {
-        lv_textarea_set_placeholder_text(this->raw_ptr(), text.c_str());
+        lv_textarea_set_placeholder_text(this->raw_ptr(), text.data());
     }
 
     void setCursorPos(int32_t pos)
@@ -69,9 +69,9 @@ public:
         lv_textarea_set_password_mode(this->raw_ptr(), enable);
     }
 
-    void setPasswordBullet(const std::string& bullet)
+    void setPasswordBullet(std::string_view bullet)
     {
-        lv_textarea_set_password_bullet(this->raw_ptr(), bullet.c_str());
+        lv_textarea_set_password_bullet(this->raw_ptr(), bullet.data());
     }
 
     void setOneLine(bool enable)
@@ -79,9 +79,9 @@ public:
         lv_textarea_set_one_line(this->raw_ptr(), enable);
     }
 
-    void setAcceptedChars(const std::string& list)
+    void setAcceptedChars(std::string_view list)
     {
-        lv_textarea_set_accepted_chars(this->raw_ptr(), list.c_str());
+        lv_textarea_set_accepted_chars(this->raw_ptr(), list.data());
     }
 
     void setMaxLength(uint32_t num)
@@ -89,9 +89,9 @@ public:
         lv_textarea_set_max_length(this->raw_ptr(), num);
     }
 
-    void setInsertReplace(const std::string& txt)
+    void setInsertReplace(std::string_view txt)
     {
-        lv_textarea_set_insert_replace(this->raw_ptr(), txt.c_str());
+        lv_textarea_set_insert_replace(this->raw_ptr(), txt.data());
     }
 
     void setTextSelection(bool enable)

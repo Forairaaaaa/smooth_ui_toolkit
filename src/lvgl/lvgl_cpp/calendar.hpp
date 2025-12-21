@@ -66,7 +66,8 @@ public:
                         on_value_changed->emit(date);
                     }
                 },
-                LV_EVENT_VALUE_CHANGED, _on_value_changed.get());
+                LV_EVENT_VALUE_CHANGED,
+                _on_value_changed.get());
         }
         return *_on_value_changed;
     }

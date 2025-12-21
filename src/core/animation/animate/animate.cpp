@@ -89,7 +89,7 @@ void Animate::cancel()
     get_key_frame_generator().value = start;
 }
 
-void Animate::retarget(const float& start, const float& end)
+void Animate::retarget(float start, float end)
 {
     get_key_frame_generator().retarget(start, end);
     if (_playing_state != AnimateState::Paused) {
@@ -104,12 +104,12 @@ void Animate::update()
     update(currentTime);
 }
 
-void Animate::update(const float& currentTime)
+void Animate::update(float currentTime)
 {
     update_state_machine(currentTime);
 }
 
-void Animate::update_state_machine(const float& currentTime)
+void Animate::update_state_machine(float currentTime)
 {
     // Handle delay state
     if (_playing_state == AnimateState::Delaying) {
