@@ -11,6 +11,7 @@
 #pragma once
 #include "core/animation/animate_value/animate_value.hpp"
 #include <cstdint>
+#include <string>
 #include <string_view>
 
 namespace smooth_ui_toolkit {

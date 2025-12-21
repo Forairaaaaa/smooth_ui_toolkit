@@ -9,6 +9,8 @@
  *
  */
 #include "color.hpp"
+#include <cstdlib>
+#include <cstdio>
 
 namespace smooth_ui_toolkit {
 namespace color {
