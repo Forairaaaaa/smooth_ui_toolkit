@@ -81,7 +81,7 @@ private:
     Random()
     {
 #ifdef ESP_PLATFORM
-        rng.seed(esp_random());
+        _rng.seed(esp_random());
 #else
         std::random_device rd;
         _rng.seed(rd());
