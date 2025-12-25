@@ -91,6 +91,8 @@ void Animate::cancel()
 
 void Animate::retarget(float start, float end)
 {
+    this->start = start;
+    this->end = end;
     get_key_frame_generator().retarget(start, end);
     if (_playing_state != AnimateState::Paused) {
         _playing_state = AnimateState::Idle;
