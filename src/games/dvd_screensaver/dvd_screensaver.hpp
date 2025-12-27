@@ -111,6 +111,7 @@ protected:
     virtual void onBuildLevel() = 0;
     virtual void onInit() {}
     virtual void onRender(float dt) = 0;
+    virtual void onLogoCollide(int logoGroupId) {}
 
     World& getWorld()
     {
@@ -128,7 +129,11 @@ protected:
 
     void addLogo(int groupId, Vector2 pos, Vector2 size, Vector2 direction, float speed)
     {
-        _world.createObject(std::make_unique<Logo>(groupId, pos, size, direction, speed));
+        auto logo = _world.createObject(std::make_unique<Logo>(groupId, pos, size, direction, speed));
+        const auto logo_id = logo->groupId;
+        logo->get<Area>()->onEntered.connect([this, logo_id](GameObject& other) {
+            onLogoCollide(logo_id);
+        });
     }
 
     void addScreenFrameAsWall(Vector2 screenSize)
