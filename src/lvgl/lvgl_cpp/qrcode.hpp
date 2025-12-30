@@ -47,6 +47,7 @@ public:
         return lv_qrcode_update(this->raw_ptr(), data.data(), data.size());
     }
 
+#if LVGL_VERSION_MAJOR >= 9 && LVGL_VERSION_MINOR >= 4
     void setData(std::string_view data)
     {
         lv_qrcode_set_data(this->raw_ptr(), data.data());
@@ -56,6 +57,7 @@ public:
     {
         lv_qrcode_set_quiet_zone(this->raw_ptr(), enable);
     }
+#endif
 };
 
 } // namespace lvgl_cpp
