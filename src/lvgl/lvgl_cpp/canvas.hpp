@@ -9,8 +9,11 @@
  *
  */
 #pragma once
-#include "obj.hpp"
 #include <lvgl.h>
+
+#if LV_USE_CANVAS
+
+#include "obj.hpp"
 #include <cstdint>
 #include <vector>
 
@@ -84,3 +87,5 @@ protected:
 
 } // namespace lvgl_cpp
 } // namespace smooth_ui_toolkit
+
+#endif

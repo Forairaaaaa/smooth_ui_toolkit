@@ -9,6 +9,8 @@
  *
  */
 #pragma once
+#if LV_USE_TEXTAREA
+
 #include "obj.hpp"
 #include <lvgl.h>
 #include <string_view>
@@ -107,3 +109,5 @@ public:
 
 } // namespace lvgl_cpp
 } // namespace smooth_ui_toolkit
+
+#endif

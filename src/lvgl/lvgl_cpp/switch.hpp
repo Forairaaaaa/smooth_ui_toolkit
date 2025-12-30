@@ -9,9 +9,12 @@
  *
  */
 #pragma once
+#include <lvgl.h>
+
+#if LV_USE_SWITCH
+
 #include "obj.hpp"
 #include "tools/event/signal.hpp"
-#include <lvgl.h>
 #include <memory>
 
 namespace smooth_ui_toolkit {
@@ -60,3 +63,5 @@ protected:
 
 } // namespace lvgl_cpp
 } // namespace smooth_ui_toolkit
+
+#endif

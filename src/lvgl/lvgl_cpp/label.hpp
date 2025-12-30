@@ -9,8 +9,11 @@
  *
  */
 #pragma once
-#include "obj.hpp"
 #include <lvgl.h>
+
+#if LV_USE_LABEL
+
+#include "obj.hpp"
 #include <string_view>
 
 namespace smooth_ui_toolkit {
@@ -42,3 +45,5 @@ public:
 
 } // namespace lvgl_cpp
 } // namespace smooth_ui_toolkit
+
+#endif

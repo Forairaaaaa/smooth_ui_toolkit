@@ -28,6 +28,7 @@
 #include "lvgl_cpp/text_area.hpp"
 #include "lvgl_cpp/table.hpp"
 #include "lvgl_cpp/screen.hpp"
+#include "lvgl_cpp/qrcode.hpp"
 #include "number_flow/digit_flow.hpp"
 #include "number_flow/number_flow.hpp"
 #include "number_flow/number_flow_float.hpp"

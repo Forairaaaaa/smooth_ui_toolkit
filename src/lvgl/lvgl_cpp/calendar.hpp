@@ -9,9 +9,12 @@
  *
  */
 #pragma once
+#include <lvgl.h>
+
+#if LV_USE_CALENDAR
+
 #include "obj.hpp"
 #include "tools/event/signal.hpp"
-#include <lvgl.h>
 
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
@@ -78,3 +81,5 @@ protected:
 
 } // namespace lvgl_cpp
 } // namespace smooth_ui_toolkit
+
+#endif
