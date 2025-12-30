@@ -9,8 +9,11 @@
  *
  */
 #pragma once
-#include "obj.hpp"
 #include <lvgl.h>
+
+#if LV_USE_TABLE
+
+#include "obj.hpp"
 #include <cstdint>
 #include <string_view>
 
@@ -128,3 +131,5 @@ private:
 
 } // namespace lvgl_cpp
 } // namespace smooth_ui_toolkit
+
+#endif

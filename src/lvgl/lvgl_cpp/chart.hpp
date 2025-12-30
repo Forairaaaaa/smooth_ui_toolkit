@@ -9,8 +9,11 @@
  *
  */
 #pragma once
-#include "obj.hpp"
 #include <lvgl.h>
+
+#if LV_USE_CHART
+
+#include "obj.hpp"
 #include <vector>
 
 namespace smooth_ui_toolkit {
@@ -108,3 +111,5 @@ protected:
 
 } // namespace lvgl_cpp
 } // namespace smooth_ui_toolkit
+
+#endif

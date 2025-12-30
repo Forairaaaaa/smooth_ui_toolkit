@@ -9,8 +9,11 @@
  *
  */
 #pragma once
-#include "obj.hpp"
 #include <lvgl.h>
+
+#if LV_USE_SPINNER
+
+#include "obj.hpp"
 
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
@@ -31,3 +34,5 @@ public:
 
 } // namespace lvgl_cpp
 } // namespace smooth_ui_toolkit
+
+#endif

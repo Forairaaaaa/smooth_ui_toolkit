@@ -9,9 +9,12 @@
  *
  */
 #pragma once
+#include <lvgl.h>
+
+#if LV_USE_BUTTON && LV_USE_LABEL
+
 #include "obj.hpp"
 #include "label.hpp"
-#include <lvgl.h>
 #include <memory>
 
 namespace smooth_ui_toolkit {
@@ -40,3 +43,5 @@ protected:
 
 } // namespace lvgl_cpp
 } // namespace smooth_ui_toolkit
+
+#endif

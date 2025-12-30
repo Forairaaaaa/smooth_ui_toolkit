@@ -9,9 +9,12 @@
  *
  */
 #pragma once
+#include <lvgl.h>
+
+#if LV_USE_ROLLER
+
 #include "obj.hpp"
 #include "tools/event/signal.hpp"
-#include <lvgl.h>
 #include <string>
 #include <vector>
 
@@ -102,3 +105,5 @@ protected:
 
 } // namespace lvgl_cpp
 } // namespace smooth_ui_toolkit
+
+#endif
