@@ -255,11 +255,11 @@ Animate::Animate(Animate&& other) noexcept
       _on_complete(std::move(other._on_complete)),
       _key_frame_generator(std::move(other._key_frame_generator)),
       _playing_state(other._playing_state),
+      _saved_state(other._saved_state),
       _last_tick(other._last_tick),
       _current_duration(other._current_duration),
       _repeat_count(other._repeat_count),
-      _generator_dirty(other._generator_dirty),
-      _saved_state(other._saved_state)
+      _generator_dirty(other._generator_dirty)
 {
     // Reset other object to default state
     other._playing_state = AnimateState::Idle;
@@ -280,11 +280,11 @@ Animate& Animate::operator=(Animate&& other) noexcept
         _on_complete = std::move(other._on_complete);
         _key_frame_generator = std::move(other._key_frame_generator);
         _playing_state = other._playing_state;
+        _saved_state = other._saved_state;
         _last_tick = other._last_tick;
         _current_duration = other._current_duration;
         _repeat_count = other._repeat_count;
         _generator_dirty = other._generator_dirty;
-        _saved_state = other._saved_state;
 
         // Reset other object to default state
         other._playing_state = AnimateState::Idle;
