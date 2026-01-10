@@ -47,25 +47,27 @@ void Animate::play()
         return;
     }
 
-    // If paused, add pause time to start time, resume animation
+    // If paused, resume
     if (_playing_state == AnimateState::Paused) {
-        _start_time += ui_hal::get_tick_s() - _pause_time;
+        _playing_state = _saved_state;
+        _last_tick = ui_hal::get_tick_s();
     }
     // If not, reset repeat count and start time, start animation
     else {
         _repeat_count = repeat;
-        _start_time = ui_hal::get_tick_s();
+        _current_duration = 0.0f;
+        _playing_state = delay > 0 ? AnimateState::Delaying : AnimateState::Playing;
+        get_key_frame_generator().done = false;
+        _last_tick = ui_hal::get_tick_s();
     }
-
-    _playing_state = delay > 0 ? AnimateState::Delaying : AnimateState::Playing;
-    get_key_frame_generator().done = false;
 }
 
 void Animate::pause()
 {
-    if (_playing_state == AnimateState::Playing || _playing_state == AnimateState::Delaying) {
+    if (_playing_state == AnimateState::Playing || _playing_state == AnimateState::Delaying ||
+        _playing_state == AnimateState::RepeatDelaying) {
+        _saved_state = _playing_state;
         _playing_state = AnimateState::Paused;
-        _pause_time = ui_hal::get_tick_s();
     }
 }
 
@@ -108,11 +110,35 @@ void Animate::update()
 
 void Animate::update(float currentTime)
 {
-    update_state_machine(currentTime);
+    float dt = currentTime - _last_tick;
+    _last_tick = currentTime;
+    if (dt < 0) {
+        dt = 0;
+    }
+    update_state_machine(dt);
 }
 
-void Animate::update_state_machine(float currentTime)
+void Animate::updateWithDelta(float dt)
 {
+    update_state_machine(dt);
+}
+
+void Animate::update_state_machine(float dt)
+{
+    if (_playing_state == AnimateState::Completed || _playing_state == AnimateState::Cancelled) {
+        get_key_frame_generator().done = true;
+        if (_on_update) {
+            _on_update(value());
+        }
+        return;
+    }
+
+    if (_playing_state == AnimateState::Idle || _playing_state == AnimateState::Paused) {
+        return;
+    }
+
+    _current_duration += dt;
+
     // Handle delay state
     if (_playing_state == AnimateState::Delaying) {
         // Invoke callback with current value
@@ -120,11 +146,13 @@ void Animate::update_state_machine(float currentTime)
             _on_update(value());
         }
         // Check delay timeout
-        if (currentTime - _start_time >= delay) {
+        if (_current_duration >= delay) {
+            float overflow = _current_duration - delay;
             _playing_state = AnimateState::Playing;
-            _start_time = currentTime;
+            _current_duration = overflow;
+        } else {
+            return;
         }
-        return;
     }
 
     // Handle playing state
@@ -134,7 +162,7 @@ void Animate::update_state_machine(float currentTime)
         }
 
         // Update key frame
-        get_key_frame_generator().next(currentTime - _start_time);
+        get_key_frame_generator().next(_current_duration);
         if (_on_update) {
             _on_update(value());
         }
@@ -156,15 +184,21 @@ void Animate::update_state_machine(float currentTime)
                 // Check if we need repeat delay
                 if (repeatDelay > 0) {
                     _playing_state = AnimateState::RepeatDelaying;
-                    _start_time = currentTime;
+                    _current_duration = 0;
                 } else {
                     // Reset animation immediately
                     if (repeatType == AnimateRepeatType::Reverse) {
                         std::swap(start, end);
                     }
                     init();
-                    _playing_state = delay > 0 ? AnimateState::Delaying : AnimateState::Playing;
-                    _start_time = currentTime;
+
+                    if (delay > 0) {
+                        _playing_state = AnimateState::Delaying;
+                        _current_duration = 0;
+                    } else {
+                        _playing_state = AnimateState::Playing;
+                        _current_duration = 0;
+                    }
                 }
             }
         }
@@ -174,23 +208,21 @@ void Animate::update_state_machine(float currentTime)
     // Handle repeat delay state
     if (_playing_state == AnimateState::RepeatDelaying) {
         // Check repeat delay timeout
-        if (currentTime - _start_time >= repeatDelay) {
+        if (_current_duration >= repeatDelay) {
+            float overflow = _current_duration - repeatDelay;
             // Reset animation
             if (repeatType == AnimateRepeatType::Reverse) {
                 std::swap(start, end);
             }
             init();
-            _playing_state = delay > 0 ? AnimateState::Delaying : AnimateState::Playing;
-            _start_time = currentTime;
-        }
-        return;
-    }
 
-    // Handle completed/cancelled states
-    if (_playing_state == AnimateState::Completed || _playing_state == AnimateState::Cancelled) {
-        get_key_frame_generator().done = true;
-        if (_on_update) {
-            _on_update(value());
+            if (delay > 0) {
+                _playing_state = AnimateState::Delaying;
+                _current_duration = overflow;
+            } else {
+                _playing_state = AnimateState::Playing;
+                _current_duration = overflow;
+            }
         }
         return;
     }
@@ -223,10 +255,11 @@ Animate::Animate(Animate&& other) noexcept
       _on_complete(std::move(other._on_complete)),
       _key_frame_generator(std::move(other._key_frame_generator)),
       _playing_state(other._playing_state),
-      _start_time(other._start_time),
-      _pause_time(other._pause_time),
+      _last_tick(other._last_tick),
+      _current_duration(other._current_duration),
       _repeat_count(other._repeat_count),
-      _generator_dirty(other._generator_dirty)
+      _generator_dirty(other._generator_dirty),
+      _saved_state(other._saved_state)
 {
     // Reset other object to default state
     other._playing_state = AnimateState::Idle;
@@ -247,10 +280,11 @@ Animate& Animate::operator=(Animate&& other) noexcept
         _on_complete = std::move(other._on_complete);
         _key_frame_generator = std::move(other._key_frame_generator);
         _playing_state = other._playing_state;
-        _start_time = other._start_time;
-        _pause_time = other._pause_time;
+        _last_tick = other._last_tick;
+        _current_duration = other._current_duration;
         _repeat_count = other._repeat_count;
         _generator_dirty = other._generator_dirty;
+        _saved_state = other._saved_state;
 
         // Reset other object to default state
         other._playing_state = AnimateState::Idle;

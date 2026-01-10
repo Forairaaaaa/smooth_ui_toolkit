@@ -129,6 +129,13 @@ public:
     void update(float currentTime);
 
     /**
+     * @brief Update animation with delta time
+     *
+     * @param dt Delta time in seconds
+     */
+    void updateWithDelta(float dt);
+
+    /**
      * @brief Is key frame generator done
      *
      * @return true
@@ -160,12 +167,13 @@ protected:
     std::unique_ptr<KeyFrameGenerator> _key_frame_generator;
     KeyFrameGenerator& get_key_frame_generator();
     AnimateState _playing_state = AnimateState::Idle;
-    float _start_time = 0.0f;
-    float _pause_time = 0.0f;
+    AnimateState _saved_state = AnimateState::Idle;
+    float _last_tick = 0.0f;
+    float _current_duration = 0.0f;
     int _repeat_count = 0;
     bool _generator_dirty = true;
 
-    void update_state_machine(float currentTime);
+    void update_state_machine(float dt);
 };
 
 } // namespace smooth_ui_toolkit
