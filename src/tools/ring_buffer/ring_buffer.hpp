@@ -17,70 +17,65 @@
 
 namespace smooth_ui_toolkit {
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @tparam Capacity
+ */
 template <typename T, size_t Capacity>
-class ring_buffer {
+class RingBuffer {
 public:
-    ring_buffer()
-    {
-        _data.buffer = std::make_unique<T[]>(Capacity);
-    }
-    ~ring_buffer()
-    {
-        _data.buffer.reset();
-    }
+    RingBuffer() : _buffer(std::make_unique<T[]>(Capacity)) {}
 
-    // Allow overwrite the oldest data when buffer is full
+    RingBuffer(const RingBuffer&) = delete;
+    RingBuffer& operator=(const RingBuffer&) = delete;
+
+    ~RingBuffer() = default;
+
     void setAllowOverwrite(bool allowOverwrite)
     {
-        _data.allow_overwrite = allowOverwrite;
+        _allow_overwrite = allowOverwrite;
     }
 
-    size_t capacity()
+    constexpr size_t capacity() const
     {
-        return _data.capacity;
+        return Capacity;
     }
-    void resetCapacity(size_t capacity)
+    size_t size() const
     {
-        if (_data.capacity == capacity) {
-            return;
-        }
-        _data.capacity = capacity;
-        _data.buffer = std::make_unique<T[]>(_data.capacity);
+        return _current_size;
     }
-
-    bool full()
+    bool empty() const
     {
-        // return (_data.w_index + 1) % _data.capacity == _data.r_index;
-        return _data.current_size == _data.capacity;
+        return _current_size == 0;
     }
-    bool empty()
+    bool full() const
     {
-        // return _data.r_index == _data.w_index;
-        return _data.current_size == 0;
+        return _current_size == Capacity;
     }
 
-    size_t size()
+    void clear()
     {
-        return _data.current_size;
+        _w_index = 0;
+        _r_index = 0;
+        _current_size = 0;
     }
 
     void push(const T& value)
     {
         if (full()) {
-            // If allow overwrite, push read index
-            if (_data.allow_overwrite) {
-                _data.r_index = (_data.r_index + 1) % _data.capacity;
+            if (_allow_overwrite) {
+                _r_index = (_r_index + 1) % Capacity;
             } else {
                 return;
             }
+        } else {
+            _current_size++;
         }
-        _data.buffer[_data.w_index] = value;
-        _data.w_index = (_data.w_index + 1) % _data.capacity;
 
-        _data.current_size++;
-        if (_data.current_size > _data.capacity) {
-            _data.current_size = _data.capacity;
-        }
+        _buffer[_w_index] = value;
+        _w_index = (_w_index + 1) % Capacity;
     }
 
     void pop()
@@ -88,21 +83,23 @@ public:
         if (empty()) {
             return;
         }
-        _data.r_index = (_data.r_index + 1) % _data.capacity;
-        _data.current_size--;
+        _r_index = (_r_index + 1) % Capacity;
+        _current_size--;
     }
 
     T& front()
     {
-        return _data.buffer[_data.r_index];
+        return _buffer[_r_index];
     }
+    const T& front() const
+    {
+        return _buffer[_r_index];
+    }
+
     T& back()
     {
-        if (_data.w_index == 0) {
-            return _data.buffer[_data.capacity - 1];
-        } else {
-            return _data.buffer[_data.w_index - 1];
-        }
+        size_t last_idx = (_w_index == 0) ? (Capacity - 1) : (_w_index - 1);
+        return _buffer[last_idx];
     }
 
     void popAll(std::function<void(T&)> onValue)
@@ -113,53 +110,45 @@ public:
         }
     }
 
-    void peekAll(std::function<void(T&, bool& stopPeeking)> onValue)
+    void peekAll(std::function<void(const T&, bool& stopPeeking)> onValue) const
     {
-        if (empty()) {
-            return;
-        }
-        size_t peek_index = _data.r_index;
+        size_t count = _current_size;
+        size_t peek_idx = _r_index;
         bool stop_peeking = false;
-        while (peek_index != _data.w_index) {
-            onValue(_data.buffer[peek_index], stop_peeking);
-            peek_index = (peek_index + 1) % _data.capacity;
+
+        for (size_t i = 0; i < count; ++i) {
+            onValue(_buffer[peek_idx], stop_peeking);
             if (stop_peeking) {
                 break;
             }
+            peek_idx = (peek_idx + 1) % Capacity;
         }
     }
 
+    T* rawBuffer()
+    {
+        return _buffer.get();
+    }
     const T* rawBuffer() const
     {
-        return _data.buffer;
+        return _buffer.get();
     }
 
-    const size_t& readIndex()
+    size_t readIndex() const
     {
-        return _data.r_index;
+        return _r_index;
     }
-
-    const size_t& writeIndex()
+    size_t writeIndex() const
     {
-        return _data.w_index;
-    }
-
-    void clear()
-    {
-        _data.w_index = 0;
-        _data.r_index = 0;
+        return _w_index;
     }
 
 private:
-    struct Data_t {
-        std::unique_ptr<T[]> buffer;
-        size_t capacity = Capacity;
-        size_t w_index = 0;
-        size_t r_index = 0;
-        size_t current_size = 0;
-        bool allow_overwrite = true;
-    };
-    Data_t _data;
+    std::unique_ptr<T[]> _buffer;
+    size_t _w_index = 0;
+    size_t _r_index = 0;
+    size_t _current_size = 0;
+    bool _allow_overwrite = true;
 };
 
 } // namespace smooth_ui_toolkit
