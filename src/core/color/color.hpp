@@ -139,6 +139,16 @@ struct AnimateRgb_t : public Rgb_t {
         b = b_anim;
     }
 
+    inline void updateWithDelta(float dt)
+    {
+        r_anim.updateWithDelta(dt);
+        g_anim.updateWithDelta(dt);
+        b_anim.updateWithDelta(dt);
+        r = r_anim.directValue();
+        g = g_anim.directValue();
+        b = b_anim.directValue();
+    }
+
     inline void teleport(uint8_t r, uint8_t g, uint8_t b)
     {
         r_anim.teleport(r);
