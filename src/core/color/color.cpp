@@ -28,7 +28,11 @@ Rgb_t hex_to_rgb(std::string_view hex)
         return rgb;
     }
 
-    std::sscanf(hex.data(), "#%2hhx%2hhx%2hhx", &rgb.r, &rgb.g, &rgb.b);
+    uint32_t value = std::strtoul(hex.data() + 1, nullptr, 16);
+    rgb.r = (value >> 16) & 0xFF;
+    rgb.g = (value >> 8) & 0xFF;
+    rgb.b = value & 0xFF;
+
     return rgb;
 }
 
