@@ -52,6 +52,16 @@ public:
         lv_obj_align(this->raw_ptr(), align, x_ofs, y_ofs);
     }
 
+    void alignTo(const Object& base, lv_align_t align, int32_t x_ofs, int32_t y_ofs)
+    {
+        lv_obj_align_to(this->raw_ptr(), base.raw_ptr(), align, x_ofs, y_ofs);
+    }
+
+    void center()
+    {
+        lv_obj_center(this->raw_ptr());
+    }
+
     void setOpa(lv_opa_t opa, lv_style_selector_t selector = LV_PART_MAIN)
     {
         lv_obj_set_style_opa(this->raw_ptr(), opa, selector);
@@ -188,6 +198,11 @@ public:
         lv_obj_set_style_pad_bottom(this->raw_ptr(), bottom, selector);
         lv_obj_set_style_pad_left(this->raw_ptr(), left, selector);
         lv_obj_set_style_pad_right(this->raw_ptr(), right, selector);
+    }
+
+    void setPaddingAll(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_pad_all(this->raw_ptr(), value, selector);
     }
 
     void setOutlineWidth(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
