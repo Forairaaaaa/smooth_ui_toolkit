@@ -52,6 +52,16 @@ public:
         lv_obj_align(this->raw_ptr(), align, x_ofs, y_ofs);
     }
 
+    void alignTo(const Object& base, lv_align_t align, int32_t x_ofs, int32_t y_ofs)
+    {
+        lv_obj_align_to(this->raw_ptr(), base.raw_ptr(), align, x_ofs, y_ofs);
+    }
+
+    void center()
+    {
+        lv_obj_center(this->raw_ptr());
+    }
+
     void setOpa(lv_opa_t opa, lv_style_selector_t selector = LV_PART_MAIN)
     {
         lv_obj_set_style_opa(this->raw_ptr(), opa, selector);
