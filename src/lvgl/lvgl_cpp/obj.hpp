@@ -190,6 +190,11 @@ public:
         lv_obj_set_style_pad_right(this->raw_ptr(), right, selector);
     }
 
+    void setPaddingAll(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
+    {
+        lv_obj_set_style_pad_all(this->raw_ptr(), value, selector);
+    }
+
     void setOutlineWidth(int32_t value, lv_style_selector_t selector = LV_PART_MAIN)
     {
         lv_obj_set_style_outline_width(this->raw_ptr(), value, selector);
