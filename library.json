@@ -1,28 +1,29 @@
 {
-    "name": "SmoothUIToolKit",
-    "version": "2.8.1",
-    "description": "UI 动画工具集",
-    "keywords": "ui, smooth, spring animation",
-    "repository": {
-      "type": "git",
-      "url": "https://github.com/Forairaaaaa/smooth_ui_toolkit.git"
-    },
-    "authors": [
-      {
-        "name": "Forairaaaaa",
-        "email": "applesyqd@outlook.com",
-        "url": "https://github.com/Forairaaaaa"
-      }
-    ],
-    "license": "MIT",
-    "homepage": "https://github.com/Forairaaaaa/smooth_ui_toolkit.git",
-    "dependencies": {
-    },
-    "frameworks": "*",
-    "platforms": "*",
-    "build" : {
-      "srcDir": ".",
-      "includeDir": "./src"
+  "name": "SmoothUIToolKit",
+  "version": "2.11.0",
+  "description": "UI 动画工具集",
+  "keywords": "ui, smooth, spring animation",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Forairaaaaa/smooth_ui_toolkit.git"
+  },
+  "authors": [
+    {
+      "name": "Forairaaaaa",
+      "email": "applesyqd@outlook.com",
+      "url": "https://github.com/Forairaaaaa"
     }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Forairaaaaa/smooth_ui_toolkit.git",
+  "dependencies": {},
+  "frameworks": "*",
+  "platforms": "*",
+  "build": {
+    "srcDir": ".",
+    "includeDir": "./src",
+    "flags": [
+      "-std=c++17"
+    ]
   }
-  
+}
