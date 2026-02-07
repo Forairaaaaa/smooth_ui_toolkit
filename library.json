@@ -23,7 +23,8 @@
     "srcDir": ".",
     "includeDir": "./src",
     "flags": [
-      "-std=c++17"
+      "-std=c++17",
+      "-I src/lvgl"
     ]
   }
 }
