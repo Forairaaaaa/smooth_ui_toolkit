@@ -197,7 +197,7 @@ public:
      */
     PointerWrapper& operator=(LvWrapperType&& obj)
     {
-        this->lv_obj = std::swap(this->lv_obj, obj.lv_obj);
+        std::swap(this->lv_obj, obj.lv_obj);
         this->owns_ptr = obj.owns_ptr;
         return *this;
     }
