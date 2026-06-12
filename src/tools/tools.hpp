@@ -11,6 +11,8 @@
 #pragma once
 #include "event/event_queue.hpp"
 #include "event/signal.hpp"
+#include "observable/observable.hpp"
+#include "observable/single_observable.hpp"
 #include "ring_buffer/ring_buffer.hpp"
 #include "random/random.hpp"
 #include "object_pool/object_pool.hpp"
