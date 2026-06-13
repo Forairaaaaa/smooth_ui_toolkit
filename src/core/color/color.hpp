@@ -11,6 +11,7 @@
 #pragma once
 #include "core/animation/animate_value/animate_value.hpp"
 #include <cstdint>
+#include <functional>
 #include <string>
 #include <string_view>
 
@@ -116,6 +117,7 @@ struct AnimateRgb_t : public Rgb_t {
     using Rgb_t::Rgb_t;
 
     float duration = 1.0f;
+    std::function<float(float)> easingFunction = ease::linear;
 
     AnimateValue r_anim;
     AnimateValue g_anim;
@@ -123,9 +125,9 @@ struct AnimateRgb_t : public Rgb_t {
 
     inline void begin()
     {
-        r_anim.easingOptions().easingFunction = ease::linear;
-        g_anim.easingOptions().easingFunction = ease::linear;
-        b_anim.easingOptions().easingFunction = ease::linear;
+        r_anim.easingOptions().easingFunction = easingFunction;
+        g_anim.easingOptions().easingFunction = easingFunction;
+        b_anim.easingOptions().easingFunction = easingFunction;
         r_anim.easingOptions().duration = duration;
         g_anim.easingOptions().duration = duration;
         b_anim.easingOptions().duration = duration;
