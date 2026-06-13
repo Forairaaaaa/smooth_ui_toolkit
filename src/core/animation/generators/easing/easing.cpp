@@ -24,8 +24,7 @@ void Easing::retarget(float start, float end)
 {
     this->start = start;
     this->end = end;
-    _range = end - start; // 重新计算差值
-    done = false;
+    init();
 }
 
 bool Easing::next(float t)
