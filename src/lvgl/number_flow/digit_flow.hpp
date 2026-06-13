@@ -18,9 +18,17 @@
 #include <memory>
 #include <array>
 #include <cmath>
+#include <functional>
 
 namespace smooth_ui_toolkit {
 namespace lvgl_cpp {
+
+struct DigitFlowAnimationOptions {
+    float springVisualDuration = 0.6f;
+    float springBounce = 0.05f;
+    float easingDuration = 0.6f;
+    std::function<float(float)> easingFunction = ease::ease_out_quad;
+};
 
 class DigitFlow : public Widget<lv_obj_create> {
 public:
@@ -32,15 +40,18 @@ public:
 
     // Spring will feels more natural
     AnimationType animationType = AnimationType::Spring;
+    DigitFlowAnimationOptions animationOptions;
 
-    static void setup_animation(AnimateValue& animateValue, AnimationType animationType)
+    static void setup_animation(AnimateValue& animateValue,
+                                AnimationType animationType,
+                                const DigitFlowAnimationOptions& options = {})
     {
         if (animationType == AnimationType::Spring) {
-            animateValue.springOptions().visualDuration = 0.6;
-            animateValue.springOptions().bounce = 0.05;
+            animateValue.springOptions().visualDuration = options.springVisualDuration;
+            animateValue.springOptions().bounce = options.springBounce;
         } else if (animationType == AnimationType::Easing) {
-            animateValue.easingOptions().duration = 0.6;
-            animateValue.easingOptions().easingFunction = ease::ease_out_quad;
+            animateValue.easingOptions().duration = options.easingDuration;
+            animateValue.easingOptions().easingFunction = options.easingFunction;
         }
     }
 
@@ -66,7 +77,7 @@ public:
 
         // Font height
         _font_height = lv_font_get_line_height(getTextFont());
-        setup_animation(_digit_y_offset, animationType);
+        setup_animation(_digit_y_offset, animationType, animationOptions);
         _digit_y_offset = _current_digit_index * _font_height;
         setSize(LV_SIZE_CONTENT, _font_height);
     }

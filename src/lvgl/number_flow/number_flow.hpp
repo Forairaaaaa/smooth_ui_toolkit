@@ -48,6 +48,8 @@ public:
 
     // 动画类型，默认 spring 更自然
     AnimationType animationType = AnimationType::Spring;
+    // 数字和位移动画参数
+    DigitFlowAnimationOptions animationOptions;
     // 透明背景
     bool transparentBg = true;
     // 显示正负号
@@ -229,14 +231,15 @@ protected:
                 _digits.emplace_back();
                 _digits.back().digitFlow = std::make_unique<DigitFlow>(this->raw_ptr());
                 _digits.back().digitFlow->animationType = animationType;
+                _digits.back().digitFlow->animationOptions = animationOptions;
                 _digits.back().digitFlow->init();
                 _digits.back().digitFlow->setTextColor(getTextColor());
-                DigitFlow::setup_animation(_digits.back().positionX, animationType);
+                DigitFlow::setup_animation(_digits.back().positionX, animationType, animationOptions);
                 if (digit_list_size != 0) {
                     _digits.back().positionX.teleport((_current_number_of_digits - 1) * _font_width);
                 }
                 _digits.back().positionX.move(digit_list_size * _font_width);
-                DigitFlow::setup_animation(_digits.back().opacity, animationType);
+                DigitFlow::setup_animation(_digits.back().opacity, animationType, animationOptions);
                 _digits.back().opacity.move(255);
                 digit_list_size++;
             }
@@ -338,8 +341,8 @@ protected:
             if (!_label_sign) {
                 _label_sign = std::make_unique<Label_t>();
                 _label_sign->label = std::make_unique<Label>(this->raw_ptr());
-                DigitFlow::setup_animation(_label_sign->positionX, animationType);
-                DigitFlow::setup_animation(_label_sign->opacity, animationType);
+                DigitFlow::setup_animation(_label_sign->positionX, animationType, animationOptions);
+                DigitFlow::setup_animation(_label_sign->opacity, animationType, animationOptions);
             }
             update_prefix_width_cache();
             _label_sign->positionX.move(_cached_prefix_width);
@@ -365,8 +368,8 @@ protected:
                 _label_prefix = std::make_unique<Label_t>();
                 _label_prefix->label = std::make_unique<Label>(this->raw_ptr());
 
-                DigitFlow::setup_animation(_label_prefix->positionX, animationType);
-                DigitFlow::setup_animation(_label_prefix->opacity, animationType);
+                DigitFlow::setup_animation(_label_prefix->positionX, animationType, animationOptions);
+                DigitFlow::setup_animation(_label_prefix->opacity, animationType, animationOptions);
             }
             _label_prefix->positionX.move(0);
             if (_label_prefix->label->getText() != _prefix) {
@@ -392,8 +395,8 @@ protected:
                 _label_suffix = std::make_unique<Label_t>();
                 _label_suffix->label = std::make_unique<Label>(this->raw_ptr());
 
-                DigitFlow::setup_animation(_label_suffix->positionX, animationType);
-                DigitFlow::setup_animation(_label_suffix->opacity, animationType);
+                DigitFlow::setup_animation(_label_suffix->positionX, animationType, animationOptions);
+                DigitFlow::setup_animation(_label_suffix->opacity, animationType, animationOptions);
             }
 
             // Position suffix after digits
