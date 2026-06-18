@@ -13,6 +13,7 @@
 #include "components/transform.hpp"
 #include "components/shape.hpp"
 #include "components/area.hpp"
+#include "components/rigidbody.hpp"
 #include "game_object.hpp"
 #include "world.hpp"
 #include "frame_clock.hpp"
