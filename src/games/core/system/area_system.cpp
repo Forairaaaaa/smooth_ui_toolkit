@@ -12,6 +12,7 @@
 #include "games/core/components/shape.hpp"
 #include "games/core/game_object.hpp"
 #include "collision.hpp"
+#include <vector>
 
 namespace smooth_ui_toolkit::games {
 
@@ -38,10 +39,22 @@ void AreaSystem::handlePreDestroy(ObjectPool<GameObject>& pool)
     pool.forEach([&](GameObject* obj, int) {
         if (obj->isDestroyRequested()) {
             if (auto* area = obj->get<Area>()) {
-                for (auto* other : area->overlaps) {
-                    area->onExited.emit(*other);
+                std::vector<GameObject*> overlaps(area->overlaps.begin(), area->overlaps.end());
+                for (auto* other : overlaps) {
+                    if (!other) {
+                        continue;
+                    }
+
+                    if (area->overlaps.erase(other) > 0) {
+                        area->onExited.emit(*other);
+                    }
+
+                    if (auto* other_area = other->get<Area>()) {
+                        if (other_area->overlaps.erase(obj) > 0) {
+                            other_area->onExited.emit(*obj);
+                        }
+                    }
                 }
-                area->overlaps.clear();
             }
         }
     });
