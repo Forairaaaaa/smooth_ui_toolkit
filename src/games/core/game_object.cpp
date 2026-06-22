@@ -9,6 +9,7 @@
  *
  */
 #include "game_object.hpp"
+#include "components/rigidbody.hpp"
 #include "components/transform.hpp"
 #include "components/shape.hpp"
 #include <cassert>

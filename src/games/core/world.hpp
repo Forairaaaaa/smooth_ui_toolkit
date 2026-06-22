@@ -54,12 +54,18 @@ public:
     {
         _objects.forEach([&](GameObject* obj, int) {
             obj->requestDestroy();
-            obj->onDestroy();
         });
 
         _area_system.handlePreDestroy(_objects);
 
+        _objects.forEach([&](GameObject* obj, int) {
+            obj->onDestroy();
+        });
+
         _objects.cleanup();
+        _pending_ready.clear();
+        _system_object_list_cache.clear();
+        _accumulator = 0.0f;
     }
 
 private:
@@ -77,14 +83,18 @@ private:
         // Init pending objects
         if (!_pending_ready.empty()) {
             for (auto* obj : _pending_ready) {
-                obj->onReady();
+                if (obj && !obj->isDestroyRequested()) {
+                    obj->onReady();
+                }
             }
             _pending_ready.clear();
         }
 
         // Update objects
         _objects.forEach([&](GameObject* obj, int) {
-            obj->update(dt);
+            if (!obj->isDestroyRequested()) {
+                obj->update(dt);
+            }
         });
 
         // Update systems
@@ -98,20 +108,22 @@ private:
     {
         _system_object_list_cache.clear();
         _objects.forEach([&](GameObject* obj, int) {
-            _system_object_list_cache.push_back(obj);
+            if (!obj->isDestroyRequested()) {
+                _system_object_list_cache.push_back(obj);
+            }
         });
         return _system_object_list_cache;
     }
 
     void cleanup()
     {
+        _area_system.handlePreDestroy(_objects);
+
         _objects.forEach([&](GameObject* obj, int) {
             if (obj->isDestroyRequested()) {
                 obj->onDestroy();
             }
         });
-
-        _area_system.handlePreDestroy(_objects);
 
         _objects.cleanup();
     }
