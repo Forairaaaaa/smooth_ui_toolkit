@@ -15,7 +15,7 @@ namespace smooth_ui_toolkit::games {
 
 class GameObject;
 
-enum class ComponentType : uint8_t { Transform = 0, Shape = 1, Area = 2 };
+enum class ComponentType : uint8_t { Transform = 0, Shape = 1, Area = 2, Rigidbody = 3 };
 
 class Component {
 public:

@@ -25,6 +25,10 @@ void GameObject::add(std::unique_ptr<Component> comp)
         assert(get<Shape>() && "Area requires Shape");
     }
 
+    if (comp->type() == ComponentType::Rigidbody) {
+        assert(get<Transform>() && "Rigidbody requires Transform");
+    }
+
     comp->owner = this;
     components.push_back(std::move(comp));
 }
