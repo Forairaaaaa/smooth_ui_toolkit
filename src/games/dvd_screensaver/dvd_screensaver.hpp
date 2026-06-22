@@ -10,6 +10,7 @@
  */
 #pragma once
 #include "core/math/vector.hpp"
+#include "games/core/components/rigidbody.hpp"
 #include "games/core/components/shape.hpp"
 #include "games/core/components/transform.hpp"
 #include "games/core/world.hpp"
@@ -24,17 +25,27 @@ enum class Group : int {
     // Use any id but wall as a user defined group
 };
 
+namespace collision_layer {
+
+constexpr uint32_t Wall = 1u << 0;
+constexpr uint32_t Logo = 1u << 1;
+
+} // namespace collision_layer
+
 class Logo : public GameObject {
 public:
     Logo(int groupId, Vector2 pos, Vector2 size, Vector2 direction, float speed)
     {
+        const Vector2 initial_direction = direction.normalized();
+
         add(std::make_unique<Transform>(pos));
         add(std::make_unique<RectShape>(size));
-        add(std::make_unique<Area>());
+        add(std::make_unique<Area>(collision_layer::Logo, collision_layer::Wall | collision_layer::Logo));
+        add(std::make_unique<Rigidbody>(initial_direction * speed));
 
         this->groupId = groupId;
         this->speed = speed;
-        this->direction = direction;
+        this->direction = initial_direction;
     }
 
     float speed;
@@ -45,26 +56,20 @@ public:
         setup_collision();
     }
 
-    void onUpdate(float dt) override
-    {
-        auto transform = get<Transform>();
-        transform->position += direction * speed * dt;
-    }
-
 private:
-    void reflect_from_wall(GameObject& wall)
+    void reflect_from_body(GameObject& body)
     {
         auto transform = get<Transform>();
         auto logo_pos = transform->position;
         auto logo_size = get<RectShape>()->size;
-        auto wall_pos = wall.get<Transform>()->position;
-        auto wall_size = wall.get<RectShape>()->size;
+        auto body_pos = body.get<Transform>()->position;
+        auto body_size = body.get<RectShape>()->size;
 
-        float dx = logo_pos.x - wall_pos.x;
-        float dy = logo_pos.y - wall_pos.y;
+        float dx = logo_pos.x - body_pos.x;
+        float dy = logo_pos.y - body_pos.y;
 
-        float px = (wall_size.x * 0.5f + logo_size.x * 0.5f) - std::abs(dx);
-        float py = (wall_size.y * 0.5f + logo_size.y * 0.5f) - std::abs(dy);
+        float px = (body_size.x * 0.5f + logo_size.x * 0.5f) - std::abs(dx);
+        float py = (body_size.y * 0.5f + logo_size.y * 0.5f) - std::abs(dy);
 
         if (px < py) {
             float sign = dx > 0 ? 1.0f : -1.0f;
@@ -77,14 +82,25 @@ private:
         }
 
         direction = direction.normalized();
+        sync_rigidbody();
     }
 
     void setup_collision()
     {
         auto area = get<Area>();
         area->onEntered.connect([this](GameObject& other) {
-            reflect_from_wall(other);
+            reflect_from_body(other);
         });
+    }
+
+    void sync_rigidbody()
+    {
+        auto* rigidbody = get<Rigidbody>();
+        if (!rigidbody) {
+            return;
+        }
+
+        rigidbody->velocity = direction * speed;
     }
 };
 
@@ -124,7 +140,7 @@ protected:
         wall->groupId = static_cast<int>(Group::Wall);
         wall->add(std::make_unique<Transform>(pos));
         wall->add(std::make_unique<RectShape>(size));
-        wall->add(std::make_unique<Area>());
+        wall->add(std::make_unique<Area>(collision_layer::Wall, 0u));
     }
 
     void addLogo(int groupId, Vector2 pos, Vector2 size, Vector2 direction, float speed)

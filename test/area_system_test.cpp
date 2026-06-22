@@ -16,6 +16,121 @@ public:
     }
 };
 
+void test_area_collision_layer_mask_filter()
+{
+    constexpr uint32_t kPlayerLayer = 1u << 0;
+    constexpr uint32_t kEnemyLayer = 1u << 1;
+    constexpr uint32_t kPickupLayer = 1u << 2;
+
+    World world;
+
+    auto* player = world.createObject(std::make_unique<AreaTestObject>(Vector2{0.0f, 0.0f}, Vector2{20.0f, 20.0f}));
+    auto* enemy = world.createObject(std::make_unique<AreaTestObject>(Vector2{5.0f, 0.0f}, Vector2{20.0f, 20.0f}));
+
+    auto* player_area = player->get<Area>();
+    auto* enemy_area = enemy->get<Area>();
+
+    player_area->collisionLayer = kPlayerLayer;
+    player_area->collisionMask = kEnemyLayer;
+    enemy_area->collisionLayer = kEnemyLayer;
+    enemy_area->collisionMask = kPickupLayer;
+
+    int player_entered = 0;
+    int enemy_entered = 0;
+
+    player_area->onEntered.connect([&](GameObject&) {
+        player_entered++;
+    });
+    enemy_area->onEntered.connect([&](GameObject&) {
+        enemy_entered++;
+    });
+
+    world.update(1.0f / 60.0f);
+
+    assert(player_entered == 1);
+    assert(enemy_entered == 0);
+    assert(player_area->overlaps.count(enemy) == 1);
+    assert(enemy_area->overlaps.empty());
+}
+
+void test_area_collision_mask_changes_emit_exit()
+{
+    constexpr uint32_t kPlayerLayer = 1u << 0;
+    constexpr uint32_t kEnemyLayer = 1u << 1;
+
+    World world;
+
+    auto* player = world.createObject(std::make_unique<AreaTestObject>(Vector2{0.0f, 0.0f}, Vector2{20.0f, 20.0f}));
+    auto* enemy = world.createObject(std::make_unique<AreaTestObject>(Vector2{5.0f, 0.0f}, Vector2{20.0f, 20.0f}));
+
+    auto* player_area = player->get<Area>();
+    auto* enemy_area = enemy->get<Area>();
+
+    player_area->collisionLayer = kPlayerLayer;
+    player_area->collisionMask = kEnemyLayer;
+    enemy_area->collisionLayer = kEnemyLayer;
+    enemy_area->collisionMask = kPlayerLayer;
+
+    int player_exited = 0;
+    int enemy_exited = 0;
+
+    player_area->onExited.connect([&](GameObject&) {
+        player_exited++;
+    });
+    enemy_area->onExited.connect([&](GameObject&) {
+        enemy_exited++;
+    });
+
+    world.update(1.0f / 60.0f);
+
+    assert(player_area->overlaps.count(enemy) == 1);
+    assert(enemy_area->overlaps.count(player) == 1);
+
+    player_area->collisionMask = 0;
+    enemy_area->collisionMask = 0;
+    world.update(1.0f / 60.0f);
+
+    assert(player_exited == 1);
+    assert(enemy_exited == 1);
+    assert(player_area->overlaps.empty());
+    assert(enemy_area->overlaps.empty());
+}
+
+void test_destroyed_monitored_area_removes_one_way_overlap()
+{
+    constexpr uint32_t kBulletLayer = 1u << 0;
+    constexpr uint32_t kTargetLayer = 1u << 1;
+
+    World world;
+
+    auto* bullet = world.createObject(std::make_unique<AreaTestObject>(Vector2{0.0f, 0.0f}, Vector2{20.0f, 20.0f}));
+    auto* target = world.createObject(std::make_unique<AreaTestObject>(Vector2{5.0f, 0.0f}, Vector2{20.0f, 20.0f}));
+
+    auto* bullet_area = bullet->get<Area>();
+    auto* target_area = target->get<Area>();
+
+    bullet_area->collisionLayer = kBulletLayer;
+    bullet_area->collisionMask = kTargetLayer;
+    target_area->collisionLayer = kTargetLayer;
+    target_area->collisionMask = 0;
+
+    int bullet_exited = 0;
+    bullet_area->onExited.connect([&](GameObject&) {
+        bullet_exited++;
+    });
+
+    world.update(1.0f / 60.0f);
+
+    assert(bullet_area->overlaps.count(target) == 1);
+    assert(target_area->overlaps.empty());
+
+    target->requestDestroy();
+    world.update(1.0f / 60.0f);
+
+    assert(bullet_exited == 1);
+    assert(bullet_area->overlaps.empty());
+}
+
 void test_destroyed_area_removes_reverse_overlap()
 {
     World world;
@@ -62,6 +177,9 @@ void test_destroyed_area_removes_reverse_overlap()
 int main()
 {
     std::cout << "Running AreaSystem tests...\n";
+    test_area_collision_layer_mask_filter();
+    test_area_collision_mask_changes_emit_exit();
+    test_destroyed_monitored_area_removes_one_way_overlap();
     test_destroyed_area_removes_reverse_overlap();
     std::cout << "All AreaSystem tests passed successfully!\n";
     return 0;

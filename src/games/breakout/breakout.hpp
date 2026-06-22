@@ -68,7 +68,7 @@ protected:
         wall->groupId = static_cast<int>(Group::Wall);
         wall->add(std::make_unique<Transform>(pos));
         wall->add(std::make_unique<RectShape>(size));
-        wall->add(std::make_unique<Area>());
+        wall->add(std::make_unique<Area>(collision_layer::Wall, 0u));
     }
 
     void addPaddle(Vector2 pos, Vector2 size, float speed, Vector2 xLimits)
@@ -126,8 +126,7 @@ protected:
 
     void resetBall()
     {
-        _ball->active = false;
-        _ball->direction = {0, 0};
+        _ball->stop();
 
         auto pad_pos = _paddle->position();
         float y = pad_pos.y - _ball->radius() - (_paddle->size().y * 0.5f);
@@ -188,7 +187,7 @@ protected:
         float y = _ball->get<Transform>()->position.y;
 
         if (y > _screen_height) { // 屏幕底部
-            _ball->active = false;
+            _ball->stop();
             loseLife();
         }
     }

@@ -23,10 +23,13 @@ public:
 
         add(std::make_unique<Transform>(pos));
         add(std::make_unique<CircleShape>(radius));
-        add(std::make_unique<Area>());
+        add(std::make_unique<Area>(collision_layer::Ball,
+                                   collision_layer::Wall | collision_layer::Player | collision_layer::Brick));
+        add(std::make_unique<Rigidbody>());
 
         this->speed = speed;
         this->damage = damage;
+        sync_rigidbody();
     }
 
     float speed;
@@ -40,20 +43,18 @@ public:
         setup_collision();
     }
 
-    void onUpdate(float dt) override
-    {
-        if (!active) {
-            return;
-        }
-
-        auto transform = get<Transform>();
-        transform->position += direction * speed * dt;
-    }
-
     void launch(Vector2 dir)
     {
         direction = dir.normalized();
         active = true;
+        sync_rigidbody();
+    }
+
+    void stop()
+    {
+        direction = {0, 0};
+        active = false;
+        sync_rigidbody();
     }
 
     float radius()
@@ -73,6 +74,7 @@ private:
 
         direction = {hit, -1.0f};
         direction = direction.normalized();
+        sync_rigidbody();
     }
 
     void reflect_from_wall(GameObject& wall)
@@ -100,6 +102,7 @@ private:
         }
 
         direction = direction.normalized();
+        sync_rigidbody();
     }
 
     void reflect_from_brick(GameObject& brick)
@@ -112,20 +115,35 @@ private:
     {
         auto area = get<Area>();
         area->onEntered.connect([this](GameObject& other) {
-            auto g = static_cast<Group>(other.groupId);
+            auto* other_area = other.get<Area>();
+            if (!other_area) {
+                return;
+            }
 
-            if (g == Group::Wall) {
+            const uint32_t layer = other_area->collisionLayer;
+            if (layer & collision_layer::Wall) {
                 reflect_from_wall(other);
             }
 
-            if (g == Group::Player) {
+            if (layer & collision_layer::Player) {
                 reflect_from_paddle(other);
             }
 
-            if (g == Group::Brick) {
+            if (layer & collision_layer::Brick) {
                 reflect_from_brick(other);
             }
         });
+    }
+
+    void sync_rigidbody()
+    {
+        auto* rigidbody = get<Rigidbody>();
+        if (!rigidbody) {
+            return;
+        }
+
+        rigidbody->velocity = active ? direction * speed : Vector2{0, 0};
+        rigidbody->enabled = active;
     }
 };
 

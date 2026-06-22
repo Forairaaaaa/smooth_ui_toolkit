@@ -22,7 +22,7 @@ public:
 
         add(std::make_unique<Transform>(pos));
         add(std::make_unique<RectShape>(size));
-        add(std::make_unique<Area>());
+        add(std::make_unique<Area>(collision_layer::Brick, 0u));
 
         this->hp = hp;
     }

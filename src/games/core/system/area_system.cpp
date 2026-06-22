@@ -55,6 +55,18 @@ void AreaSystem::handlePreDestroy(ObjectPool<GameObject>& pool)
                         }
                     }
                 }
+
+                pool.forEach([&](GameObject* other, int) {
+                    if (other == obj) {
+                        return;
+                    }
+
+                    if (auto* other_area = other->get<Area>()) {
+                        if (other_area->overlaps.erase(obj) > 0) {
+                            other_area->onExited.emit(*obj);
+                        }
+                    }
+                });
             }
         }
     });
@@ -62,15 +74,23 @@ void AreaSystem::handlePreDestroy(ObjectPool<GameObject>& pool)
 
 void AreaSystem::test_pair(Area* a, Area* b)
 {
+    const bool a_monitors_b = a->monitors(*b);
+    const bool b_monitors_a = b->monitors(*a);
+    if (!a_monitors_b && !b_monitors_a) {
+        handle_overlap(a, b, false);
+        handle_overlap(b, a, false);
+        return;
+    }
+
     auto* sa = a->owner->get<Shape>();
     auto* sb = b->owner->get<Shape>();
     if (!sa || !sb)
         return;
 
-    bool colliding = collision::is_colliding(*sa, *sb);
+    const bool colliding = collision::is_colliding(*sa, *sb);
 
-    handle_overlap(a, b, colliding);
-    handle_overlap(b, a, colliding);
+    handle_overlap(a, b, a_monitors_b && colliding);
+    handle_overlap(b, a, b_monitors_a && colliding);
 }
 
 void AreaSystem::handle_overlap(Area* self, Area* other, bool colliding)

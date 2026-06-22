@@ -10,6 +10,7 @@
  */
 #pragma once
 #include "core/math/vector.hpp"
+#include <cstdint>
 #include <vector>
 
 namespace smooth_ui_toolkit::games::breakout {
@@ -26,6 +27,15 @@ enum class Group : int {
     Player,
     Brick,
 };
+
+namespace collision_layer {
+
+constexpr uint32_t Ball = 1u << 0;
+constexpr uint32_t Wall = 1u << 1;
+constexpr uint32_t Player = 1u << 2;
+constexpr uint32_t Brick = 1u << 3;
+
+} // namespace collision_layer
 
 struct WallDesc {
     Vector2 pos;
