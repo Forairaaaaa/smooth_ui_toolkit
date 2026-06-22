@@ -6,3 +6,6 @@ target_link_libraries(observable_test ${PROJECT_NAME})
 
 add_executable(area_system_test ./area_system_test.cpp)
 target_link_libraries(area_system_test ${PROJECT_NAME})
+
+add_executable(world_test ./world_test.cpp)
+target_link_libraries(world_test ${PROJECT_NAME})

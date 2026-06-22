@@ -21,6 +21,9 @@ void AreaSystem::update(const std::vector<GameObject*>& objects)
     // 1. 收集所有 Area
     std::vector<Area*> areas;
     for (auto* obj : objects) {
+        if (!obj || obj->isDestroyRequested()) {
+            continue;
+        }
         if (auto* area = obj->get<Area>()) {
             areas.push_back(area);
         }
@@ -74,6 +77,10 @@ void AreaSystem::handlePreDestroy(ObjectPool<GameObject>& pool)
 
 void AreaSystem::test_pair(Area* a, Area* b)
 {
+    if (!a || !b || !a->owner || !b->owner || a->owner->isDestroyRequested() || b->owner->isDestroyRequested()) {
+        return;
+    }
+
     const bool a_monitors_b = a->monitors(*b);
     const bool b_monitors_a = b->monitors(*a);
     if (!a_monitors_b && !b_monitors_a) {
