@@ -55,6 +55,18 @@ void AreaSystem::handlePreDestroy(ObjectPool<GameObject>& pool)
                         }
                     }
                 }
+
+                pool.forEach([&](GameObject* other, int) {
+                    if (other == obj) {
+                        return;
+                    }
+
+                    if (auto* other_area = other->get<Area>()) {
+                        if (other_area->overlaps.erase(obj) > 0) {
+                            other_area->onExited.emit(*obj);
+                        }
+                    }
+                });
             }
         }
     });
